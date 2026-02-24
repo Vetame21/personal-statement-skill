@@ -1,10 +1,10 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "yaoxinwei-skills",
+  "name": "DiamondhunterSA-skills",
   "description": "A curated collection of agent skills",
   "owner": {
-    "name": "yaoxinwei",
-    "url": "https://github.com/yaoxinwei"
+    "name": "DiamondhunterSA",
+    "url": "https://github.com/DiamondhunterSA"
   },
   "plugins": [
     {

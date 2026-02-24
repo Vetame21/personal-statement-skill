@@ -7,14 +7,14 @@ Assist in writing, structuring, and polishing personal statements and self-intro
 ### Claude Code / Cowork
 
 ```bash
-claude plugin marketplace add OWNER/REPO
-claude plugin install personal-statement@OWNER-skills
+claude plugin marketplace add DiamondhunterSA/personal-statement-skill
+claude plugin install personal-statement@DiamondhunterSA-skills
 ```
 
 ### npx skills
 
 ```bash
-npx skills add OWNER/REPO --skill personal-statement
+npx skills add DiamondhunterSA/personal-statement-skill --skill personal-statement
 ```
 
 ---

@@ -63,7 +63,7 @@ def get_repo_info() -> dict:
         parts = url.rstrip("/").split("/")
         return {"owner": parts[-2], "repo": parts[-1], "url": url}
     except Exception:
-        return {"owner": "OWNER", "repo": "REPO", "url": "https://github.com/OWNER/REPO"}
+        return {"owner": "DiamondhunterSA", "repo": "personal-statement-skill", "url": "https://github.com/DiamondhunterSA/personal-statement-skill"}
 
 
 def generate_table(skills: list[dict], repo_info: dict) -> str:
