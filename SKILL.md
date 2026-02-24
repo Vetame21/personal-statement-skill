@@ -1,5 +1,5 @@
 ---
-name: personal-statement
+name: personal statement
 description: Assist in writing, structuring, and polishing personal statements and self-introductions. Use when the user mentions writing a PS, personal statement, self-introduction, application essay, motivation letter, statement of purpose, cover letter, or personal bio — for study abroad applications, graduate/PhD admissions, scholarship applications, job applications, or any similar context.
 ---
 

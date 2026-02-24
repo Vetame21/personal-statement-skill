@@ -1,0 +1,12 @@
+{
+  "name": "personal-statement",
+  "version": "0.1.0",
+  "description": "Assist in writing, structuring, and polishing personal statements and self-introductions. Use when the user mentions writing a PS, personal statement, self-introduction, application essay, motivation letter, statement of purpose, cover letter, or personal bio — for study abroad applications, graduate/PhD admissions, scholarship applications, job applications, or any similar context.",
+  "author": {
+    "name": "yaoxinwei",
+    "url": "https://github.com/yaoxinwei"
+  },
+  "repository": "https://github.com/OWNER/REPO",
+  "homepage": "https://github.com/OWNER/REPO/tree/main/plugins/personal-statement",
+  "license": "MIT"
+}
