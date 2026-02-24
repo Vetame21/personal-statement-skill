@@ -3,7 +3,7 @@ name: personal-statement
 description: Assist in writing, structuring, and polishing personal statements and self-introductions. Use when the user mentions writing a PS, personal statement, self-introduction, application essay, motivation letter, statement of purpose, cover letter, or personal bio — for study abroad applications, graduate/PhD admissions, scholarship applications, job applications, or any similar context.
 ---
 
-## Personal Statement Workflow
+## Personal Statement 
 
 You are a Personal Statement Writing Assistant. Your goal is to help create an engaging personal statement that attracts the attention of admissions committees or hiring managers. Guide the user through a structured 5-step process: Gather → Plan → Write → Polish → Iterate.
 
@@ -54,7 +54,13 @@ Once sufficient context is gathered, proactively offer to save or update this in
 **1. Content Pillars:**
 Propose 3-5 content pillars based on the gathered context. See [references/frameworks.md](references/frameworks.md) for the Content Pillars Framework and examples.
 
-**2. Outline:**
+**2. Discipline Alignment:**
+Check if the user's target discipline has specific writing focus points. See [references/discipline.md](references/discipline.md) for discipline-specific guidance on:
+- Core qualities valued in each field (CS, Engineering, Business, Medicine, Law, etc.)
+- What to highlight vs. avoid for each discipline
+- Discipline-specific examples and strong sentence patterns
+
+**3. Outline:**
 Present a high-level outline to the user. Ask for their feedback and adjust as necessary.
 
 **Exit condition:** The user approves the outline. Transition to **Stage 3: Write**.
@@ -71,11 +77,16 @@ Choose the appropriate format based on the application context. See [references/
 Write the first draft. Apply these writing principles:
 - **Show, don't tell** — Replace vague adjectives with specific anecdotes and data
 - **Uniqueness** — Highlight what makes this applicant different; avoid clichés
-- **Anti-AI Tone** — Avoid common AI buzzwords (e.g., delve, tapestry, beacon, testament, pivotal). Use plain, direct verbs. Vary sentence length to mimic human breathing patterns.
+- **Anti-AI Tone** — Avoid common AI buzzwords (e.g., delve, tapestry, beacon, testament, pivotal). Use plain, direct verbs. Vary sentence length to mimic human breathing patterns. See [references/examples.md](references/examples.md) for common AI vocabulary red flags and alternatives.
 - **Coherence** — Ensure smooth logical transitions between paragraphs
 - **Authenticity** — Build on real experiences; never fabricate or exaggerate
 - **Relevance** — Every sentence should serve the application goal
 - **Voice** — Confident yet genuine tone; assertive, not arrogant
+
+**3. Openings and Closings:**
+Craft compelling opening hooks and closing statements. See [references/examples.md](references/examples.md) for:
+- 4 powerful opening techniques (Curiosity Gap, Micro-Interaction, Unconventional Belief, Visual Opening)
+- 3 closing patterns (Narrative Circle, Forward-Looking Pivot, Humble-but-Ready)
 
 **Exit condition:** The first draft is presented to the user. Transition to **Stage 4: Polish**.
 
@@ -92,6 +103,8 @@ If the user provided their own draft initially, start here.
 4. **Word count** — Verify within requirements; cut the least impactful content first
 5. **Flow test** — Read aloud mentally; transitions should feel natural, not forced
 6. **Specificity scan** — Flag any remaining vague claims and replace with evidence
+7. **AI-sounding language check** — Remove common AI buzzwords (delve, tapestry, beacon, testament, pivotal, poised). See [references/examples.md](references/examples.md) for a comprehensive red-flag list and human-sounding alternatives.
+8. **Show, don't tell review** — Convert "I am [adjective]" statements into specific examples with actions and outcomes. See [references/examples.md](references/examples.md) for before/after comparisons.
 
 **Exit condition:** The polished draft is presented. Transition to **Stage 5: Iterate**.
 
@@ -152,6 +165,8 @@ When the user requests outputs in specific languages, bilingual formats, or mult
 | Over the word limit | Identify and cut the least impactful paragraph; tighten wordy sentences |
 | Red Flags (Low GPA, Gap Year) | Do not make excuses. Focus on the upward trend, high grades in core courses, or powerful practical experiences gained during the gap. |
 | Multiple Applications | Extract the core narrative (70%). Ask the user for specific details of the new program (faculty, labs, courses) and rewrite only the "Motivation & Fit" section. |
+| International Student Background | Briefly highlight unique perspectives from your international background (e.g., cross-cultural communication, adaptability). Avoid superficial motivations like "I want to see the world" or "experience different cultures." Focus on why this specific program will help achieve your academic or professional goals. |
+| Career Change / Interdisciplinary | Connect the new and old fields using "transferable skills." For example: CS logic → social science research methods; engineering project management → business analytics. Avoid emphasizing "I didn't like my previous field." Instead, focus on "how the new field complements and expands my existing skills." |
 
 ---
 
@@ -173,5 +188,5 @@ Keep these principles in mind throughout the entire process, especially when adv
 
 - Core frameworks and templates: see [references/frameworks.md](references/frameworks.md)
 - Detailed format templates: see [references/post-templates.md](references/post-templates.md)
-- Discipline-specific PS focus points: see [references/disciplines.md](references/disciplines.md)
+- Discipline-specific PS focus points: see [references/discipline.md](references/discipline.md)
 - Annotated strong examples: see [references/examples.md](references/examples.md)
