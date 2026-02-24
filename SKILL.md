@@ -27,7 +27,7 @@ If `.claude/personal-statement-context.md` exists, read it before asking questio
 **2. Info Dumping:**
 Encourage the user to dump all the context they have. Ask them to provide:
 - Their CV/resume, transcripts, or project summaries.
-- The target program's prompt or specific essay questions.
+- The target program's prompt, specific essay questions, or the official job description/program requirements.
 - Any specific anecdotes they want to highlight.
 Let them know they can paste text, upload files, or just write stream-of-consciousness.
 
@@ -37,7 +37,7 @@ If their motivation seems superficial (e.g., "I like computers" or "The school i
 
 *Core Requirements to gather:*
 - **Goals:** Primary objective (e.g., Master's, PhD, job)? Target program/school?
-- **Receivers:** Who is reading this? What do they value most?
+- **Receivers:** Who is reading this? What do they value most? (Ask for specific job requirements, lab expectations, or program prerequisites if not provided).
 - **Brand Voice:** What tone fits the applicant? Any specific impression to leave?
 - **Limitations:** Word/character limit? Deadline? Language requirements?
 
@@ -76,6 +76,13 @@ Choose the appropriate format based on the application context. See [references/
 **2. Drafting:**
 Write the first draft. Apply these writing principles:
 - **Show, don't tell** — Replace vague adjectives with specific anecdotes and data
+- **Research Progression** — Structure research experiences to show clear capability growth over time (e.g., from learning basics/assisting -> mastering specific techniques -> independent project leadership/publishing). Connect parallel projects with transitional sentences that demonstrate evolving skills (e.g., "Project A built my hardware and project management skills, which allowed me to dive into core algorithms in Project B, solidifying my lifelong interest in the field").
+- **Structured Future Plans** — Break down future academic/career plans into specific, actionable phases rather than a single vague paragraph:
+  - *Short-term*: Coursework, building theoretical foundations, and quickly integrating into the target lab.
+  - *Medium-term*: Conducting substantive research under the advisor's guidance, aiming for high-level papers/patents in specific sub-fields.
+  - *Long-term*: Clear career goals (e.g., pursuing a PhD, or R&D roles in specific high-tech industries).
+- **Sincere Motivation** — Express a strong, genuine desire for the specific program/lab without being overly dramatic. Explicitly state why the target university is a long-standing goal and why the specific professor's team is the absolute best platform to realize the applicant's research dreams.
+- **Requirement Alignment** — Explicitly map the applicant's experiences and skills to the specific requirements of the target program, lab, or job description. If the program emphasizes leadership, highlight leadership in projects; if a lab requires specific technical skills (e.g., Python, hardware design), ensure those are prominently featured and proven through past work.
 - **Uniqueness** — Highlight what makes this applicant different; avoid clichés
 - **Anti-AI Tone** — Avoid common AI buzzwords (e.g., delve, tapestry, beacon, testament, pivotal). Use plain, direct verbs. Vary sentence length to mimic human breathing patterns. See [references/examples.md](references/examples.md) for common AI vocabulary red flags and alternatives.
 - **Coherence** — Ensure smooth logical transitions between paragraphs
@@ -161,6 +168,9 @@ When the user requests outputs in specific languages, bilingual formats, or mult
 | Lack of material | Guide the user to uncover overlooked experiences (class projects, self-study, part-time work) |
 | Weak opening | Offer 3+ alternative hooks (anecdote, question, bold statement, in-medias-res) |
 | Vague content | Ask follow-up questions for specific numbers, outcomes, and reflections |
+| Disconnected Projects | Connect parallel projects with transitional sentences showing capability growth (e.g., from hardware to algorithms). |
+| Vague Future Plans | Break down into Short-term (coursework/integration), Medium-term (research/papers), and Long-term (career/PhD) goals. |
+| Generic Motivation | Ask for the specific job description, lab requirements, or program prerequisites, and explicitly map the applicant's skills to these requirements. |
 | Poor flow | Re-outline the narrative arc; suggest transition phrases |
 | Over the word limit | Identify and cut the least impactful paragraph; tighten wordy sentences |
 | Red Flags (Low GPA, Gap Year) | Do not make excuses. Focus on the upward trend, high grades in core courses, or powerful practical experiences gained during the gap. |
