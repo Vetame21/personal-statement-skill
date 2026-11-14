@@ -1,31 +1,31 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "DiamondhunterSA-skills",
-  "description": "A curated collection of agent skills by DiamondhunterSA",
+  "name": "Vetame21-skills",
+  "description": "A curated collection of agent skills by Vetame21",
   "owner": {
-    "name": "DiamondhunterSA",
-    "url": "https://github.com/DiamondhunterSA/personal-statement-skill"
+    "name": "Vetame21",
+    "url": "https://github.com/Vetame21/personal-statement-skill"
   },
   "plugins": [
     {
       "name": "debate-mode",
       "source": "./plugins/debate-mode",
       "description": "Evidence-first debate. Instead of agreeing, Claude researches a claim or proposal and returns a sourced verdict (Yes / No / Partly / Not enough evidence) before giving a recommendation. Use when the user asks Claude to debate, argue, challenge them, push back, fact-check, \"debat pakai fakta\", \"jangan iya-iya aja\", \"don't just agree\", \"prove it\", or asks whether an idea, claim, or edit (for example to a personal statement or CV) is right or relevant.",
-      "version": "0.1.1794628230",
+      "version": "0.1.1794628265",
       "category": "productivity"
     },
     {
       "name": "harvard-cv",
       "source": "./plugins/harvard-cv",
       "description": "Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education \u2192 Experience \u2192 Leadership & Activities \u2192 Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions \"Harvard CV\", \"Harvard resume\", \"Harvard format\", or needs a CV to go with a university, scholarship, internship, or job application.",
-      "version": "0.1.1794628230",
+      "version": "0.1.1794628265",
       "category": "productivity"
     },
     {
       "name": "personal-statement",
       "source": "./plugins/personal-statement",
       "description": "Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, or wants to prepare video/interview answers from a statement.",
-      "version": "0.1.1771930693",
+      "version": "0.1.1794628265",
       "category": "productivity"
     }
   ]

@@ -7,14 +7,14 @@ Write, upgrade, and polish personal statements, statements of purpose, motivatio
 ### Claude Code / Cowork
 
 ```bash
-claude plugin marketplace add DiamondhunterSA/personal-statement-skill
-claude plugin install personal-statement@DiamondhunterSA-skills
+claude plugin marketplace add Vetame21/personal-statement-skill
+claude plugin install personal-statement@Vetame21-skills
 ```
 
 ### npx skills
 
 ```bash
-npx skills add DiamondhunterSA/personal-statement-skill --skill personal-statement
+npx skills add Vetame21/personal-statement-skill --skill personal-statement
 ```
 
 ---

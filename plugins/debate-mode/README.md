@@ -7,14 +7,14 @@ Evidence-first debate. Instead of agreeing, Claude researches a claim or proposa
 ### Claude Code / Cowork
 
 ```bash
-claude plugin marketplace add DiamondhunterSA/personal-statement-skill
-claude plugin install debate-mode@DiamondhunterSA-skills
+claude plugin marketplace add Vetame21/personal-statement-skill
+claude plugin install debate-mode@Vetame21-skills
 ```
 
 ### npx skills
 
 ```bash
-npx skills add DiamondhunterSA/personal-statement-skill --skill debate-mode
+npx skills add Vetame21/personal-statement-skill --skill debate-mode
 ```
 
 ---

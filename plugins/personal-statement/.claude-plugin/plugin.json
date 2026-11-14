@@ -1,12 +1,12 @@
 {
   "name": "personal-statement",
-  "version": "0.1.1771930693",
+  "version": "0.1.1794628265",
   "description": "Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, or wants to prepare video/interview answers from a statement.",
   "author": {
-    "name": "DiamondhunterSA",
-    "url": "https://github.com/DiamondhunterSA/personal-statement-skill"
+    "name": "Vetame21",
+    "url": "https://github.com/Vetame21/personal-statement-skill"
   },
-  "repository": "https://github.com/DiamondhunterSA/personal-statement-skill",
-  "homepage": "https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/plugins/personal-statement",
+  "repository": "https://github.com/Vetame21/personal-statement-skill",
+  "homepage": "https://github.com/Vetame21/personal-statement-skill/tree/main/plugins/personal-statement",
   "license": "MIT"
 }

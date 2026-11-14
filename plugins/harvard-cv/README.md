@@ -7,14 +7,14 @@ Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse c
 ### Claude Code / Cowork
 
 ```bash
-claude plugin marketplace add DiamondhunterSA/personal-statement-skill
-claude plugin install harvard-cv@DiamondhunterSA-skills
+claude plugin marketplace add Vetame21/personal-statement-skill
+claude plugin install harvard-cv@Vetame21-skills
 ```
 
 ### npx skills
 
 ```bash
-npx skills add DiamondhunterSA/personal-statement-skill --skill harvard-cv
+npx skills add Vetame21/personal-statement-skill --skill harvard-cv
 ```
 
 ---

@@ -15,19 +15,19 @@ Agent skills for [Claude Code](https://code.claude.com/docs) and Cowork that hel
 ### Claude Plugin Marketplace (Claude Code / Cowork)
 
 ```bash
-claude plugin marketplace add __OWNER__/__REPO__
+claude plugin marketplace add Vetame21/personal-statement-skill
 ```
 
 ```bash
-claude plugin install personal-statement@__OWNER__-skills
+claude plugin install personal-statement@Vetame21-skills
 ```
 
 ```bash
-claude plugin install harvard-cv@__OWNER__-skills
+claude plugin install harvard-cv@Vetame21-skills
 ```
 
 ```bash
-claude plugin install debate-mode@__OWNER__-skills
+claude plugin install debate-mode@Vetame21-skills
 ```
 
 While the repository is private, the marketplace commands need a GitHub login that can read it.
@@ -35,7 +35,7 @@ While the repository is private, the marketplace commands need a GitHub login th
 ### npx skills (CLI)
 
 ```bash
-npx skills add __OWNER__/__REPO__ --skill personal-statement
+npx skills add Vetame21/personal-statement-skill --skill personal-statement
 ```
 
 ### Manual
@@ -48,15 +48,15 @@ Copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/ski
 
 | Skill | Description |
 |-------|-------------|
-| [debate-mode](https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/skills/debate-mode) | Evidence-first debate. Instead of agreeing, Claude researches a claim or proposal and returns a sourced verdict (Yes / No / Partly / Not enough evidence) before giving a recommendation. Use when the user asks Claude to debate, argue, challenge them, push back, fact-check, "debat pakai fakta", "jangan iya-iya aja", "don't just agree", "prove it", or asks whether an idea, claim, or edit (for example to a personal statement or CV) is right or relevant. |
-| | ```npx skills add DiamondhunterSA/personal-statement-skill --skill debate-mode``` |
-| | ```claude plugin install debate-mode@DiamondhunterSA-skills``` |
-| [harvard-cv](https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/skills/harvard-cv) | Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education → Experience → Leadership & Activities → Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions "Harvard CV", "Harvard resume", "Harvard format", or needs a CV to go with a university, scholarship, internship, or job application. |
-| | ```npx skills add DiamondhunterSA/personal-statement-skill --skill harvard-cv``` |
-| | ```claude plugin install harvard-cv@DiamondhunterSA-skills``` |
-| [personal-statement](https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/skills/personal-statement) | Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, or wants to prepare video/interview answers from a statement. |
-| | ```npx skills add DiamondhunterSA/personal-statement-skill --skill personal-statement``` |
-| | ```claude plugin install personal-statement@DiamondhunterSA-skills``` |
+| [debate-mode](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/debate-mode) | Evidence-first debate. Instead of agreeing, Claude researches a claim or proposal and returns a sourced verdict (Yes / No / Partly / Not enough evidence) before giving a recommendation. Use when the user asks Claude to debate, argue, challenge them, push back, fact-check, "debat pakai fakta", "jangan iya-iya aja", "don't just agree", "prove it", or asks whether an idea, claim, or edit (for example to a personal statement or CV) is right or relevant. |
+| | ```npx skills add Vetame21/personal-statement-skill --skill debate-mode``` |
+| | ```claude plugin install debate-mode@Vetame21-skills``` |
+| [harvard-cv](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/harvard-cv) | Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education → Experience → Leadership & Activities → Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions "Harvard CV", "Harvard resume", "Harvard format", or needs a CV to go with a university, scholarship, internship, or job application. |
+| | ```npx skills add Vetame21/personal-statement-skill --skill harvard-cv``` |
+| | ```claude plugin install harvard-cv@Vetame21-skills``` |
+| [personal-statement](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/personal-statement) | Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, or wants to prepare video/interview answers from a statement. |
+| | ```npx skills add Vetame21/personal-statement-skill --skill personal-statement``` |
+| | ```claude plugin install personal-statement@Vetame21-skills``` |
 
 <!-- SKILLS_TABLE_END -->
 
