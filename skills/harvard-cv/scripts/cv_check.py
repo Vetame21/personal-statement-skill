@@ -16,7 +16,8 @@ import sys
 BULLET = re.compile(r"^\s*(?:[-*•]|\d+[.)])\s+(.*)$")
 WEAK_OPENERS = ("responsible", "helped", "assisted in", "worked on", "participated",
                 "was ", "were ", "involved", "duties", "tasks included", "in charge")
-PRONOUNS = re.compile(r"\b(i|me|my|mine|we|our|us)\b", re.I)
+# "I" counts only at the start of a bullet or clause, so "Calculus I and II" passes
+PRONOUNS = re.compile(r"(?:^|[.;:,]\s*|\band\s+)I\s+[a-z]|\b(?:[Mm]e|[Mm]y|[Mm]ine|[Ww]e|[Oo]ur|[Uu]s)\b")
 BUZZWORDS = ["results-driven", "passionate", "dynamic", "synergy", "synergies", "spearheaded",
              "leverag", "utilized", "utilised", "detail-oriented", "team player",
              "go-getter", "hard-working", "hardworking", "self-starter", "successfully",
