@@ -1,64 +1,46 @@
-# Personal Statement Agent Skill
+# Application Writing Skills for Claude
 
-> **🎯 Agent Skills Enabled** — Structured 5-stage workflow for crafting compelling personal statements
+Agent skills for [Claude Code](https://code.claude.com/docs) and Cowork that help with university, scholarship and job applications:
 
-A production-ready agent skill for [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) and [Cowork](https://cowork.ai) that guides users through writing, structuring, and polishing personal statements — from brainstorming to final draft.
+| Skill | What it does |
+|---|---|
+| **personal-statement** | Write, upgrade or polish a personal statement / SOP / motivation letter / scholarship essay, keep it close to the applicant's own draft, add verified current facts, and prepare interview or recorded-video answers |
+| **harvard-cv** | Create, upgrade or tailor a one-page Harvard-style CV with action-verb, result-focused bullets |
+| **debate-mode** | Claude does not just agree: it researches the claim first and returns a sourced verdict (Yes / No / Partly / Not enough evidence) |
 
-## Overview
+> Based on [DiamondhunterSA/personal-statement-skill](https://github.com/DiamondhunterSA/personal-statement-skill) (MIT). See [CREDITS.md](CREDITS.md) for what is original and what changed.
 
-This skill provides an intelligent **5-stage writing assistant** for personal statements across all application contexts:
+## Install
 
-- **5-Stage Workflow** — Gather → Plan → Write → Polish → Iterate
-- **10+ Discipline Templates** — Tailored guidance for CS, Engineering, Medicine, Law, Business, Humanities, and more
-- **4 Reference Modules** — Frameworks, discipline-specific advice, annotated examples, and format templates
-- **Multi-Language Support** — Bilingual parallel text, localized tone adaptation
-- **Anti-AI Detection** — Built-in vocabulary checks to avoid common AI writing red flags
-
-### Supported Application Types
-
-| Type | Typical Length | Key Focus |
-|------|---------------|-----------|
-| Graduate / Master's | 500–1000 words | Academic fit, career goals |
-| PhD Program | 1000–2000 words | Research interest, advisor fit |
-| Scholarship | 500–800 words | Merit, impact, potential |
-| Job Application | 300–500 words | Skills, experience, role fit |
-| Fellowship | 800–1500 words | Leadership, community impact |
-| Motivation Letter (European) | 1–2 pages | Formal letter format |
-
-### How It Works
-
-The skill follows a structured **progressive disclosure** approach:
-
-```
-Stage 1: Gather    →  Collect context, CV, program requirements
-Stage 2: Plan      →  Build content pillars, discipline-aligned outline
-Stage 3: Write     →  Draft with "show don't tell", anti-AI tone
-Stage 4: Polish    →  Grammar, flow, specificity, word count
-Stage 5: Iterate   →  Targeted revision based on feedback
-```
-
-**Key Features:**
-- **Context persistence** — Saves applicant info to `.claude/personal-statement-context.md` for reuse across multiple applications
-- **Discipline alignment** — Automatically adapts guidance based on target field (CS emphasizes projects, Medicine emphasizes empathy + rigor, etc.)
-- **Multi-application support** — Keeps 70% core narrative stable, rewrites only "Why this program" sections for each target
-
-## Quick Start
-
-### Option 1: npx skills (CLI)
+### Claude Plugin Marketplace (Claude Code / Cowork)
 
 ```bash
-npx skills add DiamondhunterSA/personal-statement-skill --skill personal-statement
+claude plugin marketplace add __OWNER__/__REPO__
 ```
-
-### Option 2: Claude Plugin Marketplace (Claude Code / Cowork)
 
 ```bash
-# Step 1: Add the marketplace
-claude plugin marketplace add DiamondhunterSA/personal-statement-skill
-
-# Step 2: Install the skill
-claude plugin install personal-statement@DiamondhunterSA-skills
+claude plugin install personal-statement@__OWNER__-skills
 ```
+
+```bash
+claude plugin install harvard-cv@__OWNER__-skills
+```
+
+```bash
+claude plugin install debate-mode@__OWNER__-skills
+```
+
+While the repository is private, the marketplace commands need a GitHub login that can read it.
+
+### npx skills (CLI)
+
+```bash
+npx skills add __OWNER__/__REPO__ --skill personal-statement
+```
+
+### Manual
+
+Copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/skills/` (project).
 
 ## Skills
 
@@ -66,115 +48,118 @@ claude plugin install personal-statement@DiamondhunterSA-skills
 
 | Skill | Description |
 |-------|-------------|
-| [personal-statement](https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/skills/personal-statement) | Assist in writing, structuring, and polishing personal statements and self-introductions. Use when the user mentions writing a PS, personal statement, self-introduction, application essay, motivation letter, statement of purpose, cover letter, or personal bio — for study abroad applications, graduate/PhD admissions, scholarship applications, job applications, or any similar context. |
+| [debate-mode](https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/skills/debate-mode) | Evidence-first debate. Instead of agreeing, Claude researches a claim or proposal and returns a sourced verdict (Yes / No / Partly / Not enough evidence) before giving a recommendation. Use when the user asks Claude to debate, argue, challenge them, push back, fact-check, "debat pakai fakta", "jangan iya-iya aja", "don't just agree", "prove it", or asks whether an idea, claim, or edit (for example to a personal statement or CV) is right or relevant. |
+| | ```npx skills add DiamondhunterSA/personal-statement-skill --skill debate-mode``` |
+| | ```claude plugin install debate-mode@DiamondhunterSA-skills``` |
+| [harvard-cv](https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/skills/harvard-cv) | Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education → Experience → Leadership & Activities → Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions "Harvard CV", "Harvard resume", "Harvard format", or needs a CV to go with a university, scholarship, internship, or job application. |
+| | ```npx skills add DiamondhunterSA/personal-statement-skill --skill harvard-cv``` |
+| | ```claude plugin install harvard-cv@DiamondhunterSA-skills``` |
+| [personal-statement](https://github.com/DiamondhunterSA/personal-statement-skill/tree/main/skills/personal-statement) | Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, or wants to prepare video/interview answers from a statement. |
 | | ```npx skills add DiamondhunterSA/personal-statement-skill --skill personal-statement``` |
 | | ```claude plugin install personal-statement@DiamondhunterSA-skills``` |
 
 <!-- SKILLS_TABLE_END -->
 
-## Skill Architecture
+## What each skill does
 
-### Reference Modules
+### personal-statement
 
-The skill includes 4 reference modules loaded on demand for token efficiency:
+| Mode | When |
+|---|---|
+| **Upgrade** | You have a draft and want it better without losing its story or voice |
+| **Full** | Start from scratch: Gather → Plan → Write → Polish → Iterate → Interview prep |
+| **Review only** | Feedback, no rewrite |
+| **Debate** | Challenge a choice before it goes into the statement |
+| **Interview prep** | Live interview notes, or a story bank for pre-recorded video interviews |
 
-| Module | File | Content |
-|--------|------|---------|
-| **Frameworks** | `references/frameworks.md` | Content Pillars framework, format templates by scenario |
-| **Discipline** | `references/discipline.md` | 10+ fields with specific guidance, key questions, and pitfalls |
-| **Examples** | `references/examples.md` | Annotated paragraphs, before/after comparisons, opening/closing techniques |
-| **Templates** | `references/post-templates.md` | Structural skeletons for essay, formal letter, SoP, and Q&A formats |
+Built-in rules:
 
-### Progressive Disclosure
+- **No silent fabrication**: any invented detail is marked `[VERIFY: ...]` and listed under "Check before submitting".
+- **Current facts must be searched and cited**, with vendor reports and conflicting numbers flagged.
+- **Anti-AI tone**: word, structure and content red flags ([anti-ai-tone.md](skills/personal-statement/references/anti-ai-tone.md)).
+- **Undergraduate and scholarship guidance**, two programs (1st/2nd choice) in one statement, and regional conventions (Hong Kong, UK UCAS, US Common App, Europe, Asia).
+- `scripts/ps_check.py`: word/character counts, sentence-length spread, em-dash density, red-flag phrases, leftover placeholders.
 
-```
-Always loaded:    Skill metadata (name, description, activation criteria)
-On activation:    Core 5-stage workflow instructions
-On demand:        Reference modules (frameworks, discipline, examples, templates)
-```
-
-This keeps token usage minimal — reference materials are only loaded when the relevant stage needs them.
-
-## Usage Examples
-
-### Start from Scratch
-
-```
-"Help me write a personal statement for a CS Master's at CMU"
+```bash
+python skills/personal-statement/scripts/ps_check.py statement.txt --limit-words 500
 ```
 
-The skill will guide you through all 5 stages, starting with context gathering.
+### harvard-cv
 
-### Polish an Existing Draft
+- Modes: **Create**, **Upgrade** (audit table → rewrite → before/after), **Tailor** (map to a program or job), **Review only**.
+- Layout variants for secondary school students, university students and experienced applicants.
+- Bullet formula: *action verb + what + how + result*; no invented numbers.
+- `scripts/cv_check.py`: weak openers, pronouns, buzzwords, bullets without results, repeated verbs, mixed date formats, length.
 
-```
-"Here's my personal statement draft, please help me polish it: [paste draft]"
-```
-
-Jumps directly to Stage 4 (Polish) with grammar, flow, and specificity checks.
-
-### Multiple Applications
-
-```
-"I need to adapt my PS for both MIT and Stanford"
+```bash
+python skills/harvard-cv/scripts/cv_check.py cv.md
 ```
 
-Keeps the core narrative stable and rewrites program-specific sections.
+### debate-mode
 
-## Project Structure
+1. Restates your message as checkable claims (fact, causal, relevance, preference).
+2. Researches them with web search (deeper research for recent or high-stakes claims).
+3. Returns a verdict per claim with confidence and sources, the strongest counter-argument, and a recommendation.
+4. Changes its verdict only for new evidence or a better argument, not for insistence.
+
+Example prompts:
+
+```
+Debat pakai fakta: AI fraud news itu nggak relevan buat PS Data Science, kan?
+```
+
+```
+Don't just agree. Is it true that Hong Kong is still the biggest IPO market this year?
+```
+
+## Usage examples
+
+```
+Upgrade this personal statement for CityU Data Science (1st) and CFFT (2nd), undergraduate + scholarship. Keep it close to the original: [paste]
+```
+
+```
+Turn my personal statement into a story bank for a recorded video interview.
+```
+
+```
+Upgrade my CV to Harvard style and tailor it for a fintech internship: [paste]
+```
+
+## Project structure
 
 ```
 .
-├── .claude-plugin/              # Plugin marketplace configuration
-│   └── marketplace.json
+├── .claude-plugin/marketplace.json      # generated
 ├── .github/
-│   ├── scripts/                 # CI/CD automation scripts
-│   │   ├── generate-plugins.py  # Auto-generate plugins/ from skills/
-│   │   └── update-readme.py     # Auto-update skills table in README
-│   └── workflows/               # GitHub Actions workflows
-│       ├── generate-plugins.yml
-│       └── update-readme.yml
-├── skills/                      # Skill source files (edit here)
-│   └── personal-statement/
+│   ├── scripts/generate-plugins.py      # skills/ → plugins/
+│   ├── scripts/update-readme.py         # skills table above
+│   └── workflows/
+├── skills/                              # edit here
+│   ├── personal-statement/
+│   │   ├── SKILL.md
+│   │   ├── references/                  # frameworks, discipline, examples, templates,
+│   │   │                                # anti-ai-tone, undergraduate-scholarship, regional,
+│   │   │                                # research-and-verify, interview-prep
+│   │   └── scripts/ps_check.py
+│   ├── harvard-cv/
+│   │   ├── SKILL.md
+│   │   ├── references/                  # harvard-format, action-verbs, bullet-upgrades
+│   │   └── scripts/cv_check.py
+│   └── debate-mode/
 │       ├── SKILL.md
-│       └── references/
-│           ├── discipline.md
-│           ├── examples.md
-│           ├── frameworks.md
-│           └── post-templates.md
-├── plugins/                     # Auto-generated plugin distributions
-│   └── personal-statement/
-└── README.md
+│       └── references/evidence-standards.md
+├── plugins/                             # generated: plugins/<name>/skills/<name>/
+├── CREDITS.md
+└── LICENSE
 ```
 
-### Two Distribution Channels
+On every push to `main`, GitHub Actions regenerates `plugins/` and the skills table. To run it locally:
 
-| Channel | How It Works | Install Command |
-|---------|-------------|-----------------|
-| **npx skills** | Direct CLI installation from `skills/` | `npx skills add DiamondhunterSA/personal-statement-skill --skill personal-statement` |
-| **Claude Plugin Marketplace** | Auto-generated `plugins/` via `.claude-plugin/marketplace.json` | `claude plugin install personal-statement@DiamondhunterSA-skills` |
-
-### CI/CD Automation
-
-On push to `main`, GitHub Actions automatically:
-1. **Regenerates** `plugins/` from `skills/` source (via `generate-plugins.py`)
-2. **Updates** the skills table in this README (via `update-readme.py`)
-
-## Contributing
-
-To add a new skill:
-
-1. Create a new directory under `skills/` (e.g., `skills/my-new-skill/`)
-2. Add a `SKILL.md` with YAML frontmatter (`name`, `description`) and skill instructions
-3. Optionally add a `references/` directory for supporting materials
-4. Push to `main` — CI will auto-generate the plugin and update this README
-
-## Resources
-
-- [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code/overview)
-- [Plugins Guide](https://docs.claude.com/en/docs/claude-code/plugins)
-- [Agent Skills Guide](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview)
+```bash
+pip install pyyaml && python .github/scripts/generate-plugins.py && python .github/scripts/update-readme.py
+```
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE) and [CREDITS.md](CREDITS.md). Not affiliated with Harvard University or any university mentioned in examples.

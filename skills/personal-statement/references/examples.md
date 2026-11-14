@@ -16,15 +16,15 @@ Since full-length essays can be overwhelming, these "skeleton paragraphs" (openi
 > **[Opening Paragraph]**
 > The cursor blinked steadily at the end of line 402. For three weeks, our predictive model for local traffic congestion had stalled at a meager 65% accuracy. It wasn't a lack of data; it was the noise. I realized we were treating every weather variable equally.
 >
-> **[Annotation: Uses *in medias res* technique—dropping the reader directly into the middle of the action. The blinking cursor creates immediate tension and establishes an authentic research bottleneck scenario.]**
+> **[Annotation: Uses *in medias res* technique, dropping the reader directly into the middle of the action. The blinking cursor creates immediate tension and establishes an authentic research bottleneck scenario.]**
 >
 > **[Body Paragraph]**
-> Instead of blindly feeding the algorithm more datasets, I paused to study the meteorological patterns specific to Seattle. I proposed integrating a weighted penalty system for micro-climate shifts—specifically, unexpected rainfall during rush hour. I rewrote the data-cleaning pipeline using Python, reducing processing time by 30% and bumping our model's accuracy to 82%.
+> Instead of blindly feeding the algorithm more datasets, I paused to study the meteorological patterns specific to Seattle. I proposed integrating a weighted penalty system for micro-climate shifts, specifically unexpected rainfall during rush hour. I rewrote the data-cleaning pipeline using Python, reducing processing time by 30% and bumping our model's accuracy to 82%.
 >
 > **[Annotation: Demonstrates rather than states "analytical ability" and "programming skills." Instead of saying "I'm good at Python," the writer proves it with specific metrics (30%, 82%) and concrete actions (proposed, rewrote).]**
 >
 > **[Closing Paragraph]**
-> This project taught me that data science isn't just about throwing computing power at a wall to see what sticks; it's about domain-aware intuition. At your program, specifically in Prof. Smith's Urban Informatics lab, I want to refine this intuition to build smarter, adaptive city infrastructures.
+> This project taught me that more computing power rarely fixes a model. Knowing the domain does. At your program, specifically in Prof. Smith's Urban Informatics lab, I want to refine this intuition to build smarter, adaptive city infrastructures.
 >
 > **[Annotation: Elevates the theme by connecting past experience's insight with specific resources from the target program (Prof. Smith's lab). Shows the applicant has done their homework and is genuinely prepared.]**
 
@@ -34,7 +34,7 @@ Since full-length essays can be overwhelming, these "skeleton paragraphs" (openi
 **Focus:** Evolution of Research Motivation
 
 > **[Opening Paragraph]**
-> Growing up in a factory town, the afternoon siren didn't just signal the end of a shift; it dictated the rhythm of my community's respiratory health. I watched my grandfather, and dozens like him, trade lung capacity for a paycheck.
+> Growing up in a factory town, the afternoon siren signalled the end of a shift, and somehow also the rhythm of my community's coughing. I watched my grandfather, and dozens like him, trade lung capacity for a paycheck.
 >
 > **[Annotation: Establishes a powerful personal hook. Avoids cliché phrases like "I've loved sociology since childhood." Instead, uses concrete imagery ("siren," "trading lung capacity") to grab attention and ground the motivation in lived experience.]**
 >
@@ -125,7 +125,7 @@ States a clear, slightly contrarian position to demonstrate independent thinking
 
 Uses vivid imagery to create an immediate mental picture.
 
-**Example:** "At 3 a.m., the lab hummed with the sound of centrifuges. My hands shook slightly—not from cold, but from what the data on my screen meant."
+**Example:** "At 3 a.m., the lab hummed with the sound of centrifuges. My hands shook a little. It wasn't the cold. It was what the data on my screen meant."
 
 *Why it works:* Creates sensory immersion. The reader can hear the lab, see the screen, feel the nervousness. Establishes setting and emotional state simultaneously.
 
@@ -149,7 +149,7 @@ If you opened with the Jenga tower analogy from above:
 
 #### Pattern 2: The Forward-Looking Pivot
 
-**Example:** "These experiences taught me that climate policy isn't just about carbon credits and emissions targets—it's about people. At your program, I will combine technical expertise with community-based research to develop solutions that work on the ground, not just in models."
+**Example:** "These experiences taught me that climate policy succeeds or fails with the people it affects, whatever the carbon targets say. At your program, I will combine technical expertise with community-based research to develop solutions that work on the ground, not just in models."
 
 *Why it works:* Summarizes a key insight, then immediately applies it to how the applicant will contribute to the specific program. Bridges past to future.
 
@@ -181,6 +181,8 @@ With the rise of large language models, admissions officers have become highly s
 | *"My passion **knows no bounds**..."* | Hyperbolic and cliché. | *"I am deeply committed to..."* or *"I have dedicated significant time to..."* |
 | *"This opportunity is a **golden ticket** to..."* | Metaphor from pop culture, inappropriate for academic writing. | *"This program would enable me to..."* |
 | *"I am **poised** to make an impact..."* | Stiff, unnatural phrasing. | *"I am **prepared** to..."* or *"I aim to..."* |
+
+For the full list (including structure-level patterns such as "not just X, but Y", triplets and em-dash habits), see [anti-ai-tone.md](anti-ai-tone.md).
 
 ---
 

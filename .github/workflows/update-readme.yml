@@ -33,4 +33,5 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add README.md
           git diff --staged --quiet || git commit -m "Update skills table in README"
+          git pull --rebase  # the generate-plugins workflow pushes to main on the same trigger
           git push

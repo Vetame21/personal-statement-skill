@@ -13,7 +13,7 @@ Standard continuous-prose essay. No headings, no salutations. The most widely us
   A vivid scene, provocative question, or bold statement that draws the reader in.
 
 [Paragraph 1: Origin of Interest]
-  How your curiosity in this field began — a pivotal course, book, event, or conversation.
+  How your curiosity in this field began — a specific course, book, event, or conversation.
 
 [Paragraph 2: Key Experience #1]
   Research, internship, or project. State your specific role, methods used, and measurable outcomes.

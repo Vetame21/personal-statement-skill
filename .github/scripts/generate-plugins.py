@@ -88,6 +88,8 @@ def generate_plugin_json(name: str, description: str, version: str, repo_info: d
 # Category mapping based on skill characteristics
 SKILL_CATEGORIES = {
     "personal-statement": "productivity",
+    "harvard-cv": "productivity",
+    "debate-mode": "productivity",
 }
 
 
@@ -125,19 +127,21 @@ npx skills add {owner_repo} --skill {name}
 """
 
 
-def copy_skill_to_plugin(skill_path: Path, plugin_path: Path):
-    """Copy skill contents into plugin structure."""
-    plugin_skills_dir = plugin_path / "skills"
-    plugin_skills_dir.mkdir(parents=True, exist_ok=True)
+def copy_skill_to_plugin(skill_path: Path, plugin_path: Path, name: str):
+    """Copy the whole skill into plugins/<name>/skills/<name>/.
 
-    for item in skill_path.iterdir():
-        dest = plugin_skills_dir / item.name if item.name in ["SKILL.md", "references"] else plugin_path / item.name
-
-        if item.is_dir():
-            shutil.copytree(item, dest, dirs_exist_ok=True)
-        else:
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(item, dest)
+    Claude Code discovers plugin skills at skills/<skill-name>/SKILL.md.
+    The previous version copied SKILL.md straight into skills/, which
+    broke discovery, and dropped any other folders (e.g. scripts/) at
+    the plugin root where the skill's relative links could not reach them.
+    """
+    dest = plugin_path / "skills" / name
+    shutil.copytree(
+        skill_path,
+        dest,
+        dirs_exist_ok=True,
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store"),
+    )
 
 
 def main():
@@ -181,7 +185,7 @@ def main():
         plugin_path.mkdir()
 
         # Copy skill files
-        copy_skill_to_plugin(skill_path, plugin_path)
+        copy_skill_to_plugin(skill_path, plugin_path, name)
 
         # Generate plugin.json
         plugin_json_dir = plugin_path / ".claude-plugin"

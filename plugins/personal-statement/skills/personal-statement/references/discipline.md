@@ -9,6 +9,8 @@ Different academic disciplines and professional fields value different qualities
 | Discipline | Core Focus | Key Differentiator | What Admissions Committees Value Most |
 |------------|------------|-------------------|--------------------------------------|
 | Computer Science | Technical depth, problem-solving, innovation | Concrete projects with specific technologies | Ability to think algorithmically, build things, and tackle real-world problems |
+| Data Science | Maths/statistics + programming applied to real questions | A question answered with data, and what the data could not show | Quantitative foundation, curiosity about data, careful reasoning about evidence |
+| FinTech / Computational Finance | Maths, coding and how financial systems work | Linking a technical skill to a concrete money problem (payments, risk, fraud) | Quantitative ability, interest in markets and regulation, ethical awareness |
 | Engineering | Application of theory, teamwork, practical impact | Design process, constraints, trade-offs | Hands-on experience, collaboration, results-oriented mindset |
 | Business/Management | Leadership, strategy, impact quantification | Measurable outcomes, stakeholder management | Decision-making under uncertainty, team leadership, ROI awareness |
 | Medicine/Healthcare | Empathy, clinical observation, scientific rigor | Patient interaction, research ethics | Compassion + analytical thinking, commitment to service |
@@ -45,6 +47,44 @@ Different academic disciplines and professional fields value different qualities
 
 ---
 
+### Data Science & Statistics
+
+**What to highlight:**
+- **A question you tried to answer with data**: even a small one (school survey, sports stats, a public dataset)
+- **Maths and statistics preparation**: relevant grades, competitions, self-study (probability, linear algebra, calculus)
+- **Tools, used for something**: "cleaned a CSV of 2,000 rows in Python to find which club activities students drop first", not a list of libraries
+- **Judgement about data**: missing values, bias, what a correlation does *not* prove
+
+**For school leavers:** a spreadsheet project, a simple Python script, or a clear explanation of how data is used in something familiar (recommendations, weather, sales) is enough. Show curiosity and the first steps taken.
+
+**Avoid:**
+- "Data is the new oil" and other slogans
+- Claiming to "do AI/machine learning" after one tutorial
+- Treating data science as only coding; mention the maths and the questions
+
+**Sample strong sentence:** "When our class survey showed that students who slept less scored higher, I learned to ask what else was different about them before believing the chart."
+
+---
+
+### FinTech, Computational Finance & Quantitative Finance
+
+**What to highlight:**
+- **Why money systems interest you**: a concrete trigger (a family business, online payments, a scam someone you know faced, a market event)
+- **Quantitative preparation**: maths, statistics, programming
+- **Understanding of the field's problems**: payments, risk, fraud detection, regulation, financial inclusion
+- **Ethics and trust**: security, privacy, consumer protection
+
+**For school leavers:** one clear, correct explanation of how technology changes a financial service you know, plus the maths and coding steps you have taken, is enough.
+
+**Avoid:**
+- "I want to get rich" or crypto hype
+- Market-prediction claims ("I built a model that beats the market")
+- Unverified statistics about fraud, IPOs or crypto; cite official sources or leave them out
+
+**Sample strong sentence:** "Watching my aunt's shop switch to QR payments made me wonder how the bank decides, in under a second, that a payment is not fraud."
+
+---
+
 ### Engineering (Civil, Mechanical, Electrical, Chemical, etc.)
 
 **What to highlight:**
@@ -62,7 +102,7 @@ Different academic disciplines and professional fields value different qualities
 - Focusing only on formulas and theory without application
 - Ignoring the human/real-world impact of your work
 
-**Sample strong sentence:** "Our capstone team designed a water purification system for rural communities, balancing filtration efficiency with maintenance accessibility — resulting in a prototype that met 95% of WHO standards at 1/3 the cost of commercial alternatives."
+**Sample strong sentence:** "Our capstone team designed a water purification system for rural communities, balancing filtration efficiency with maintenance accessibility, resulting in a prototype that met 95% of WHO standards at 1/3 the cost of commercial alternatives."
 
 ---
 
@@ -128,7 +168,7 @@ Different academic disciplines and professional fields value different qualities
 - Assuming all lawyers must be aggressive or adversarial
 - Ignoring the collaborative nature of modern legal practice
 
-**Sample strong sentence:** "My research on digital privacy law examined how GDPR's 'right to be forgotten' conflicts with historical preservation — leading me to advocate for a tiered approach that balances individual control with public record integrity."
+**Sample strong sentence:** "My research on digital privacy law examined how GDPR's 'right to be forgotten' conflicts with historical preservation, which led me to advocate for a tiered approach that balances individual control with public record integrity."
 
 ---
 
@@ -150,7 +190,7 @@ Different academic disciplines and professional fields value different qualities
 - Overly academic language that obscures your genuine voice
 - Disconnecting your intellectual interests from broader human concerns
 
-**Sample strong sentence:** "Analyzing the marginalia in 19th-century abolitionist newspapers revealed how ordinary readers reinterpreted radical texts — a discovery that shaped my current interest in how social movements spread through participatory media."
+**Sample strong sentence:** "Analyzing the marginalia in 19th-century abolitionist newspapers revealed how ordinary readers reinterpreted radical texts. That discovery that shaped my current interest in how social movements spread through participatory media."
 
 ---
 
