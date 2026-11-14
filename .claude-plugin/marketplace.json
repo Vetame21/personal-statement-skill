@@ -18,7 +18,7 @@
       "name": "harvard-cv",
       "source": "./plugins/harvard-cv",
       "description": "Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education \u2192 Experience \u2192 Leadership & Activities \u2192 Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions \"Harvard CV\", \"Harvard resume\", \"Harvard format\", or needs a CV to go with a university, scholarship, internship, or job application.",
-      "version": "0.1.1794628265",
+      "version": "0.1.1794630377",
       "category": "productivity"
     },
     {
