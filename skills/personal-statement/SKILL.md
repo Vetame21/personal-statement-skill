@@ -1,6 +1,6 @@
 ---
 name: personal-statement
-description: Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, or wants to prepare video/interview answers from a statement.
+description: Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, wants the statement debated or stress-tested by a reviewer panel, or wants to prepare video/interview answers from a statement.
 ---
 
 # Personal Statement
@@ -15,7 +15,7 @@ Read the request and choose one mode. Say which mode you are using in one line, 
 |---|---|---|
 | **Upgrade** (light edit) | User has a draft and wants it better *without* losing their story or voice ("jangan jauh-jauh", "keep it close", "same vibe") | [Upgrade mode](#upgrade-mode) |
 | **Full** | User starts from scratch, or explicitly wants a full rewrite | Stage 1: Gather |
-| **Review only** | User wants feedback, not a rewrite | Stage 4 checks, reported as a review |
+| **Review only** | User wants feedback, not a rewrite | Stage 4 checks + Debate 2 (post-draft panel), reported as a review |
 | **Debate** | User challenges a choice ("is this even relevant?", "debat pakai fakta", "jangan iya-iya aja") | Load the `debate-mode` skill if available; otherwise follow [Debate inside this skill](#debate-inside-this-skill) |
 | **Interview prep** | User wants video or live interview answers built from the statement | Stage 6 |
 
@@ -33,6 +33,7 @@ These apply in every mode.
 4. **Declare, don't beg.** The statement argues why the applicant fits. No "I really hope you accept me", no "I promise". Scholarship need is stated plainly, then tied to a plan.
 5. **Every claim must survive an interview.** If the applicant could not talk about it for 60 seconds, cut it or flag it.
 6. **Do not agree just to please.** If the user proposes an addition that weakens the statement (off-topic news, a scary framing, a fact that cannot be verified), say so with reasons, then offer the better version. See Debate below.
+7. **Debate twice.** Every writing job runs a panel debate **before writing** (what the statement should say) and **after the draft** (attack it before a real reader does): [references/debate-panel.md](references/debate-panel.md). Quick mode by default; "deep" on request. Skip only if the user says so.
 
 ---
 
@@ -48,9 +49,11 @@ Goal: the same story, told better. A reader who saw the original should recognis
    - Missing pieces the application needs (a second program choice not mentioned, scholarship angle, "why this place").
    - Repetition and filler.
    - Words that are too formal or too odd for the applicant's level and age.
-4. **Rewrite at the lightest touch that fixes each issue.** Prefer editing a sentence over replacing a paragraph. Match the applicant's register: a high school applicant should sound like a capable 17-18 year old, not a consultant.
-5. **Show a short change table** (what changed, why), then the full text, then "Check before submitting".
-6. **Tone setting.** If the user says the text feels too stiff ("terlalu baku"), loosen it: contractions, shorter sentences, plain verbs. If they say too casual, tighten it. Do not swing to the other extreme.
+4. **Debate 1 (before rewriting).** Turn the fix list and any additions the user asked for into motions and run the pre-writing debate ([references/debate-panel.md](references/debate-panel.md)). The Applicant Advocate guards the keep list.
+5. **Rewrite at the lightest touch that fixes each issue.** Prefer editing a sentence over replacing a paragraph. Match the applicant's register: a high school applicant should sound like a capable 17-18 year old, not a consultant.
+6. **Debate 2 (after rewriting).** Run the post-draft debate; apply "Fix now" verdicts at the lightest touch.
+7. **Show** the debate summary, a short change table (what changed, why), the full text, the scores, then "Check before submitting".
+8. **Tone setting.** If the user says the text feels too stiff ("terlalu baku"), loosen it: contractions, shorter sentences, plain verbs. If they say too casual, tighten it. Do not swing to the other extreme.
 
 ---
 
@@ -74,7 +77,8 @@ Exit: enough to outline.
 2. Check the discipline guide ([references/discipline.md](references/discipline.md)) and, for school leavers and scholarships, [references/undergraduate-scholarship.md](references/undergraduate-scholarship.md).
 3. Check regional conventions ([references/regional.md](references/regional.md)): limits, format, what readers expect.
 4. Two programs in one statement (1st and 2nd choice): find the shared core (e.g. maths + coding) and give the second choice one clear sentence of its own reason. Never leave it unmentioned.
-5. Present the outline; adjust on feedback.
+5. **Debate 1 (before writing).** Turn the open decisions (main story, opening, what to add or leave out, tone, scholarship paragraph) into motions and run the pre-writing debate ([references/debate-panel.md](references/debate-panel.md)).
+6. Present the locked outline with the verdicts; adjust on feedback.
 
 Exit: user approves the outline.
 
@@ -107,8 +111,9 @@ Exit: first draft shown.
 7. Specificity scan: replace vague claims with evidence, or flag them.
 8. Anti-AI pass ([references/anti-ai-tone.md](references/anti-ai-tone.md)).
 9. Placeholder and `[VERIFY]` sweep.
+10. **Debate 2 (after the draft).** Run the post-draft panel ([references/debate-panel.md](references/debate-panel.md)): attacks, clash, verdicts, fixes, scores.
 
-Exit: polished draft shown.
+Exit: polished draft shown, with the debate verdicts and scores.
 
 ### Stage 5: Iterate
 
@@ -189,4 +194,5 @@ Use the `debate-mode` skill when it is installed. If not, follow this short vers
 - [references/regional.md](references/regional.md): conventions by country and system
 - [references/research-and-verify.md](references/research-and-verify.md): adding facts, `[VERIFY]` markers
 - [references/interview-prep.md](references/interview-prep.md): live and video interview prep
+- [references/debate-panel.md](references/debate-panel.md): the before-writing and after-draft panel debates
 - `scripts/ps_check.py`: word/character counts and red-flag phrase scan

@@ -54,7 +54,7 @@ Copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/ski
 | [harvard-cv](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/harvard-cv) | Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education → Experience → Leadership & Activities → Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions "Harvard CV", "Harvard resume", "Harvard format", or needs a CV to go with a university, scholarship, internship, or job application. |
 | | ```npx skills add Vetame21/personal-statement-skill --skill harvard-cv``` |
 | | ```claude plugin install harvard-cv@Vetame21-skills``` |
-| [personal-statement](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/personal-statement) | Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, or wants to prepare video/interview answers from a statement. |
+| [personal-statement](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/personal-statement) | Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, wants the statement debated or stress-tested by a reviewer panel, or wants to prepare video/interview answers from a statement. |
 | | ```npx skills add Vetame21/personal-statement-skill --skill personal-statement``` |
 | | ```claude plugin install personal-statement@Vetame21-skills``` |
 
@@ -74,6 +74,7 @@ Copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/ski
 
 Built-in rules:
 
+- **Panel debate, twice**: before writing, a panel (Admissions Reader, Skeptic, Applicant Advocate, Tone Detector) debates the plan as motions; after the draft, it attacks the text, rebuts each other, and a moderator gives verdicts and 1-5 scores ([debate-panel.md](skills/personal-statement/references/debate-panel.md)).
 - **No silent fabrication**: any invented detail is marked `[VERIFY: ...]` and listed under "Check before submitting".
 - **Current facts must be searched and cited**, with vendor reports and conflicting numbers flagged.
 - **Anti-AI tone**: word, structure and content red flags ([anti-ai-tone.md](skills/personal-statement/references/anti-ai-tone.md)).
@@ -140,7 +141,7 @@ Upgrade my CV to Harvard style and tailor it for a fintech internship: [paste]
 │   │   ├── SKILL.md
 │   │   ├── references/                  # frameworks, discipline, examples, templates,
 │   │   │                                # anti-ai-tone, undergraduate-scholarship, regional,
-│   │   │                                # research-and-verify, interview-prep
+│   │   │                                # research-and-verify, interview-prep, debate-panel
 │   │   └── scripts/ps_check.py
 │   ├── harvard-cv/
 │   │   ├── SKILL.md
