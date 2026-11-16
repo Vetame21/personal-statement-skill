@@ -22,6 +22,13 @@
       "category": "productivity"
     },
     {
+      "name": "humanizer",
+      "source": "./plugins/humanizer",
+      "description": "Make any piece of writing sound natural and like its author instead of machine-written - personal statements, reports, thesis chapters, CVs, cover letters, emails, posts - in English or Indonesian. Diagnoses AI-sounding words, rhythm and structure, asks whether to also upgrade the content, then rewrites at the lightest touch while keeping every fact, number and citation. Use when the user says humanize, humanizer, make it sound human or natural, sounds like AI, kayak AI, kurang natural, terlalu kaku, or runs /humanizer.",
+      "version": "0.1.1794835897",
+      "category": "productivity"
+    },
+    {
       "name": "personal-statement",
       "source": "./plugins/personal-statement",
       "description": "Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, wants the statement debated or stress-tested by a reviewer panel, or wants to prepare video/interview answers from a statement.",

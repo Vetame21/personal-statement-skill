@@ -10,5 +10,6 @@ This repository is based on **[DiamondhunterSA/personal-statement-skill](https:/
 - **harvard-cv** (new): create, upgrade and tailor Harvard-style CVs, with a `cv_check.py` linter.
 - **thesis** (new): undergraduate thesis / skripsi coach with structures, examiner criteria, defense prep, integrity rules, and citation and text checkers.
 - **report** (new): lab, programming, technical, makalah, internship and progress reports.
+- **humanizer** (new): natural-voice rewriting for any text with an optional content upgrade, and a before/after pattern checker.
 
 The Harvard-style CV guidance summarises public resume guides from Harvard's Mignone Center for Career Success. This project is not affiliated with or endorsed by Harvard University.

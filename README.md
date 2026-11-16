@@ -9,6 +9,7 @@ Agent skills for [Claude Code](https://code.claude.com/docs) and Cowork that hel
 | **debate-mode** | Claude does not just agree: it researches the claim first and returns a sourced verdict (Yes / No / Partly / Not enough evidence) |
 | **thesis** | Coach an undergraduate thesis (skripsi / tugas akhir / 毕业论文): topic and proposal, Bab I-V or IMRaD chapters, literature and citations, examiner-simulation debate, defense (sidang) prep, AI-use and similarity rules |
 | **report** | Lab reports, programming lab reports, technical/project reports, makalah, internship (KP/magang) and progress reports |
+| **humanizer** | `/humanizer`: make any text (personal statement, report, thesis, CV, email) sound natural and like its author; diagnoses AI-sounding patterns, asks whether to upgrade the content too, keeps every fact and citation |
 
 > Based on [DiamondhunterSA/personal-statement-skill](https://github.com/DiamondhunterSA/personal-statement-skill) (MIT). See [CREDITS.md](CREDITS.md) for what is original and what changed.
 
@@ -40,6 +41,10 @@ claude plugin install thesis@Vetame21-skills
 claude plugin install report@Vetame21-skills
 ```
 
+```bash
+claude plugin install humanizer@Vetame21-skills
+```
+
 While the repository is private, the marketplace commands need a GitHub login that can read it.
 
 ### npx skills (CLI)
@@ -64,6 +69,9 @@ Copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/ski
 | [harvard-cv](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/harvard-cv) | Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education → Experience → Leadership & Activities → Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions "Harvard CV", "Harvard resume", "Harvard format", or needs a CV to go with a university, scholarship, internship, or job application. |
 | | ```npx skills add Vetame21/personal-statement-skill --skill harvard-cv``` |
 | | ```claude plugin install harvard-cv@Vetame21-skills``` |
+| [humanizer](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/humanizer) | Make any piece of writing sound natural and like its author instead of machine-written - personal statements, reports, thesis chapters, CVs, cover letters, emails, posts - in English or Indonesian. Diagnoses AI-sounding words, rhythm and structure, asks whether to also upgrade the content, then rewrites at the lightest touch while keeping every fact, number and citation. Use when the user says humanize, humanizer, make it sound human or natural, sounds like AI, kayak AI, kurang natural, terlalu kaku, or runs /humanizer. |
+| | ```npx skills add Vetame21/personal-statement-skill --skill humanizer``` |
+| | ```claude plugin install humanizer@Vetame21-skills``` |
 | [personal-statement](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/personal-statement) | Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, wants the statement debated or stress-tested by a reviewer panel, or wants to prepare video/interview answers from a statement. |
 | | ```npx skills add Vetame21/personal-statement-skill --skill personal-statement``` |
 | | ```claude plugin install personal-statement@Vetame21-skills``` |
@@ -142,6 +150,15 @@ Don't just agree. Is it true that Hong Kong is still the biggest IPO market this
 - Structures and checklists for lab reports, programming lab reports, technical/project reports, makalah, KP/magang and progress reports.
 - Marker-style review panel; same checker scripts as `thesis`.
 
+### humanizer
+
+1. Diagnoses the text (English or Indonesian): AI-typical words, padding phrases, "not just X but Y", lists of three, repeated paragraph openers, uniform sentence length, em dashes.
+2. Asks: **humanize only**, or **humanize + upgrade** with the matching skill (personal-statement, report, thesis, harvard-cv)?
+3. Rewrites at the lightest touch (length within about ±10%), never changing facts, numbers, citations or quotes, and never inventing details; unclear spots are flagged `[ADD DETAIL]`.
+4. Shows a before/after check with `scripts/humanize_check.py --compare`.
+
+It improves style; it is not a detector-evasion tool and does not replace any AI-use disclosure a school or employer requires.
+
 ## Usage examples
 
 ```
@@ -181,7 +198,8 @@ Upgrade my CV to Harvard style and tailor it for a fintech internship: [paste]
 │   │   └── references/evidence-standards.md
 │   ├── thesis/                          # structure, what-examiners-want, literature-and-citations,
 │   │                                    # defense-prep, debate-panel, integrity-and-ai + 2 scripts
-│   └── report/                          # report-types, review-panel + 2 scripts
+│   ├── report/                          # report-types, review-panel + 2 scripts
+│   └── humanizer/                       # patterns (EN + ID) + humanize_check.py
 ├── plugins/                             # generated: plugins/<name>/skills/<name>/
 ├── CREDITS.md
 └── LICENSE

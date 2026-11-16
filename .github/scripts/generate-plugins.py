@@ -92,6 +92,7 @@ SKILL_CATEGORIES = {
     "debate-mode": "productivity",
     "thesis": "productivity",
     "report": "productivity",
+    "humanizer": "productivity",
 }
 
 
