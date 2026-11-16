@@ -8,5 +8,7 @@ This repository is based on **[DiamondhunterSA/personal-statement-skill](https:/
 - **personal-statement**: Upgrade (light edit) mode, undergraduate and scholarship guidance, two-program statements, `[VERIFY]` markers for invented details, a research-and-cite step for current facts, regional conventions, interview and recorded-video prep, Data Science and FinTech guidance, a two-stage panel debate (before writing and after the draft), a full anti-AI tone checklist, and a `ps_check.py` script; example sentences now follow the anti-AI rules.
 - **debate-mode** (new): Claude researches before agreeing and returns sourced verdicts.
 - **harvard-cv** (new): create, upgrade and tailor Harvard-style CVs, with a `cv_check.py` linter.
+- **thesis** (new): undergraduate thesis / skripsi coach with structures, examiner criteria, defense prep, integrity rules, and citation and text checkers.
+- **report** (new): lab, programming, technical, makalah, internship and progress reports.
 
 The Harvard-style CV guidance summarises public resume guides from Harvard's Mignone Center for Career Success. This project is not affiliated with or endorsed by Harvard University.

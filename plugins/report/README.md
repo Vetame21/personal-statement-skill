@@ -1,0 +1,22 @@
+# report
+
+Plan, write, review and polish academic and technical reports - lab reports (laporan praktikum), programming lab and assignment reports, technical/project reports, makalah, internship reports (laporan magang / kerja praktik / KP), and research or progress reports - in Indonesian or English. Use when the user asks to write, structure, fix, shorten, or review a report, mentions laporan, lab report, praktikum, makalah, KP, magang, project report, or wants a report checked for structure, citations, or AI-sounding language.
+
+## Installation
+
+### Claude Code / Cowork
+
+```bash
+claude plugin marketplace add Vetame21/personal-statement-skill
+claude plugin install report@Vetame21-skills
+```
+
+### npx skills
+
+```bash
+npx skills add Vetame21/personal-statement-skill --skill report
+```
+
+---
+
+> This plugin is auto-generated from [skills/report](../../skills/report).

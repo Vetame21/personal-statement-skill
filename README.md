@@ -7,6 +7,8 @@ Agent skills for [Claude Code](https://code.claude.com/docs) and Cowork that hel
 | **personal-statement** | Write, upgrade or polish a personal statement / SOP / motivation letter / scholarship essay, keep it close to the applicant's own draft, add verified current facts, and prepare interview or recorded-video answers |
 | **harvard-cv** | Create, upgrade or tailor a one-page Harvard-style CV with action-verb, result-focused bullets |
 | **debate-mode** | Claude does not just agree: it researches the claim first and returns a sourced verdict (Yes / No / Partly / Not enough evidence) |
+| **thesis** | Coach an undergraduate thesis (skripsi / tugas akhir / 毕业论文): topic and proposal, Bab I-V or IMRaD chapters, literature and citations, examiner-simulation debate, defense (sidang) prep, AI-use and similarity rules |
+| **report** | Lab reports, programming lab reports, technical/project reports, makalah, internship (KP/magang) and progress reports |
 
 > Based on [DiamondhunterSA/personal-statement-skill](https://github.com/DiamondhunterSA/personal-statement-skill) (MIT). See [CREDITS.md](CREDITS.md) for what is original and what changed.
 
@@ -28,6 +30,14 @@ claude plugin install harvard-cv@Vetame21-skills
 
 ```bash
 claude plugin install debate-mode@Vetame21-skills
+```
+
+```bash
+claude plugin install thesis@Vetame21-skills
+```
+
+```bash
+claude plugin install report@Vetame21-skills
 ```
 
 While the repository is private, the marketplace commands need a GitHub login that can read it.
@@ -57,6 +67,12 @@ Copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/ski
 | [personal-statement](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/personal-statement) | Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, wants the statement debated or stress-tested by a reviewer panel, or wants to prepare video/interview answers from a statement. |
 | | ```npx skills add Vetame21/personal-statement-skill --skill personal-statement``` |
 | | ```claude plugin install personal-statement@Vetame21-skills``` |
+| [report](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/report) | Plan, write, review and polish academic and technical reports - lab reports (laporan praktikum), programming lab and assignment reports, technical/project reports, makalah, internship reports (laporan magang / kerja praktik / KP), and research or progress reports - in Indonesian or English. Use when the user asks to write, structure, fix, shorten, or review a report, mentions laporan, lab report, praktikum, makalah, KP, magang, project report, or wants a report checked for structure, citations, or AI-sounding language. |
+| | ```npx skills add Vetame21/personal-statement-skill --skill report``` |
+| | ```claude plugin install report@Vetame21-skills``` |
+| [thesis](https://github.com/Vetame21/personal-statement-skill/tree/main/skills/thesis) | Coach a student through an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis, graduation project / 毕业论文), from choosing a topic, writing the proposal, structuring chapters (Indonesian Bab I-V or international IMRaD), literature review, methodology, results and discussion, citations, similarity and AI-use rules, and preparing for the defense (sidang). Use when the user mentions skripsi, tugas akhir, TA, thesis, proposal penelitian, seminar proposal, sidang, bab 1/2/3/4/5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a thesis chapter reviewed, debated, or improved. |
+| | ```npx skills add Vetame21/personal-statement-skill --skill thesis``` |
+| | ```claude plugin install thesis@Vetame21-skills``` |
 
 <!-- SKILLS_TABLE_END -->
 
@@ -113,6 +129,19 @@ Debat pakai fakta: AI fraud news itu nggak relevan buat PS Data Science, kan?
 Don't just agree. Is it true that Hong Kong is still the biggest IPO market this year?
 ```
 
+### thesis
+
+- **Integrity first**: never invents data or references, coaches rather than ghostwrites, follows the campus AI-use and similarity rules (e.g. Indonesia's 2024 GenAI guidance).
+- Structures for Indonesian skripsi (Bab I-V), international IMRaD theses, CS design-and-implementation projects, and the Chinese 毕业论文 process (开题报告, 外文翻译, 答辩).
+- What examiners reward vs. common mistakes, a 10-criterion scoring sheet, a defense question bank and mock defense.
+- Debate panel (Examiner, Supervisor, Methodologist, Tone Detector) for topic choice and draft review.
+- `scripts/cite_check.py` (in-text citations vs reference list, APA and IEEE) and `scripts/text_check.py` (Indonesian + English padding/AI phrases, "signifikan" without a test, long sentences, placeholders).
+
+### report
+
+- Structures and checklists for lab reports, programming lab reports, technical/project reports, makalah, KP/magang and progress reports.
+- Marker-style review panel; same checker scripts as `thesis`.
+
 ## Usage examples
 
 ```
@@ -147,9 +176,12 @@ Upgrade my CV to Harvard style and tailor it for a fintech internship: [paste]
 │   │   ├── SKILL.md
 │   │   ├── references/                  # harvard-format, action-verbs, bullet-upgrades
 │   │   └── scripts/cv_check.py
-│   └── debate-mode/
-│       ├── SKILL.md
-│       └── references/evidence-standards.md
+│   ├── debate-mode/
+│   │   ├── SKILL.md
+│   │   └── references/evidence-standards.md
+│   ├── thesis/                          # structure, what-examiners-want, literature-and-citations,
+│   │                                    # defense-prep, debate-panel, integrity-and-ai + 2 scripts
+│   └── report/                          # report-types, review-panel + 2 scripts
 ├── plugins/                             # generated: plugins/<name>/skills/<name>/
 ├── CREDITS.md
 └── LICENSE

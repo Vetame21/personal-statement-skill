@@ -90,6 +90,8 @@ SKILL_CATEGORIES = {
     "personal-statement": "productivity",
     "harvard-cv": "productivity",
     "debate-mode": "productivity",
+    "thesis": "productivity",
+    "report": "productivity",
 }
 
 
