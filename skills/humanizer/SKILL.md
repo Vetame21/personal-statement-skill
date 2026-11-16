@@ -57,9 +57,20 @@ If the user already said which they want, skip the question. If they don't answe
 - Fix the diagnosed problems first; leave sentences that already sound natural alone.
 - Match register to the audience: a 17-year-old applicant, a lab report, an academic chapter and an email sound different. See [references/patterns.md](references/patterns.md#register-by-text-type).
 - If a voice sample was given, borrow its sentence length, word choice and level of formality.
+- **Summaries, reviews and reflections** (film or book summaries, article reviews, lab reflections) sound the most templated, because each sentence just reports "then X happens". Follow the summary rules in [references/patterns.md](references/patterns.md#summaries-and-reviews).
 - Never add a personal detail the user did not give. If a sentence is vague and only a real detail would fix it, flag it as `[ADD DETAIL: e.g. which project?]` instead of inventing one.
 
 **Humanize + upgrade**: load the matching skill and follow its workflow (for example personal-statement Upgrade mode with its debates, report review, thesis chapter coach, harvard-cv Upgrade). Apply the humanize rules to the final text.
+
+### 4b. Self-check loop (required)
+
+Before showing anything, save the rewrite and run `python scripts/humanize_check.py <rewrite> --per-sentence`. For every flagged sentence:
+
+- **generic transition opener** ("Next,", "Then,", "Furthermore,", "Selanjutnya,"): cut it, or join the sentence to its neighbour, or open with the subject and a concrete verb.
+- **vague claim** ("for decades", "sharply", "experts say"): replace with the specific fact from the user's source, or attribute it ("the film says..."), or flag `[ADD DETAIL]`.
+- **no concrete anchor**: tie it to a name, number, example or the writer's view, or merge it into a sentence that has one.
+
+Repeat until no sentence has a fixable flag (a plain fact with no flag is fine). Do not show a draft that still has fixable flags. If a flag cannot be fixed without inventing something, keep the sentence and list it under `[ADD DETAIL]`.
 
 ### 5. Show the result
 

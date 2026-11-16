@@ -114,6 +114,12 @@ def scan(text: str, lang: str) -> dict:
 
 GENERIC_OPENERS = re.compile(r"^(?:next|then|firstly|secondly|finally|furthermore|moreover|additionally|in addition|overall|selanjutnya|kemudian|selain itu|lebih lanjut)\b,?", re.I)
 VAGUE = re.compile(r"\b(?:sharply|significantly|dramatically|greatly|many people|experts? (?:say|agree)|for decades|in recent years|secara signifikan|banyak orang|para ahli|dalam beberapa tahun terakhir)\b", re.I)
+STARTERS = {"the", "a", "an", "it", "its", "she", "he", "they", "this", "that", "these", "those", "there",
+            "we", "i", "our", "my", "in", "on", "at", "for", "with", "after", "before", "when", "while",
+            "next", "then", "first", "finally", "however", "but", "and", "so", "as", "if", "because",
+            "ini", "itu", "dia", "mereka", "kami", "saya", "kita", "pada", "dalam", "setelah", "sebelum",
+            "namun", "tetapi", "dan", "jadi", "karena", "selain", "kemudian", "selanjutnya", "hal"}
+ATTRIBUTION = re.compile(r"\b(?:the|this|her|his|their) (?:film|book|article|study|report|paper|video|talk|author|speaker|documentary|survey)\b|\b(?:film|buku|artikel|penelitian|laporan|video|penulis) ini\b|\baccording to\b|\bmenurut\b", re.I)
 CONCRETE = re.compile(r"\d|[A-Z][a-z]+\s[A-Z][a-z]+|\b(?:I|my|we|saya|kami|aku)\b")
 
 
@@ -123,6 +129,7 @@ def per_sentence(text: str, lang: str) -> None:
     sents = [s for s in re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text.strip())) if WORD.search(s)]
     # words written with a capital in mid-sentence somewhere = names/proper nouns
     names = {t for s in sents for t in WORD.findall(s)[1:] if t[:1].isupper()}
+    low_words = {t for t in WORD.findall(text) if t.islower()}
     for i, s in enumerate(sents, 1):
         low = s.lower()
         notes = []
@@ -133,8 +140,12 @@ def per_sentence(text: str, lang: str) -> None:
         if VAGUE.search(s) and not re.search(r"\d", s):
             notes.append("vague claim (no number/source)")
         tokens = WORD.findall(s)
-        has_name = any(t in names for t in tokens)
-        if not (CONCRETE.search(s) or has_name) and len(tokens) > 6:
+        first = tokens[0] if tokens else ""
+        first_is_name = (first[:1].isupper() and first.lower() not in STARTERS
+                         and not first.lower().endswith("s") and first.lower() not in low_words)
+        has_name = first_is_name or any(t in names for t in tokens[1:])
+        has_attribution = bool(ATTRIBUTION.search(low))
+        if not (CONCRETE.search(s) or has_name or has_attribution) and len(tokens) > 6:
             notes.append("no concrete anchor (number, name, or writer's voice)")
         tag = "  " if not notes else "! "
         print(f"{tag}{i:>2}. {s[:110]}{'...' if len(s) > 110 else ''}")

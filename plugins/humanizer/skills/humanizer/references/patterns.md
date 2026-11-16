@@ -59,6 +59,23 @@
 - Occasional admission of limits ("It was simple, but...").
 - Opinions stated directly where the genre allows.
 
+## Summaries and reviews
+
+Summaries of films, books, talks and articles are where templated writing is most obvious: "First, she introduces... Next, she explains... Finally, she concludes...". Fix them like this:
+
+1. **Drop the play-by-play transitions.** Not "Next, she explains X", but "X is where the film gets specific" or simply state X.
+2. **Attribute instead of generalising.** Not "Scientists have warned for decades...", but "Skinner opens with the warning that..." or "The film cites..." (only what the source actually says).
+3. **Use the source's own specifics.** Names, numbers, examples, quotes from the film or text, so the summary could not describe any other source.
+4. **Group by idea, not by order.** Two or three themes with evidence read better than a scene-by-scene list.
+5. **Add the writer's view where the task allows** (reviews, reflections, responses): what was convincing, surprising, or weak. Ask the user for their opinion rather than inventing one.
+6. **Keep plain facts plain.** A correct fact sentence does not need decorating; merge it with a sentence that says why it matters.
+
+| Before | After |
+|---|---|
+| "Next, she explains the science behind carbon." | "Skinner then turns to carbon itself: why a gas that makes up so little of the air matters so much." |
+| "Scientists have warned for decades that human activity is overloading natural systems." | "The film opens with a warning: human activity is overloading natural systems, and engineers are part of the cause." *(only if that is what the film says)* |
+| "Finally, she concludes that engineers must act." | "Her closing argument is aimed at her own profession: [the specific action she names]." |
+
 ## Register by text type
 
 | Text type | Register | Notes |
