@@ -32,14 +32,14 @@
       "name": "report",
       "source": "./plugins/report",
       "description": "Plan, write, review and polish academic and technical reports - lab reports (laporan praktikum), programming lab and assignment reports, technical/project reports, makalah, internship reports (laporan magang / kerja praktik / KP), and research or progress reports - in Indonesian or English. Use when the user asks to write, structure, fix, shorten, or review a report, mentions laporan, lab report, praktikum, makalah, KP, magang, project report, or wants a report checked for structure, citations, or AI-sounding language.",
-      "version": "0.1.1794820534",
+      "version": "0.1.1794820546",
       "category": "productivity"
     },
     {
       "name": "thesis",
       "source": "./plugins/thesis",
       "description": "Coach a student through an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis, graduation project / \u6bd5\u4e1a\u8bba\u6587), from choosing a topic, writing the proposal, structuring chapters (Indonesian Bab I-V or international IMRaD), literature review, methodology, results and discussion, citations, similarity and AI-use rules, and preparing for the defense (sidang). Use when the user mentions skripsi, tugas akhir, TA, thesis, proposal penelitian, seminar proposal, sidang, bab 1/2/3/4/5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a thesis chapter reviewed, debated, or improved.",
-      "version": "0.1.1794820534",
+      "version": "0.1.1794820546",
       "category": "productivity"
     }
   ]
