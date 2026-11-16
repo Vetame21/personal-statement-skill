@@ -1,6 +1,6 @@
 ---
 name: humanizer
-description: Make any piece of writing sound natural and like its author instead of machine-written - personal statements, reports, thesis chapters, CVs, cover letters, emails, posts - in English or Indonesian. Diagnoses AI-sounding words, rhythm and structure, asks whether to also upgrade the content, then rewrites at the lightest touch while keeping every fact, number and citation. Use when the user says humanize, humanizer, make it sound human or natural, sounds like AI, kayak AI, kurang natural, terlalu kaku, or runs /humanizer.
+description: Make any piece of writing sound natural and like its author instead of machine-written - personal statements, reports, thesis chapters, CVs, cover letters, emails, posts - in English or Indonesian. Diagnoses AI-sounding words, rhythm and structure, asks whether to also upgrade the content, then rewrites at the lightest touch while keeping every fact, number and citation. Use when the user says humanize, humanizer, make it sound human or natural, sounds like AI, kayak AI, kurang natural, terlalu kaku, pastes an AI-detector report (GPTZero, Turnitin, ZeroGPT), or runs /humanizer.
 ---
 
 # Humanizer
@@ -18,6 +18,10 @@ You turn stiff or machine-sounding text into writing that sounds like a real per
 ### 1. Identify
 
 From the text and the request, note in one line: text type (personal statement, report, thesis chapter, CV, email, post, other), language, audience, and any word limit. Ask only if it truly cannot be inferred.
+
+### 1b. If the user pastes an AI-detector report
+
+GPTZero, Turnitin, ZeroGPT and similar reports ("most AI sentences", a percentage) are **hints, not the target**. Detectors are unreliable, especially for non-native English writers, and often flag plain factual sentences. Follow [references/detectors.md](references/detectors.md): note the reliability problem once, triage each flagged sentence (template phrasing / vague claim / plain fact / missing voice), and fix only real writing problems. Never add errors or filler to move a score, and never promise a lower score.
 
 ### 2. Diagnose
 
@@ -76,4 +80,5 @@ The rewrite passes when:
 ## References
 
 - [references/patterns.md](references/patterns.md): English and Indonesian red-flag words, structural patterns, register by text type, and before/after examples
-- `scripts/humanize_check.py`: red-flag scan (English + Indonesian), rhythm statistics, placeholders, before/after comparison
+- [references/detectors.md](references/detectors.md): how to use AI-detector reports, why scores are unreliable, sentence triage
+- `scripts/humanize_check.py`: red-flag scan (English + Indonesian), rhythm statistics, placeholders, `--per-sentence` view, before/after comparison

@@ -4,6 +4,7 @@
 Usage:
     python humanize_check.py text.txt [--lang en|id|auto]
     python humanize_check.py --compare before.txt after.txt [--lang auto]
+    python humanize_check.py text.txt --per-sentence
     cat text.txt | python humanize_check.py -
 
 Reports AI-typical words and padding phrases, structural patterns
@@ -111,6 +112,36 @@ def scan(text: str, lang: str) -> dict:
     }
 
 
+GENERIC_OPENERS = re.compile(r"^(?:next|then|firstly|secondly|finally|furthermore|moreover|additionally|in addition|overall|selanjutnya|kemudian|selain itu|lebih lanjut)\b,?", re.I)
+VAGUE = re.compile(r"\b(?:sharply|significantly|dramatically|greatly|many people|experts? (?:say|agree)|for decades|in recent years|secara signifikan|banyak orang|para ahli|dalam beberapa tahun terakhir)\b", re.I)
+CONCRETE = re.compile(r"\d|[A-Z][a-z]+\s[A-Z][a-z]+|\b(?:I|my|we|saya|kami|aku)\b")
+
+
+def per_sentence(text: str, lang: str) -> None:
+    words = EN_WORDS if lang == "en" else ID_WORDS
+    phrases = EN_PHRASES if lang == "en" else ID_PHRASES
+    sents = [s for s in re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text.strip())) if WORD.search(s)]
+    # words written with a capital in mid-sentence somewhere = names/proper nouns
+    names = {t for s in sents for t in WORD.findall(s)[1:] if t[:1].isupper()}
+    for i, s in enumerate(sents, 1):
+        low = s.lower()
+        notes = []
+        notes += [f"word:{w}" for w in words if re.search(rf"\b{re.escape(w)}\w*", low)]
+        notes += [f'phrase:"{m.group(0)}"' for p in phrases for m in re.finditer(p, low)]
+        if GENERIC_OPENERS.match(s.strip()):
+            notes.append("generic transition opener")
+        if VAGUE.search(s) and not re.search(r"\d", s):
+            notes.append("vague claim (no number/source)")
+        tokens = WORD.findall(s)
+        has_name = any(t in names for t in tokens)
+        if not (CONCRETE.search(s) or has_name) and len(tokens) > 6:
+            notes.append("no concrete anchor (number, name, or writer's voice)")
+        tag = "  " if not notes else "! "
+        print(f"{tag}{i:>2}. {s[:110]}{'...' if len(s) > 110 else ''}")
+        for n in notes:
+            print(f"       - {n}")
+
+
 def total_flags(r: dict) -> int:
     return (sum(r["word_hits"].values()) + len(r["phrase_hits"]) + len(r["not_just"])
             + max(0, r["triplets"] - 1) + sum(r["repeated_openers"].values()) + max(0, r["morals"] - 1)
@@ -146,6 +177,7 @@ def main() -> int:
     ap.add_argument("file", nargs="?")
     ap.add_argument("--compare", nargs=2, metavar=("BEFORE", "AFTER"))
     ap.add_argument("--lang", choices=["en", "id", "auto"], default="auto")
+    ap.add_argument("--per-sentence", action="store_true", help="list each sentence with its flags")
     args = ap.parse_args()
 
     def load(path):
@@ -177,7 +209,11 @@ def main() -> int:
     if not args.file:
         ap.error("give a file, '-' for stdin, or --compare BEFORE AFTER")
     text = load(args.file)
-    report(scan(text, detect_lang(text) if args.lang == "auto" else args.lang))
+    lang = detect_lang(text) if args.lang == "auto" else args.lang
+    if args.per_sentence:
+        per_sentence(text, lang)
+        return 0
+    report(scan(text, lang))
     return 0
 
 

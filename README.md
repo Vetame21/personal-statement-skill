@@ -156,6 +156,7 @@ Don't just agree. Is it true that Hong Kong is still the biggest IPO market this
 2. Asks: **humanize only**, or **humanize + upgrade** with the matching skill (personal-statement, report, thesis, harvard-cv)?
 3. Rewrites at the lightest touch (length within about ±10%), never changing facts, numbers, citations or quotes, and never inventing details; unclear spots are flagged `[ADD DETAIL]`.
 4. Shows a before/after check with `scripts/humanize_check.py --compare`.
+5. Accepts AI-detector reports (GPTZero, Turnitin, ZeroGPT) as hints: triages each flagged sentence (template phrasing / vague claim / plain fact / missing voice) and fixes only real writing problems, since detectors are unreliable, especially for non-native writers. `--per-sentence` shows which sentences have real red flags.
 
 It improves style; it is not a detector-evasion tool and does not replace any AI-use disclosure a school or employer requires.
 
