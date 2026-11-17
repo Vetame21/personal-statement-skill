@@ -21,7 +21,7 @@ From the text and the request, note in one line: text type (personal statement, 
 
 ### 1b. If the user pastes an AI-detector report
 
-GPTZero, Turnitin, ZeroGPT and similar reports ("most AI sentences", a percentage) are **hints, not the target**. Detectors are unreliable, especially for non-native English writers, and often flag plain factual sentences. Follow [references/detectors.md](references/detectors.md): note the reliability problem once, triage each flagged sentence (template phrasing / vague claim / plain fact / missing voice), and fix only real writing problems. Never add errors or filler to move a score, and never promise a lower score.
+GPTZero, Turnitin, ZeroGPT and similar reports ("most AI sentences", a percentage) are **hints, not the target**. Detectors are unreliable, especially for non-native English writers, and often flag plain factual sentences. Follow [references/detectors.md](references/detectors.md): note the reliability problem once, triage each flagged sentence (template phrasing / vague claim / plain fact / missing voice), and fix only real writing problems. Never add errors or filler to move a score, and never promise a lower score. If the user says they wrote the text themselves and fear a false accusation, also share the steps in [references/authorship-evidence.md](references/authorship-evidence.md). If the user asks to make AI-written text pass a detector ("Turnitin killer", "bypass"), decline that goal briefly, explain that Turnitin now detects humanizer-altered text, and offer the normal humanize workflow plus honest disclosure instead.
 
 ### 2. Diagnose
 
@@ -91,5 +91,6 @@ The rewrite passes when:
 ## References
 
 - [references/patterns.md](references/patterns.md): English and Indonesian red-flag words, structural patterns, register by text type, and before/after examples
-- [references/detectors.md](references/detectors.md): how to use AI-detector reports, why scores are unreliable, sentence triage
+- [references/detectors.md](references/detectors.md): how detectors decide (perplexity, burstiness, classifiers, bypasser detection), why scores are unreliable, sentence triage
+- [references/authorship-evidence.md](references/authorship-evidence.md): keeping a writing trail and responding to a false AI flag
 - `scripts/humanize_check.py`: red-flag scan (English + Indonesian), rhythm statistics, placeholders, `--per-sentence` view, before/after comparison
