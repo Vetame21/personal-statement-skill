@@ -2,7 +2,7 @@
 
 Two debates run in every personal statement job: one **before writing** (decide what the statement should say) and one **after the draft** (attack the draft before a real reader does). The point is to catch weak choices that a single "looks good" pass would wave through.
 
-The rules of the `debate-mode` skill apply to every panelist: no instant agreement, research before any factual verdict, steelman the other side, and change position only for evidence or a better argument.
+The rules in `shared/debate-rules.md` apply to every panelist: no instant agreement, research before any factual verdict, steelman the other side, and change position only for evidence or a better argument.
 
 ---
 

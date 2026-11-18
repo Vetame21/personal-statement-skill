@@ -1,6 +1,6 @@
 # Thesis Debate Panel
 
-Same rules as the `debate-mode` skill: no instant agreement, research before factual verdicts, steelman both sides, change position only for evidence or a better argument. Write each panelist's view before reading the others, then let them clash. Use parallel subagents only when the environment supports them and the user asked for a deep debate; otherwise play the roles in sequence.
+Rules: `shared/debate-rules.md` (in short: no instant agreement, research before factual verdicts, steelman both sides, change position only for evidence or a better argument). Write each panelist's view before reading the others, then let them clash. Use parallel subagents only when the environment supports them and the user asked for a deep debate; otherwise play the roles in sequence.
 
 ## Panelists
 

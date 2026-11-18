@@ -1,15 +1,21 @@
 # Credits
 
-This repository is based on **[DiamondhunterSA/personal-statement-skill](https://github.com/DiamondhunterSA/personal-statement-skill)** by DiamondhunterSA, published under the MIT License (as stated in its README). The original 5-stage personal statement workflow, its reference modules (frameworks, discipline guide, examples, templates) and the CI scripts that generate the plugin marketplace come from that project. Thank you!
+## Original inspiration
 
-## What changed here
+This project started as a fork of **[DiamondhunterSA/personal-statement-skill](https://github.com/DiamondhunterSA/personal-statement-skill)** by DiamondhunterSA (MIT License). From it we took the idea of a structured, stage-based personal statement skill, and the original commits remain in this repository's history. Thank you!
 
-- **Bug fixes**: plugin generator now writes `plugins/<name>/skills/<name>/SKILL.md` (the layout Claude Code discovers); removed the duplicate root `SKILL.md` with an invalid name; replaced VS Code tool names (`create_file`, `replace_string_in_file`) with Claude Code's `Write`/`Edit`; README workflow rebases before pushing; added the missing `LICENSE` file.
-- **personal-statement**: Upgrade (light edit) mode, undergraduate and scholarship guidance, two-program statements, `[VERIFY]` markers for invented details, a research-and-cite step for current facts, regional conventions, interview and recorded-video prep, Data Science and FinTech guidance, a two-stage panel debate (before writing and after the draft), a full anti-AI tone checklist, and a `ps_check.py` script; example sentences now follow the anti-AI rules.
-- **debate-mode** (new): Claude researches before agreeing and returns sourced verdicts.
-- **harvard-cv** (new): create, upgrade and tailor Harvard-style CVs, with a `cv_check.py` linter.
-- **thesis** (new): undergraduate thesis / skripsi coach with structures, examiner criteria, defense prep, integrity rules, and citation and text checkers.
-- **report** (new): lab, programming, technical, makalah, internship and progress reports.
-- **humanizer** (new): natural-voice rewriting for any text with an optional content upgrade, and a before/after pattern checker.
+## Version 2.0 (full rewrite)
 
-The Harvard-style CV guidance summarises public resume guides from Harvard's Mignone Center for Career Success. This project is not affiliated with or endorsed by Harvard University.
+Version 2.0 replaces the original files with new work:
+
+- A new workflow for personal statements (Evidence → Angle → Draft → Stress-test → Finalise) with debates before and after drafting.
+- New research-based references: what admissions, scholarship and job readers weigh; formats and limits by system (UCAS 2026, Common App, Hong Kong, graduate SOPs); field-by-field guidance; openings and closings.
+- Five more skills: harvard-cv, thesis, report, humanizer, debate-mode.
+- A shared foundation used by every skill: integrity rules, anti-AI tone (English and Indonesian), verification and citation, evidence standards, debate rules, AI-detection research (including Turnitin's documented thresholds, bypasser detection and Clarity), and authorship evidence.
+- A new build (`scripts/build.py`), tests and CI.
+
+## Research sources
+
+Key sources are cited inside the reference files, including NACAC's State of College Admission data, UCAS guidance, Turnitin's documentation and blog posts, Liang et al. (2023) on detector bias, Krishna et al. (NeurIPS 2023) on paraphrase attacks, OpenAI's 2023 classifier withdrawal, Harvard's Mignone Center resume guides, and Indonesia's 2024 GenAI guidance for higher education.
+
+Not affiliated with any of these organisations.

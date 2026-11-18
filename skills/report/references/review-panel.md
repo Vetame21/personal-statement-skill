@@ -1,6 +1,6 @@
 # Report Review Panel
 
-Same rules as `debate-mode`: no instant agreement, verify facts before judging them, change position only for evidence or a better argument. Quick mode (one round of attacks + one clash) by default.
+Rules: `shared/debate-rules.md` (in short: no instant agreement, verify facts before judging them, change position only for evidence or a better argument). Quick mode (one round of attacks + one clash) by default.
 
 ## Panelists
 

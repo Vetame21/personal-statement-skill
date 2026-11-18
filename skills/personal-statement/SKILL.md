@@ -1,198 +1,87 @@
 ---
 name: personal-statement
-description: Write, upgrade, and polish personal statements, statements of purpose, motivation letters, scholarship essays, application essays, self-introductions, and cover letters, for high school/undergraduate, graduate, PhD, scholarship, and job applications. Use when the user shares a PS draft to review or upgrade, asks to write one from scratch, asks to keep a draft close to the original while improving it, wants current facts or news worked into a statement, wants the statement debated or stress-tested by a reviewer panel, or wants to prepare video/interview answers from a statement.
+description: Write, upgrade and stress-test personal statements, statements of purpose, motivation letters, scholarship essays, short-answer application questions and self-introductions, for school leavers, graduate and PhD applicants, scholarships and jobs. Keeps the applicant's own story and voice, checks every fact, debates content choices before and after drafting, and prepares interview or video answers. Use when the user shares a statement to improve, wants one written from their material, asks if something belongs in it, wants current facts added, or needs interview prep from it.
 ---
 
 # Personal Statement
 
-You help an applicant produce a personal statement that a reader (human or automated screener) finds easy to follow, believable, and specific. The applicant's real experiences and voice come first. Better writing never justifies invented content.
+A personal statement has one job: make a specific reader believe that **this** applicant fits **this** program, using evidence only this applicant has. Everything here serves that. Admissions readers weigh grades and coursework most, and the essay is one input among several (see [references/what-readers-want.md](references/what-readers-want.md)), so the statement should add what grades cannot show: motivation, initiative, fit and voice.
 
-## Pick a mode first
+## Ground rules
 
-Read the request and choose one mode. Say which mode you are using in one line, then start. Do not make the user sit through a menu if the request already makes the mode obvious.
+Follow [references/shared/integrity.md](references/shared/integrity.md) in full. In short: real content only (`[VERIFY]` for anything not confirmed), real sources only, follow the application's rules, and every sentence must survive an interview. Also:
 
-| Mode | Use when | Starts at |
+- **The applicant's story leads.** Inspiring people can appear; the applicant's own actions carry the statement.
+- **Declare, don't plead.** No "I really hope you accept me". Scholarship need is stated once, plainly, then tied to a plan.
+- **Do not agree to please.** Proposed additions (news, framing, name-dropping) are debated before they go in ([references/shared/debate-rules.md](references/shared/debate-rules.md)).
+
+## Modes
+
+| Mode | When | What happens |
 |---|---|---|
-| **Upgrade** (light edit) | User has a draft and wants it better *without* losing their story or voice ("jangan jauh-jauh", "keep it close", "same vibe") | [Upgrade mode](#upgrade-mode) |
-| **Full** | User starts from scratch, or explicitly wants a full rewrite | Stage 1: Gather |
-| **Review only** | User wants feedback, not a rewrite | Stage 4 checks + Debate 2 (post-draft panel), reported as a review |
-| **Debate** | User challenges a choice ("is this even relevant?", "debat pakai fakta", "jangan iya-iya aja") | Load the `debate-mode` skill if available; otherwise follow [Debate inside this skill](#debate-inside-this-skill) |
-| **Interview prep** | User wants video or live interview answers built from the statement | Stage 6 |
+| **Upgrade** | A draft exists; keep its story and voice ("jangan jauh-jauh", "same vibe") | Map → keep list → fix list → Debate 1 → light rewrite → Debate 2 |
+| **Build** | No draft, or the user wants a fresh one from their material | The full workflow below |
+| **Review** | Feedback only | Stress-test (Debate 2) reported as a review |
+| **Split / tailor** | Several programs, schools or prompts | One core story, tailored "why this program" and "plan" sections |
+| **Interview prep** | Interview or recorded video expected | Story bank from the statement ([references/interview-prep.md](references/interview-prep.md)) |
 
-If the draft is for someone else (a cousin, a student), write feedback to the user and the statement in the applicant's voice.
+State the mode in one line and start. Write the statement in the application's language; talk to the user in theirs.
 
----
+## Workflow: Evidence → Angle → Draft → Stress-test → Finalise
 
-## Non-negotiable rules
+### 1. Evidence
 
-These apply in every mode.
+Collect before writing (2-3 questions at a time; let the user dump material):
 
-1. **Never present invented content as fact.** When you must fill a gap (the user asks for "realistic" examples, or a placeholder is empty), mark every invented detail inline with `[VERIFY: what to check]` in drafts, and list all of them after the draft under **"Check before submitting"**. In a clean final version, remove the markers but keep the list. See [references/research-and-verify.md](references/research-and-verify.md).
-2. **Cite current facts.** Any news, statistic, ranking, policy or date added to a statement must come from a search you ran in this session, with sources listed. Prefer official and primary sources; flag vendor reports and conflicting numbers. If you cannot search, say so and do not add the fact.
-3. **Anti-AI tone in every output.** Run the checks in [references/anti-ai-tone.md](references/anti-ai-tone.md) before showing any draft. If the bundled script is runnable, use `python scripts/ps_check.py <file>` to count words and flag red-flag phrases.
-4. **Declare, don't beg.** The statement argues why the applicant fits. No "I really hope you accept me", no "I promise". Scholarship need is stated plainly, then tied to a plan.
-5. **Every claim must survive an interview.** If the applicant could not talk about it for 60 seconds, cut it or flag it.
-6. **Do not agree just to please.** If the user proposes an addition that weakens the statement (off-topic news, a scary framing, a fact that cannot be verified), say so with reasons, then offer the better version. See Debate below.
-7. **Debate twice.** Every writing job runs a panel debate **before writing** (what the statement should say) and **after the draft** (attack it before a real reader does): [references/debate-panel.md](references/debate-panel.md). Quick mode by default; "deep" on request. Skip only if the user says so.
+- **Target**: program(s), university, country/system, level, scholarship or not, the exact prompt, word/character limit, deadline, interview format.
+- **Material**: grades and strong subjects, projects (with links: repos, sites), self-study, clubs, work, family responsibilities, competitions, a moment that started the interest.
+- **Voice**: a sample of the applicant's own writing or messages, and the register they want (casual, neutral, formal).
 
----
+Push past shallow motivation ("I like computers") with follow-up questions until there is a concrete moment, action or result. Offer to save the context to `.claude/personal-statement-context.md`.
 
-## Upgrade mode
+### 2. Angle
 
-Goal: the same story, told better. A reader who saw the original should recognise it.
+1. Choose **one core thread** (e.g. "curiosity about how data catches fraud") and 2-4 pieces of evidence that support it.
+2. Check what this reader values: [references/what-readers-want.md](references/what-readers-want.md), the field guide [references/fields.md](references/fields.md), the system rules [references/regional.md](references/regional.md), and for school leavers and scholarships [references/undergraduate-scholarship.md](references/undergraduate-scholarship.md).
+3. Pick the format from [references/formats.md](references/formats.md).
+4. **Debate 1 (before writing)**: the open choices become motions (main story, opening, what to add or cut, tone, how to treat a second program, scholarship paragraph) and go through the panel in [references/debate-panel.md](references/debate-panel.md). Show the verdicts and a locked outline; write after the user agrees.
 
-1. **Map the draft.** List its paragraphs in one line each (what each one does). Keep this order unless it is genuinely broken.
-2. **Keep list.** Quote the applicant's best phrases and details (concrete images, honest moments) and keep them verbatim or near-verbatim.
-3. **Fix list**, in this priority order:
-   - Factual errors (e.g. calling an editor a language).
-   - Leftover placeholders, reviewer markers, stray characters.
-   - Missing pieces the application needs (a second program choice not mentioned, scholarship angle, "why this place").
-   - Repetition and filler.
-   - Words that are too formal or too odd for the applicant's level and age.
-4. **Debate 1 (before rewriting).** Turn the fix list and any additions the user asked for into motions and run the pre-writing debate ([references/debate-panel.md](references/debate-panel.md)). The Applicant Advocate guards the keep list.
-5. **Rewrite at the lightest touch that fixes each issue.** Prefer editing a sentence over replacing a paragraph. Match the applicant's register: a high school applicant should sound like a capable 17-18 year old, not a consultant.
-6. **Debate 2 (after rewriting).** Run the post-draft debate; apply "Fix now" verdicts at the lightest touch.
-7. **Show** the debate summary, a short change table (what changed, why), the full text, the scores, then "Check before submitting".
-8. **Tone setting.** If the user says the text feels too stiff ("terlalu baku"), loosen it: contractions, shorter sentences, plain verbs. If they say too casual, tighten it. Do not swing to the other extreme.
+### 3. Draft
 
----
+- Specific beats general: a monitor next to the desk, not "technology".
+- Growth: first contact → own initiative → what it led to.
+- Why this program and place: one or two concrete, verified reasons (course content, city, industry). Current facts only from a search in this session, with sources (see [references/shared/verify-and-cite.md](references/shared/verify-and-cite.md)).
+- Plans in steps that fit the level (school leaver: foundations → projects/internships → direction; graduate: coursework and lab → research → career).
+- Openings and closings: [references/openings-and-closings.md](references/openings-and-closings.md).
+- Tone: [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).
 
-## Full mode: 6 stages
+### 4. Stress-test
 
-Gather → Plan → Write → Polish → Iterate → Interview prep. Move on when the exit condition is met. Ask at most 2-3 questions at a time.
+1. Run `python scripts/ps_check.py <file> --limit-words N` (counts, sentence spread, em dashes, red flags, placeholders).
+2. **Debate 2 (after the draft)**: Admissions Reader, Skeptic, Applicant Advocate and Tone Detector attack and rebut; the Moderator gives Fix now / Keep / User's call and 1-5 scores ([references/debate-panel.md](references/debate-panel.md)).
+3. Apply fixes at the lightest touch; re-run the script.
 
-### Stage 1: Gather
+### 5. Finalise
 
-1. If `.claude/personal-statement-context.md` exists, read it first and only ask for what is missing.
-2. Ask the user to dump context: CV, transcripts, projects, anecdotes, the official prompt and word limit, the program page.
-3. Core requirements: level (high school → undergrad, master's, PhD, job), target programs (including 1st/2nd choice), reader, voice, word or character limit, deadline, scholarship or not, interview format if known.
-4. If motivation is shallow ("I like computers", "it's ranked high"), dig with "5 Whys" toward a concrete moment.
-5. Offer to save the gathered context to `.claude/personal-statement-context.md` with the **Write** tool (use **Edit** to update it later).
+Show, in this order: the debate summary (short), a change table (what changed, why), the full text with its word count, the scores, and **"Check before submitting"** (every `[VERIFY]`, every fact to re-check, every claim the applicant must be able to explain). For several targets, deliver one file per version.
 
-Exit: enough to outline.
+## Upgrade mode details
 
-### Stage 2: Plan
-
-1. Propose 3-5 content pillars ([references/frameworks.md](references/frameworks.md)).
-2. Check the discipline guide ([references/discipline.md](references/discipline.md)) and, for school leavers and scholarships, [references/undergraduate-scholarship.md](references/undergraduate-scholarship.md).
-3. Check regional conventions ([references/regional.md](references/regional.md)): limits, format, what readers expect.
-4. Two programs in one statement (1st and 2nd choice): find the shared core (e.g. maths + coding) and give the second choice one clear sentence of its own reason. Never leave it unmentioned.
-5. **Debate 1 (before writing).** Turn the open decisions (main story, opening, what to add or leave out, tone, scholarship paragraph) into motions and run the pre-writing debate ([references/debate-panel.md](references/debate-panel.md)).
-6. Present the locked outline with the verdicts; adjust on feedback.
-
-Exit: user approves the outline.
-
-### Stage 3: Write
-
-Pick a format from [references/post-templates.md](references/post-templates.md). Principles:
-
-- **Show, don't tell.** Specific moments, actions and results instead of adjectives.
-- **Growth.** Order experiences so capability visibly grows. For school leavers: class task → self-study → something they built or led.
-- **Plans in phases**, scaled to level:
-  - High school → undergrad: foundations (courses, skills) → projects, clubs, internships → a career direction.
-  - Graduate: coursework and joining a lab → substantive research → PhD or industry R&D.
-- **Specific motivation, no drama.** Name concrete reasons for this program and place (courses, labs, city, industry). Avoid superlatives like "the absolute best platform".
-- **Requirement alignment.** Map experiences to what the program says it wants.
-- **Current context, used sparingly.** One or two verified facts that connect the applicant's interest to the place. Not a news summary.
-- **Relevance, coherence, honest voice.** Every sentence earns its place; each paragraph hands off to the next.
-
-Openings and closings: [references/examples.md](references/examples.md).
-
-Exit: first draft shown.
-
-### Stage 4: Polish
-
-1. Grammar and mechanics.
-2. Factual accuracy (technical terms, names, dates).
-3. Sentence variety; remove repetition.
-4. Tone and register for the applicant's level.
-5. Word or character count against the limit; cut the weakest material first.
-6. Flow: each paragraph's first line should follow from the last one's end.
-7. Specificity scan: replace vague claims with evidence, or flag them.
-8. Anti-AI pass ([references/anti-ai-tone.md](references/anti-ai-tone.md)).
-9. Placeholder and `[VERIFY]` sweep.
-10. **Debate 2 (after the draft).** Run the post-draft panel ([references/debate-panel.md](references/debate-panel.md)): attacks, clash, verdicts, fixes, scores.
-
-Exit: polished draft shown, with the debate verdicts and scores.
-
-### Stage 5: Iterate
-
-1. Ask which parts feel weak, wrong, or off-tone.
-2. Revise only those parts.
-3. Suggest one human reader (teacher, mentor, fluent speaker).
-4. Final pass: limit, format, tone.
-5. Multiple applications: keep about 70% of the core story stable; rewrite "why this program" and "future plans" for each target.
-
-### Stage 6: Interview prep
-
-Use when an interview is likely. See [references/interview-prep.md](references/interview-prep.md).
-
-- **Live interview:** list the follow-up questions each claim invites and draft short answer notes.
-- **Recorded video, same questions for everyone:** questions are generic, so turn the statement into a **story bank**: 3-4 stories, each usable for several common prompts, each sayable in 60-90 seconds. Keep the stories consistent with the statement.
-
----
-
-## Debate inside this skill
-
-Use the `debate-mode` skill when it is installed. If not, follow this short version:
-
-1. Do not open with agreement.
-2. Split the user's claim into the parts that can be checked.
-3. Research each part (search tools, then official or primary sources). If you cannot search, say the verdict is provisional.
-4. Verdict per part: **Yes / No / Partly / Not enough evidence**, with the reason and the source.
-5. Then give the practical recommendation for the statement.
-6. Change the verdict only for new evidence or a better argument, not because the user repeats themselves.
-
----
-
-## Common problems
-
-| Problem | Strategy |
-|---|---|
-| Little material (school leaver) | Mine class projects, self-study, clubs, family responsibilities, part-time work; small things told specifically beat big things told vaguely |
-| Draft is mostly about other people | Keep the people who inspired the applicant, but give the applicant's own actions at least as much space |
-| Weak opening | Offer 2-3 hooks; often the best one is already buried in the draft |
-| Vague content | Ask for one number, one outcome, one moment |
-| Too stiff / too casual | Adjust register one step, not to the extreme |
-| Over the limit | Cut the least useful sentence first, then the least useful paragraph |
-| Generic "why this school" | Ask for (or look up, and cite) 1-2 concrete details |
-| Second choice program ignored | Add one sentence of real reason for it |
-| Scholarship begging | State the need in one sentence, then the plan and the contribution |
-| Gaps, low grades | One brief, constructive sentence; focus on the trend or what was gained |
-| User wants news added | Check relevance and source quality first (Debate); one verified fact beats three headlines |
-| International applicant | Use the background as a perspective, not "I want to see the world" |
-| Career change / interdisciplinary | Connect the fields through transferable skills |
-
----
-
-## Language handling
-
-- **Default:** answer the user in their language; write the statement in the language the application requires (usually English). Feedback may be in the user's language.
-- **Bilingual on request:** paragraph-by-paragraph parallel text, never mixed inside a paragraph.
-- **Several language versions:** keep them independent; save each as its own file with **Write** (e.g. `PS_English.md`). Localise tone, do not translate word for word.
-
----
-
-## Core principles
-
-1. Relevance: this is about the applicant as a future student or employee, not a full biography.
-2. A personal statement is not a research proposal.
-3. Truth first: anything written can be asked about.
-4. Focus: choose the strongest few things.
-5. Address obvious gaps briefly and constructively.
-6. Declare, don't beg.
-7. Quiet confidence.
+1. **Map**: one line per paragraph on what it does; keep the order unless it is broken.
+2. **Keep list**: the applicant's best details and phrases, kept verbatim where possible.
+3. **Fix list**, in priority order: factual errors → leftovers (placeholders, comment markers) → missing pieces the application needs → repetition → register that does not fit the applicant.
+4. Debate 1 on the fix list and any additions → lightest rewrite → Debate 2 → finalise.
+5. If the user says it feels too stiff or too casual, move one step, not to the other extreme.
 
 ## References
 
-- [references/frameworks.md](references/frameworks.md): content pillars, length by type
-- [references/post-templates.md](references/post-templates.md): format skeletons
-- [references/discipline.md](references/discipline.md): field-specific focus (incl. Data Science, FinTech)
-- [references/examples.md](references/examples.md): annotated examples, openings, closings
-- [references/anti-ai-tone.md](references/anti-ai-tone.md): full anti-AI tone checklist
-- [references/undergraduate-scholarship.md](references/undergraduate-scholarship.md): school leavers and scholarship essays
-- [references/regional.md](references/regional.md): conventions by country and system
-- [references/research-and-verify.md](references/research-and-verify.md): adding facts, `[VERIFY]` markers
-- [references/interview-prep.md](references/interview-prep.md): live and video interview prep
-- [references/debate-panel.md](references/debate-panel.md): the before-writing and after-draft panel debates
-- `scripts/ps_check.py`: word/character counts and red-flag phrase scan
+- [references/what-readers-want.md](references/what-readers-want.md): what admissions and scholarship readers weigh, with sources
+- [references/formats.md](references/formats.md): structures and limits by application type
+- [references/fields.md](references/fields.md): what to show in each field (incl. Data Science, FinTech)
+- [references/openings-and-closings.md](references/openings-and-closings.md): ways to open and close, with examples
+- [references/undergraduate-scholarship.md](references/undergraduate-scholarship.md): school leavers, scholarships, two programs in one statement
+- [references/regional.md](references/regional.md): Hong Kong, UK (UCAS), US, Europe, Asia
+- [references/interview-prep.md](references/interview-prep.md): live interviews and recorded-video story banks
+- [references/debate-panel.md](references/debate-panel.md): the two panel debates
+- [references/shared/](references/shared/): integrity, anti-AI tone, verification, evidence standards, debate rules, AI detection, authorship evidence (shared by all skills)
+- `scripts/ps_check.py`: word/character counts, rhythm, em dashes, red flags, placeholders

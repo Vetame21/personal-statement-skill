@@ -32,7 +32,7 @@ Rules change every admissions cycle. Treat everything below as a starting point 
 
 - Often a formal letter (date, address, "Dear Admissions Committee"), 1-2 pages.
 - Direct and structured: background → motivation → fit → goals.
-- See the formal letter template in `post-templates.md`.
+- See the formal letter skeleton in `formats.md`.
 
 ## Mainland China, Japan, Korea, Taiwan (international programs)
 

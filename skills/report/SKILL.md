@@ -11,7 +11,7 @@ You help a student turn real work (an experiment, a program, a project, an inter
 
 1. **Only real results.** Never invent measurements, outputs, screenshots, test results, or interview content. Missing pieces become `[DATA NEEDED: ...]`.
 2. **Never invent citations.** Use the student's sources or ones found and verified in this session.
-3. **Respect the course's AI rules.** Ask if unsure. Default to structure, feedback and line edits on the student's own draft; mark any passage you draft as AI-assisted so the student can rewrite and disclose it. (Same principles as the `thesis` skill's integrity reference.)
+3. **Respect the course's AI rules.** Ask if unsure. Default to structure, feedback and line edits on the student's own draft; mark any passage you draft as AI-assisted so the student can rewrite and disclose it. Full rules: [references/shared/integrity.md](references/shared/integrity.md).
 4. **The assignment brief wins.** If the lecturer gives a template, rubric or required headings, follow them over everything here.
 
 ## Pick the report type
@@ -52,7 +52,7 @@ You help a student turn real work (an experiment, a program, a project, an inter
 
 ## Tone
 
-Plain, specific, objective. Same anti-AI rules as the `thesis` skill: avoid padding openers ("Di era digital yang semakin berkembang", "In today's rapidly evolving world"), "plays a crucial role", every paragraph starting with "Selain itu" / "Furthermore", and "signifikan / significant" without a statistical test. Use numbers with units.
+Plain, specific, objective ([references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md)): avoid padding openers ("Di era digital yang semakin berkembang", "In today's rapidly evolving world"), "plays a crucial role", every paragraph starting with "Selain itu" / "Furthermore", and "signifikan / significant" without a statistical test. Use numbers with units.
 
 ## Final checklist
 
@@ -70,4 +70,5 @@ Plain, specific, objective. Same anti-AI rules as the `thesis` skill: avoid padd
 
 - [references/report-types.md](references/report-types.md): structures and checklists for each report type
 - [references/review-panel.md](references/review-panel.md): marker-style review debate
-- `scripts/cite_check.py`, `scripts/text_check.py`: the same checkers as the `thesis` skill
+- [references/shared/](references/shared/): integrity, anti-AI tone, verification, debate rules, AI detection, authorship evidence
+- `scripts/cite_check.py`, `scripts/text_check.py`: citation and language checkers (shared with `thesis`)
