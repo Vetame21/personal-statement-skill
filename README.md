@@ -227,7 +227,7 @@ python -m unittest discover -s tests -v
 python scripts/build.py --check
 ```
 
-CI runs the tests and `build.py --check` on Python 3.9, 3.11, 3.12 and 3.13 (Linux) and 3.12 (Windows and macOS). For a release, bump `VERSION` and add a `CHANGELOG.md` entry.
+CI runs the tests and `build.py --check` on Python 3.9, 3.11, 3.12 and 3.13 (Linux) and 3.12 (Windows and macOS). For a release, bump `VERSION`, add a `CHANGELOG.md` entry, push, then push a tag such as `v2.3.0`. The Release workflow publishes it with the `download/` files attached.
 
 If this helped you, please ⭐ the repo so more students can find it.
 

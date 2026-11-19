@@ -1,0 +1,43 @@
+name: Release
+
+# Push a tag such as v2.3.0 (matching VERSION) to publish a GitHub release with the download/ files attached
+# and the matching CHANGELOG.md section as notes.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Check the build and tests
+        run: |
+          uv run --no-project --python 3.12 --with pyyaml python scripts/build.py --check
+          uv run --no-project --python 3.12 --with pyyaml python -m unittest discover -s tests
+      - name: Check the tag matches VERSION
+        run: test "${GITHUB_REF_NAME#v}" = "$(cat VERSION | tr -d '[:space:]')"
+      - name: Release notes from CHANGELOG.md
+        run: |
+          python3 - <<'EOF'
+          import os
+          version = os.environ["GITHUB_REF_NAME"].lstrip("v")
+          text = open("CHANGELOG.md", encoding="utf-8").read()
+          start = text.index("## " + version)
+          end = text.find("\n## ", start + 4)
+          notes = text[start:end if end != -1 else None].split("\n", 1)[1].strip()
+          notes += ("\n\n**Downloads:** `vetame-writing-chat.md` (any chat AI: attach or paste), "
+                    "`vetame-writing.zip` (all six skills, for claude.ai), "
+                    "`vetame-writing-lite.zip` (Gemini app: unzip and upload the folder).")
+          open("release-notes.md", "w", encoding="utf-8").write(notes)
+          EOF
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file release-notes.md \
+            download/vetame-writing-chat.md download/vetame-writing.zip download/vetame-writing-lite.zip
