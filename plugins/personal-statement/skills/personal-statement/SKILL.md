@@ -14,12 +14,13 @@ Follow [references/shared/integrity.md](references/shared/integrity.md) in full.
 - **The applicant's story leads.** Inspiring people can appear; the applicant's own actions carry the statement.
 - **Declare, don't plead.** No "I really hope you accept me". Scholarship need is stated once, plainly, then tied to a plan.
 - **Do not agree to please.** Proposed additions (news, framing, name-dropping) are debated before they go in ([references/shared/debate-rules.md](references/shared/debate-rules.md)).
+- **Debate in proportion.** A light polish ("rapikan", "fix the grammar", "keep my voice") gets one quick **Check** after the rewrite: a short list of what the Skeptic and Tone Detector would flag, with no approval stop. The full panel debates ([references/debate-panel.md](references/debate-panel.md)) run in Build mode, when new content or facts are added, or when the user asks to debate or stress-test. The user can always say "skip debate" or "full debate".
 
 ## Modes
 
 | Mode | When | What happens |
 |---|---|---|
-| **Upgrade** | A draft exists; keep its story and voice ("jangan jauh-jauh", "same vibe") | Map → keep list → fix list → Debate 1 → light rewrite → Debate 2 |
+| **Upgrade** | A draft exists; keep its story and voice ("jangan jauh-jauh", "same vibe") | Quick intake → map → keep list → fix list → light rewrite → quick Check (full debates only for new content or on request) |
 | **Build** | No draft, or the user wants a fresh one from their material | The full workflow below |
 | **Review** | Feedback only | Stress-test (Debate 2) reported as a review |
 | **Split / tailor** | Several programs, schools or prompts | One core story, tailored "why this program" and "plan" sections |
@@ -41,7 +42,7 @@ Push past shallow motivation ("I like computers") with follow-up questions until
 
 **Rules check (once):** ask whether the application states an AI-use or authorship policy (many portals ask applicants to confirm the essay is their own work) and whether disclosure is required. Follow it: where AI drafting is not allowed, coach and edit the applicant's own sentences instead of drafting new ones. See rule 4 in [references/shared/integrity.md](references/shared/integrity.md).
 
-Offer to save the context to `.claude/personal-statement-context.md`. It can contain grades and family details, so tell the user to keep it out of version control (add it to `.gitignore`) and delete it when the application is done.
+Offer to save the context to a file such as `personal-statement-context.md` in the project. It can contain grades and family details, so tell the user to keep it out of version control (add it to `.gitignore`) and delete it when the application is done.
 
 ### 2. Angle
 
@@ -71,10 +72,11 @@ Show, in this order: the debate summary (short), a change table (what changed, w
 
 ## Upgrade mode details
 
+0. **Quick intake** (one message; skip what the user already gave): the target program and prompt, the word or character limit, and whether the application has an AI-use or authorship policy (the Rules check in step 1 of the workflow).
 1. **Map**: one line per paragraph on what it does; keep the order unless it is broken.
 2. **Keep list**: the applicant's best details and phrases, kept verbatim where possible.
 3. **Fix list**, in priority order: factual errors → leftovers (placeholders, comment markers) → missing pieces the application needs → repetition → register that does not fit the applicant.
-4. Debate 1 on the fix list and any additions → lightest rewrite → Debate 2 → finalise.
+4. Lightest rewrite → `ps_check.py` with the limit → quick Check → finalise. Run Debate 1 first only if the user wants additions (news, facts, new sections) or asks for a debate; run the full Debate 2 only on request.
 5. If the user says it feels too stiff or too casual, move one step, not to the other extreme.
 
 ## References
@@ -90,4 +92,4 @@ Show, in this order: the debate summary (short), a change table (what changed, w
 - [references/shared/](references/shared/): integrity, anti-AI tone, verification, evidence standards, debate rules, AI detection, authorship evidence (shared by all skills)
 - `scripts/ps_check.py`: word/character counts, rhythm, em dashes, red flags, placeholders
 
-> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/personal-statement/scripts/...` for a personal install. Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/personal-statement/scripts/...` (Claude Code) or `python ~/.agents/skills/personal-statement/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.

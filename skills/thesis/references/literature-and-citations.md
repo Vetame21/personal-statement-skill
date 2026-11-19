@@ -19,7 +19,7 @@ Before a source goes into the thesis:
 2. It says what the thesis claims it says (read at least the abstract and the relevant section).
 3. It is the right type of source for the claim (a news article can show that something happened; it cannot prove a scientific result).
 
-**AI tools invent references that look real.** Never paste a citation from a chatbot without checking it. When you (Claude) suggest a source, find it with a search in this session and give its link or DOI; otherwise do not suggest it.
+**AI tools invent references that look real.** Never paste a citation from a chatbot without checking it. When you (the assistant) suggest a source, find it with a search in this session and give its link or DOI; otherwise do not suggest it.
 
 ## 3. Literature matrix
 

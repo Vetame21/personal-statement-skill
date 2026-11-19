@@ -10,7 +10,7 @@ A working summary of the widely used "Harvard style", informed by the public res
 - **Order:** reverse chronological inside each section (most recent first).
 - **Layout:** single column; name centred at the top; section headings in bold capitals with a thin rule under them; organisation and location on one line, title and dates on the next (or the same line, dates right-aligned).
 - **Fonts:** one serif or clean sans-serif font (Times New Roman, Garamond, Georgia, Calibri), 10-12 pt body, name 14-16 pt.
-- **Margins:** 0.5-1 inch. White space is better than cramming.
+- **Margins:** at least 0.75 inch (Harvard's guidance), up to 1 inch. White space is better than cramming.
 - **Bullets:** 1-2 lines each; start with an action verb; no full stops needed, but be consistent.
 - **No:** photo, personal pronouns, "References available upon request", objective statements full of buzzwords, graphics, skill bars, columns.
 - **Dates:** one format throughout, e.g. `Sep 2023 – Jun 2026`.

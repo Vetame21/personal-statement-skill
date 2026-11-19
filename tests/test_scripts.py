@@ -13,7 +13,7 @@ def run(script: str, text: str, *args: str, code: int = 0) -> str:
     with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as f:
         f.write(text)
         path = f.name
-    out = subprocess.run([sys.executable, str(ROOT / script), path, *args], capture_output=True, text=True)
+    out = subprocess.run([sys.executable, str(ROOT / script), path, *args], capture_output=True, text=True, encoding="utf-8")
     assert out.returncode == code, f"exit {out.returncode} != {code}\n{out.stdout}{out.stderr}"
     return out.stdout
 
@@ -43,7 +43,7 @@ class CvCheck(unittest.TestCase):
         self.assertNotIn("line 4", out)
 
     def test_help_and_non_achievement_sections(self):
-        out = subprocess.run([sys.executable, str(ROOT / self.script), "--help"], capture_output=True, text=True)
+        out = subprocess.run([sys.executable, str(ROOT / self.script), "--help"], capture_output=True, text=True, encoding="utf-8")
         self.assertEqual(out.returncode, 0)
         cv = ("## EDUCATION\n- Relevant coursework: Data Structures, Statistics\n- Cumulative GPA: 3.68 / 4.00\n"
               "## PROJECTS\n- Built a quiz game used by 15 classmates\n- Wrote an 84-run evaluation harness\n"
@@ -149,7 +149,7 @@ class HumanizeCheck(unittest.TestCase):
             a.write_text("Furthermore, this pivotal journey was a testament to my passion. Furthermore, it is crucial.", encoding="utf-8")
             b.write_text("I kept fixing the same bug for a week. Then it worked.", encoding="utf-8")
             out = subprocess.run([sys.executable, str(ROOT / self.script), "--compare", str(a), str(b)],
-                                 capture_output=True, text=True, check=True).stdout
+                                 capture_output=True, text=True, encoding="utf-8", check=True).stdout
         self.assertIn("Total flags", out)
         self.assertRegex(out, r"Total flags\s+\d+\s+0")
 
@@ -209,7 +209,7 @@ class ReviewTwoRegressions(unittest.TestCase):
         with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-16") as f:
             f.write("See [1].\n\n## References\n[1] a\n")
         out = subprocess.run([sys.executable, str(ROOT / "shared/scripts/cite_check.py"), f.name],
-                             capture_output=True, text=True, check=True).stdout
+                             capture_output=True, text=True, encoding="utf-8", check=True).stdout
         self.assertIn("Result: OK", out)
 
     def test_strict_in_per_sentence_and_compare(self):
@@ -220,7 +220,7 @@ class ReviewTwoRegressions(unittest.TestCase):
             a.write_text("This journey was a testament to my passion.", encoding="utf-8")
             b.write_text("It was a testament to my delving.", encoding="utf-8")
             out = subprocess.run([sys.executable, str(ROOT / "skills/humanizer/scripts/humanize_check.py"),
-                                  "--compare", str(a), str(b), "--strict"], capture_output=True, text=True)
+                                  "--compare", str(a), str(b), "--strict"], capture_output=True, text=True, encoding="utf-8")
             self.assertEqual(out.returncode, 1, out.stdout)
 
     def test_empty_input_warns(self):
@@ -278,7 +278,7 @@ class ReviewThreeRegressions(unittest.TestCase):
         with tempfile.NamedTemporaryFile("wb", suffix=".txt", delete=False) as f:
             f.write("My project was a testament to my passion.".encode("utf-16-le"))
         out = subprocess.run([sys.executable, str(ROOT / "skills/personal-statement/scripts/ps_check.py"), f.name],
-                             capture_output=True, text=True, check=True).stdout
+                             capture_output=True, text=True, encoding="utf-8", check=True).stdout
         self.assertIn("testament", out)
 
     def test_compare_with_empty_after(self):
@@ -287,7 +287,7 @@ class ReviewThreeRegressions(unittest.TestCase):
             a.write_text("This journey was a testament to my passion.", encoding="utf-8")
             b.write_text("", encoding="utf-8")
             out = subprocess.run([sys.executable, str(ROOT / "skills/humanizer/scripts/humanize_check.py"),
-                                  "--compare", str(a), str(b), "--strict"], capture_output=True, text=True)
+                                  "--compare", str(a), str(b), "--strict"], capture_output=True, text=True, encoding="utf-8")
         self.assertEqual(out.returncode, 1)
         self.assertIn("Empty input", out.stdout)
 
@@ -304,6 +304,111 @@ class ReviewThreeRegressions(unittest.TestCase):
     def test_cite_footnotes_and_works_cited(self):
         out = run("shared/scripts/cite_check.py", "A claim.[^1]\n\n[^1]: Smith, Book (2020).\n\n## Works Cited\n\nSmith, J. (2020). Book.\n")
         self.assertIn("Footnote", out)
+
+
+class ReviewFourRegressions(unittest.TestCase):
+    """Cases found by the fourth independent review (v2.1.0)."""
+
+    def test_anchor_is_advisory_only(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "The radio played old songs that nobody else seemed to remember anymore.", "--per-sentence", "--strict")
+        self.assertIn("~", out)
+        self.assertIn("Sentences with flags: 0/1", out)
+
+    def test_non_utf8_console_does_not_crash(self):
+        import os
+        env = dict(os.environ, PYTHONIOENCODING="cp1252")
+        with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as f:
+            f.write("Arrow → and 中文 text here. No references.\n")
+        for script in ("shared/scripts/cite_check.py", "skills/humanizer/scripts/humanize_check.py"):
+            out = subprocess.run([sys.executable, str(ROOT / script), f.name], capture_output=True, env=env)
+            self.assertEqual(out.returncode, 0, script + out.stderr.decode("utf-8", "replace"))
+
+    def test_stdin_uses_the_same_decoder(self):
+        for data, expected in ((b"\xef\xbb\xbfHello world.", "Characters (with spaces): 12"),
+                               ("Hello world.".encode("utf-16"), "Words: 2")):
+            out = subprocess.run([sys.executable, str(ROOT / "skills/personal-statement/scripts/ps_check.py"), "-"],
+                                 input=data, capture_output=True)
+            self.assertIn(expected, out.stdout.decode("utf-8"))
+
+    def test_cite_indonesian_page_forms_and_numbered_ieee(self):
+        out = run("shared/scripts/cite_check.py", "Menurut Sugiyono (2019:12), data penting (Santoso, 2020: 45).\n\n"
+                  "# Daftar Pustaka\n\nSugiyono. (2019). Metode.\nSantoso, B. (2020). Buku.\n")
+        self.assertIn("Result: OK", out)
+        out = run("shared/scripts/cite_check.py", 'As shown in [1] and [2].\n\n## References\n1. A. Author, "X," 2020.\n2. B. Author, "Y," 2021.\n')
+        self.assertIn("IEEE", out)
+        self.assertIn("Result: OK", out)
+
+    def test_cite_wrong_style_warns_and_footnotes_stop(self):
+        out = run("shared/scripts/cite_check.py", "As (Lee, 2020) said.\n\n## References\nLee, J. (2020). X.\n", "--style", "ieee")
+        self.assertIn("Try --style apa", out)
+        out = run("shared/scripts/cite_check.py", "A claim.[^1]\n\n[^1]: London: X, 2019.\n\n## Bibliography\nX. 2019. Book.\n")
+        self.assertNotIn("Cited but not", out)
+
+    def test_cite_chapter_against_separate_refs(self):
+        with tempfile.TemporaryDirectory() as d:
+            chap, refs = Path(d, "bab2.md"), Path(d, "dp.md")
+            chap.write_text("## Bab II\nTeori ini (Hadi, 2017) dan (Chen, 2020).\n", encoding="utf-8")
+            refs.write_text("# Daftar Pustaka\nHadi, R. (2017). E.\nSantoso, B. (2020). A.\n", encoding="utf-8")
+            out = subprocess.run([sys.executable, str(ROOT / "shared/scripts/cite_check.py"), str(chap), "--refs", str(refs)],
+                                 capture_output=True, text=True, encoding="utf-8").stdout
+        self.assertIn("Cited but not in references: Chen (2020)", out)
+        self.assertNotIn("never cited", out)
+
+    def test_sentence_splitting_units_and_appendix(self):
+        sys.path.insert(0, str(ROOT / "shared" / "scripts"))
+        import writing_rules
+        parts = writing_rules.split_sentences("# Methods\nAdd 1 L. The mix was heated to 80 °C. A sample was taken. "
+                                              "See Appendix B. The data from J. Smith and Dr. Lee in the U.S. were clean.")
+        self.assertEqual(len(parts), 6, parts)
+
+    def test_cv_bold_headings(self):
+        out = run("skills/harvard-cv/scripts/cv_check.py", "**PROJECTS**\n- Built a quiz game used by 15 classmates\n"
+                  "- Wrote an 84-run evaluation harness\n**SKILLS & INTERESTS**\n- Python, C++, SQL\n- Video editing\n")
+        self.assertIn("2/2", out)
+
+    def test_indonesian_sangat_penting_phrase(self):
+        out = run("skills/personal-statement/scripts/ps_check.py",
+                  "Teknologi memainkan peran yang sangat penting dalam kehidupan saya sehari-hari di sekolah.")
+        self.assertIn("memainkan peran yang sangat penting", out)
+
+
+class Installer(unittest.TestCase):
+    def _run(self, home, *args):
+        import os
+        env = dict(os.environ, HOME=str(home), USERPROFILE=str(home))
+        return subprocess.run([sys.executable, str(ROOT / "scripts" / "install.py"), *args],
+                              capture_output=True, text=True, encoding="utf-8", env=env)
+
+    def test_install_default_locations_and_uninstall(self):
+        with tempfile.TemporaryDirectory() as home:
+            home = Path(home)
+            out = self._run(home)
+            self.assertEqual(out.returncode, 0, out.stderr)
+            for loc in (".claude/skills", ".agents/skills", ".qwen/skills"):
+                self.assertTrue((home / loc / "humanizer" / "SKILL.md").exists(), loc)
+            (home / ".agents/skills/someone-else").mkdir()
+            out = self._run(home, "--uninstall")
+            self.assertFalse((home / ".agents/skills/humanizer").exists())
+            self.assertTrue((home / ".agents/skills/someone-else").exists())
+
+    def test_never_overwrites_foreign_skill(self):
+        with tempfile.TemporaryDirectory() as home:
+            home = Path(home)
+            foreign = home / ".agents/skills/thesis"
+            foreign.mkdir(parents=True)
+            (foreign / "SKILL.md").write_text("mine", encoding="utf-8")
+            out = self._run(home, "--tools", "codex")
+            self.assertIn("SKIP", out.stdout)
+            self.assertEqual((foreign / "SKILL.md").read_text(encoding="utf-8"), "mine")
+
+    def test_tool_names_and_list(self):
+        with tempfile.TemporaryDirectory() as home:
+            out = self._run(Path(home), "--tools", "qwen", "--skills", "humanizer", "--dry-run")
+            self.assertIn(".qwen", out.stdout)
+            self.assertNotIn(".claude", out.stdout)
+            out = self._run(Path(home), "--list")
+            self.assertIn("Kimi Code", out.stdout)
 
 
 class Build(unittest.TestCase):
@@ -326,7 +431,7 @@ class Build(unittest.TestCase):
 
     def test_build_is_up_to_date(self):
         out = subprocess.run([sys.executable, str(ROOT / "scripts" / "build.py"), "--check"],
-                             capture_output=True, text=True, cwd=ROOT)
+                             capture_output=True, text=True, encoding="utf-8", cwd=ROOT)
         self.assertEqual(out.returncode, 0, out.stdout + out.stderr)
 
     def test_shared_copies_match(self):

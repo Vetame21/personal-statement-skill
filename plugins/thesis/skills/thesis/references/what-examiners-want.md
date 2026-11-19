@@ -19,7 +19,7 @@ There is no single national or international rubric: every program sets its own 
 | **Referencing** | Missing or mismatched citations, mixed styles | Every source cited and listed correctly in one style |
 | **Defense** | Reads slides, cannot explain choices | Explains every choice and number, handles critical questions calmly |
 
-Example weights, as summarised from one Indonesian informatics defense rubric ([Universitas Mataram, Informatika](https://if.unram.ac.id/wp-content/uploads/2025/12/Rubrik-Penilaian-Kedalaman-Sidang-Tugas-Akhir.pdf); the document itself could not be opened when this was written): problem complexity, depth of theory, methodological fit and data quality at about 15% each, with the rest on presentation and defense. Treat this as an example only.
+Published Indonesian defense rubrics (for example [Universitas Mataram, Informatika](https://if.unram.ac.id/wp-content/uploads/2025/12/Rubrik-Penilaian-Kedalaman-Sidang-Tugas-Akhir.pdf)) list aspects such as problem complexity, depth of theory, methodological fit and data quality alongside presentation and defense. A search summary of that rubric gave about 15% for each of those four aspects, but the document itself was not opened, so treat the weights as unverified and use the student's own rubric.
 
 What top bands add (from international descriptors): **originality** (going beyond what was taught), **critical engagement** with current research, **realistic appraisal of achievements and limitations**, and work close to publishable or professional quality.
 

@@ -114,11 +114,13 @@ def known_names(entries):
 
 
 PAREN = re.compile(r"\(([^()]*?(?:" + YEAR + r")[^()]*?)\)")
-IN_PAREN = re.compile(r"([^;]*?),?\s+((?:" + YEAR + r")(?:\s*,\s*(?:" + YEAR + r"))*)(?:,\s*(?:p|pp|hlm|hal)\.?\s*[\d\-–]+)?\s*$")
+# Page references: ", p. 4", ", hlm. 12" or the Indonesian ": 45" / ":12"
+PAGE = r"(?:(?:,\s*(?:p|pp|hlm|hal)\.?\s*|\s*:\s*)[\d\-–]+)?"
+IN_PAREN = re.compile(r"([^;]*?),?\s+((?:" + YEAR + r")(?:\s*,\s*(?:" + YEAR + r"))*)" + PAGE + r"\s*$")
 ABBR_IN_TEXT = re.compile(r"([A-Z][\w.&'’\- ]+?)\s*[\[(]([A-Z][A-Za-z0-9&]{1,10})[\])]\s*,\s*(?:" + YEAR + r")")
 # Signs that the words before "(year)" are authors: "et al.", "dkk.", or a co-author joined by &/and/dan
 AUTHOR_MARKER = re.compile(r"\b(?:et\s+al\.?|dkk\.?)|\s(?:&|and|dan)\s+[A-Z]", re.I)
-NARRATIVE = re.compile(r"((?:[\w'’\-.&,]+\s+){0,6}?[\w'’\-.]+)\s+\((" + YEAR + r")\)")
+NARRATIVE = re.compile(r"((?:[\w'’\-.&,]+\s+){0,6}?[\w'’\-.]+)\s+\((" + YEAR + r")" + PAGE + r"\)")
 
 
 def best_key(candidate: str, year: str, known: set) -> str:
@@ -153,7 +155,7 @@ def best_key(candidate: str, year: str, known: set) -> str:
     return norm(" ".join(tail))
 
 
-def apa(body: str, refs: str) -> int:
+def apa(body: str, refs: str, report_unused: bool = True) -> int:
     entries = ref_entries(refs)
     listed = {(a, y) for aliases, y in entries for a in aliases}
     # "(World Health Organization [WHO], 2020)" defines WHO for later "(WHO, 2020)"
@@ -188,9 +190,12 @@ def apa(body: str, refs: str) -> int:
             possible.add((key, m.group(2)))  # "Indonesia (2020)" may be a place or event, not an author
 
     print(f"Style: APA / author-year. Cited works: {len(cited)}  Reference entries: {len(entries)}")
+    if not cited and not entries:
+        print("! No author-year citations or entries found. Is this a numeric ([1]) document? Try --style ieee.")
+        return 1
     missing = sorted(cited - listed)
     unused = sorted((sorted(aliases, key=len)[-1], y) for aliases, y in entries
-                    if not any((a, y) in cited for a in aliases))
+                    if not any((a, y) in cited for a in aliases)) if report_unused else []
     for a, y in missing:
         print(f"  ! Cited but not in references: {a.title()} ({y})")
     for a, y in unused:
@@ -206,7 +211,8 @@ RANGE = re.compile(r"(?<![A-Za-z0-9_\]])\[(\d+)\]\s*[-–]\s*\[(\d+)\]")
 BRACKET = re.compile(r"(?<![A-Za-z0-9_\]])\[(\d+(?:\s*[-–,]\s*\d+)*)\]")
 MAX_REF = 999      # numbers above this are not reference numbers (years, intervals)
 MAX_RANGE = 200    # longer "ranges" are not citation ranges
-REF_IEEE = re.compile(r"^\s*\[(\d+)\]", re.M)
+# "[1] Author..." or "1. Author..." at the start of a reference line
+REF_IEEE = re.compile(r"^\s*(?:\[(\d+)\]|(\d+)\.\s+\S)", re.M)
 
 
 def expand(group: str):
@@ -225,7 +231,7 @@ def expand(group: str):
     return nums
 
 
-def ieee(body: str, refs: str) -> int:
+def ieee(body: str, refs: str, report_unused: bool = True) -> int:
     order, seen = [], set()
 
     def add(nums):
@@ -245,13 +251,16 @@ def ieee(body: str, refs: str) -> int:
     for _, nums in sorted(events):
         add(nums)
 
-    listed = sorted({int(m.group(1)) for m in REF_IEEE.finditer(refs)})
+    listed = sorted({int(m.group(1) or m.group(2)) for m in REF_IEEE.finditer(refs)})
     print(f"Style: IEEE / numeric. Cited numbers: {len(order)}  Reference entries: {len(listed)}")
+    if not order:
+        print("! No numeric citations ([1], [2]-[4]) found in the text. Is this an author-year document? Try --style apa.")
+        return 1
     problems = 0
     for n in sorted(set(order) - set(listed)):
         print(f"  ! Cited but not in references: [{n}]")
         problems += 1
-    for n in sorted(set(listed) - set(order)):
+    for n in (sorted(set(listed) - set(order)) if report_unused else []):
         print(f"  ! In references but never cited: [{n}]")
         problems += 1
     expected = sorted(order)
@@ -265,28 +274,49 @@ def ieee(body: str, refs: str) -> int:
     return problems
 
 
+def count_numeric(body: str) -> int:
+    return sum(1 for m in BRACKET.finditer(body) if expand(m.group(1)))
+
+
+def count_author_year(body: str) -> int:
+    return sum(1 for m in PAREN.finditer(body) if re.search(r"[A-Z]", m.group(1))) + len(NARRATIVE.findall(body))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("file", help="text/markdown file, or - for stdin")
     ap.add_argument("--style", choices=["apa", "ieee", "auto"], default="auto")
+    ap.add_argument("--refs", help="separate file holding the reference list (e.g. check one thesis chapter "
+                                   "against the full Daftar Pustaka); 'never cited' is then not reported")
     ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
     text = read_input(args.file)
     if FOOTNOTE.search(text):
-        print("! Footnote/notes-style citations ([^1]) detected: this checker does not support them; check them manually.")
-        text = FOOTNOTE.sub(" ", text)
-    has_heading = bool(REF_HEADINGS.search(text))
-    body, refs = split_body_refs(strip_code(text))
-    if has_heading and not refs.strip():
-        print("! The reference list heading is there, but the list under it is empty.")
+        print("! Footnote/notes-style citations ([^1], Chicago notes) detected. This checker supports author-year "
+              "(APA-like) and numeric (IEEE, GB/T 7714) styles only; check footnotes manually.")
         return 1 if args.strict else 0
-    if not refs:
-        print("! No reference list heading found (References / Daftar Pustaka / Bibliography / Referensi / 参考文献).")
-        return 1 if args.strict else 0
+    if args.refs:
+        ref_text = read_input(args.refs)
+        _, refs = split_body_refs(strip_code(ref_text))
+        refs = refs or ref_text
+        body, _ = split_body_refs(strip_code(text))
+    else:
+        has_heading = bool(REF_HEADINGS.search(text))
+        body, refs = split_body_refs(strip_code(text))
+        if has_heading and not refs.strip():
+            print("! The reference list heading is there, but the list under it is empty.")
+            return 1 if args.strict else 0
+        if not refs:
+            print("! No reference list heading found (References / Reference List / Works Cited / Daftar Pustaka / "
+                  "Referensi / 参考文献). Checking one chapter? Pass the full list with --refs FILE.")
+            return 1 if args.strict else 0
     style = args.style
     if style == "auto":
-        style = "ieee" if len(REF_IEEE.findall(refs)) >= max(1, len(ref_entries(refs))) else "apa"
-    problems = ieee(body, refs) if style == "ieee" else apa(body, refs)
+        style = "ieee" if count_numeric(body) > count_author_year(body) else "apa"
+    check = ieee if style == "ieee" else apa
+    problems = check(body, refs, report_unused=not args.refs)
+    if args.refs:
+        print("(Checked against a separate reference list: entries not cited in this file are expected and not reported.)")
     print("\nResult:", "OK" if problems == 0 else f"{problems} issue(s) to check")
     return 1 if (args.strict and problems) else 0
 

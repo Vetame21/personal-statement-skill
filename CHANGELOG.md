@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.1.0 - 2026-11-19
+
+**Works beyond Claude Code.** Fixes from a fourth independent review.
+
+- New `scripts/install.py`: installs the skills for Claude Code (`~/.claude/skills`), Codex CLI, Gemini CLI, Kimi Code CLI, OpenCode and DeepSeek-TUI (`~/.agents/skills`), and Qwen Code (`~/.qwen/skills`); `--tools`, `--project`, `--link`, `--list`, `--uninstall`, `--dry-run`; never overwrites a same-named skill it did not install.
+- `AGENTS.md` for agents working on the repo (with `CLAUDE.md`, `GEMINI.md`, `QWEN.md` pointers); skill text no longer assumes Claude-only tools or paths.
+- Windows: scripts print UTF-8 on any console (no more UnicodeEncodeError); `.gitattributes` and LF-only build output; CI now also runs on Windows and macOS.
+- stdin (`-`) goes through the same decoder as files (BOM, UTF-16, CRLF).
+- humanizer: "no concrete anchor" is advisory (`~`), not a required fix; the self-check loop no longer pushes changes to natural sentences, and the README tension with detector signals is stated openly.
+- personal-statement Upgrade mode: quick intake (target, limit, AI policy) and a light quick Check; full debates only in Build mode, for new content, or on request.
+- cite_check: Indonesian page forms "(2019:12)", "(Santoso, 2020: 45)"; IEEE lists numbered "1."; warnings when the chosen style finds nothing; footnote files stop after the notice; `--refs FILE` checks one chapter against a separate Daftar Pustaka.
+- Sentence splitting no longer merges after units or appendix letters ("1 L.", "80 °C.", "Appendix B."), and keeps headings separate.
+- cv_check recognises bold headings (`**SKILLS & INTERESTS**`).
+- thesis: chapter and .docx guidance; no AI-rules question before purely mechanical checks.
+- Accuracy: CV margins consistent (at least 0.75 in); unverified rubric weights labelled as such; em-dash rule labelled a rule of thumb; authorship-evidence wording corrected; Indonesian phrase list extended.
+- Tests: 62 (was 42), including installer tests.
+
 ## 2.0.3 - 2026-11-19
 
 Fixes from a third independent review (no High findings).

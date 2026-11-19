@@ -95,14 +95,15 @@ def per_sentence(text: str, lang: str, register: str = "general") -> int:
         has_attribution = bool(ATTRIBUTION.search(low))
         anchored = (CONCRETE.search(s) or NUMBER_WORDS.search(s) or FIRST_PERSON.search(s) or PASSIVE.search(s)
                     or has_name or has_attribution)
+        advisory = []
         if register == "general" and not anchored and len(tokens) > 6:
-            notes.append("no concrete anchor (number, name, or writer's voice)")
+            advisory.append("advisory: no concrete anchor (number, name, or writer's voice); fine if the sentence already sounds natural")
         flagged += bool(notes)
-        tag = "  " if not notes else "! "
+        tag = "! " if notes else ("~ " if advisory else "  ")
         print(f"{tag}{i:>2}. {s[:110]}{'...' if len(s) > 110 else ''}")
-        for n in notes:
+        for n in notes + advisory:
             print(f"       - {n}")
-    print(f"\nSentences with flags: {flagged}/{len(sents)}")
+    print(f"\nSentences with flags: {flagged}/{len(sents)}  (! = fix; ~ = advisory only, not counted)")
     return flagged
 
 

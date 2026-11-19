@@ -8,15 +8,19 @@ Standard library only; works on Python 3.9+.
 import re
 import sys
 
+# Print UTF-8 whatever the console uses (Windows pipes default to cp1252, which
+# cannot encode 参考文献, arrows or em dashes in the user's text).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 # ---------------------------------------------------------------- input
 
-def read_input(path: str) -> str:
-    """Read a file (or '-' for stdin) as text: UTF-8 (with or without BOM) or UTF-16 (with or without BOM).
-    Line endings are normalised to \\n so character counts match what portals count."""
-    if path == "-":
-        return sys.stdin.read().replace("\r\n", "\n").replace("\r", "\n")
-    with open(path, "rb") as f:
-        raw = f.read()
+
+def decode_bytes(raw: bytes) -> str:
+    """Decode UTF-8 (with or without BOM) or UTF-16 (with or without BOM); normalise line endings."""
     if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
         text = raw.decode("utf-16")
     elif len(raw) >= 4 and raw.count(b"\x00") > len(raw) // 4:
@@ -27,8 +31,16 @@ def read_input(path: str) -> str:
             raw = raw[3:]
         text = raw.decode("utf-8", errors="replace")
     if text.count("\ufffd") > max(3, len(text) // 200):
-        print("! Warning: parts of this file could not be decoded; save it as UTF-8 and re-run.", file=sys.stderr)
+        print("! Warning: parts of this input could not be decoded; save it as UTF-8 and re-run.", file=sys.stderr)
     return text.replace("\r\n", "\n").replace("\r", "\n")
+
+def read_input(path: str) -> str:
+    """Read a file, or '-' for stdin, through the same decoder (BOMs, UTF-16, CRLF)."""
+    if path == "-":
+        stream = getattr(sys.stdin, "buffer", None)
+        return decode_bytes(stream.read()) if stream else sys.stdin.read().replace("\r\n", "\n")
+    with open(path, "rb") as f:
+        return decode_bytes(f.read())
 
 
 def is_empty(text: str) -> bool:
@@ -141,14 +153,32 @@ ABBREVIATIONS = ["U.S.", "U.K.", "e.g.", "i.e.", "etc.", "et al.", "vs.", "Dr.",
 _PROTECT = {a: a.replace(".", "\u2024") for a in ABBREVIATIONS}
 
 
+_SENTENCE_STARTERS = (r"The|A|An|This|That|These|Those|It|We|I|In|On|At|For|After|Before|When|Then|There|"
+                      r"Ini|Itu|Kami|Saya|Pada|Dalam|Setelah|Hasil|Data")
+# A single capital + "." is an initial ("J. Smith") unless it follows a digit or a unit
+# ("1 L.", "80 °C.") or the next word starts a new sentence ("Appendix B. The ...").
+_INITIAL = re.compile(r"(?<![\w°])(?<!\d )\b([A-Z])\.(?=\s(?!(?:" + _SENTENCE_STARTERS + r")\b)[A-Z])")
+
+
 def split_sentences(text: str):
-    """Split prose into sentences without breaking on common abbreviations (U.S., Dr., e.g., et al., dkk.)."""
-    s = re.sub(r"\s+", " ", text.strip())
-    for a, b in _PROTECT.items():
-        s = s.replace(a, b)
-    s = re.sub(r"\b([A-Z])\.(?=\s[A-Z])", "\\1\u2024", s)  # initials such as "J. Smith"
-    parts = re.split(r"(?<=[.!?])\s+(?=[\"'“(\[]?[A-Z0-9])", s)
-    return [p.replace("\u2024", ".") for p in parts if re.search(r"\w", p)]
+    """Split prose into sentences: headings and blank-line blocks stay separate, and common
+    abbreviations (U.S., Dr., e.g., et al., dkk.) and initials do not end a sentence."""
+    sentences = []
+    for block in re.split(r"\n\s*\n|\n(?=\s*#)|(?<=\n)(?=\s*#)", text):
+        lines = block.strip().splitlines()
+        if lines and lines[0].lstrip().startswith("#"):
+            heading = lines.pop(0).strip()
+            if re.search(r"\w", heading):
+                sentences.append(heading)
+        s = re.sub(r"\s+", " ", " ".join(lines).strip())
+        if not s:
+            continue
+        for a, b in _PROTECT.items():
+            s = s.replace(a, b)
+        s = _INITIAL.sub("\\1\u2024", s)
+        parts = re.split(r"(?<=[.!?])\s+(?=[\"'“(\[]?[A-Z0-9])", s)
+        sentences += [part.replace("\u2024", ".") for part in parts if re.search(r"\w", part)]
+    return sentences
 
 
 def detect_lang(text: str) -> str:
@@ -172,7 +202,7 @@ ID_PHRASES = [
     r"seiring (?:dengan )?(?:perkembangan|berkembangnya) (?:zaman|teknologi)",
     r"semakin (?:pesat|berkembang)nya (?:perkembangan )?",
     r"tidak dapat dipungkiri", r"tak dapat dipungkiri",
-    r"memainkan peran (?:yang )?(?:penting|krusial|vital|kunci)",
+    r"memainkan peran (?:yang )?(?:sangat |amat )?(?:penting|krusial|vital|kunci|besar)",
     r"memegang peranan (?:yang )?(?:penting|krusial)",
     r"merupakan hal yang (?:sangat )?penting",
     r"hal ini menunjukkan bahwa", r"dapat disimpulkan bahwa", r"dalam rangka", r"oleh karena itu,? (?:dapat|perlu)",

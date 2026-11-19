@@ -72,7 +72,7 @@ Before drafting new text, ask once whether the application or employer has an AI
 ## Output
 
 - Default: the CV in clean Markdown that mirrors the layout (centred name, contact line, section headings in caps, right-aligned dates written as "Jun 2024 – Present" on the same line).
-- If the user wants a file: use a document skill or tool if available (`.docx` via a docx skill, or `.pdf`). Fonts: Times New Roman, Garamond, Georgia or Calibri, 10-12 pt; margins 0.5-1 inch. Single column, no tables or text boxes for content (ATS-friendly).
+- If the user wants a file: use a document skill or tool if available (`.docx` via a docx skill, or `.pdf`). Fonts: Times New Roman, Garamond, Georgia or Calibri, 10-12 pt; margins 0.75-1 inch. Single column, no tables or text boxes for content (ATS-friendly).
 - Run `python scripts/cv_check.py <file>` on the text if the script is available, and fix what it flags.
 
 ## Regional notes
@@ -93,4 +93,4 @@ Before drafting new text, ask once whether the application or employer has an AI
 - [ ] Every `[VERIFY]` resolved or listed
 - [ ] Matches the personal statement's facts
 
-> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/harvard-cv/scripts/...` for a personal install. Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/harvard-cv/scripts/...` (Claude Code) or `python ~/.agents/skills/harvard-cv/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.

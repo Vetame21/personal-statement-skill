@@ -38,7 +38,8 @@ DATE_STYLES = {
 # Sections whose bullets are facts or lists, not achievement bullets
 NON_ACHIEVEMENT_SECTION = re.compile(r"skills|interests|languages?|coursework|certifications?|bahasa|keahlian", re.I)
 NON_ACHIEVEMENT_BULLET = re.compile(r"^(?:relevant\s+)?coursework\b|^(?:cumulative\s+)?gpa\b|^honou?rs\b|^ipk\b|^grades?\b", re.I)
-HEADING = re.compile(r"^\s*(?:#+\s*(.+?)\s*$|([A-Z][A-Z &/]{2,})\s*$)")
+# "## SKILLS", "SKILLS & INTERESTS", "**SKILLS & INTERESTS**" or "__Skills__" on their own line
+HEADING = re.compile(r"^\s*(?:#+\s*(.+?)\s*$|([A-Z][A-Z &/]{2,})\s*$|(?:\*\*|__)([^*_]{2,60})(?:\*\*|__)\s*:?\s*$)")
 
 
 def main() -> int:
@@ -56,7 +57,7 @@ def main() -> int:
     for i, line in enumerate(lines):
         h = HEADING.match(line)
         if h:
-            section = h.group(1) or h.group(2)
+            section = h.group(1) or h.group(2) or h.group(3)
             continue
         m = BULLET.match(line)
         if m:

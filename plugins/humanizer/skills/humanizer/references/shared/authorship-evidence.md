@@ -29,7 +29,7 @@ Some institutions now use process tools such as **Turnitin Clarity** (2025), whe
 
 ## 4. How the humanizer skill helps here
 
-- `humanize_check.py --per-sentence` shows which flagged sentences have real style problems and which are plain facts the detector misread. That helps you explain the report.
+- `humanize_check.py --per-sentence` shows which sentences have real style problems. It never sees the detector's output, but comparing its list with the detector's highlights helps you explain which flags look like plain facts or formulaic but correct sentences.
 - Improving a genuinely human text for clarity is fine; keep the old version too, so the history stays complete.
 - Do not run your own text through outside "humanizer" or paraphrasing tools to lower the score: that can trigger bypasser detection and makes the case harder to defend.
 

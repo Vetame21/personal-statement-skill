@@ -69,9 +69,10 @@ Before showing anything, save the rewrite and run `python scripts/humanize_check
 
 - **generic transition opener** ("Next,", "Then,", "Furthermore,", "Selanjutnya,"): cut it, or join the sentence to its neighbour, or open with the subject and a concrete verb.
 - **vague claim** ("for decades", "sharply", "experts say"): replace with the specific fact from the user's source, or attribute it ("the film says..."), or flag `[ADD DETAIL]`.
-- **no concrete anchor**: tie it to a name, number, example or the writer's view, or merge it into a sentence that has one.
+- AI-typical words and padding phrases: replace with plain, specific wording.
+- `~ advisory: no concrete anchor` is a hint, not a fix list. Act on it only when the sentence also has a `!` flag or the whole paragraph has no concrete detail; a vivid or natural sentence stays as it is.
 
-Repeat until no sentence has a fixable flag (a plain fact with no flag is fine). Do not show a draft that still has fixable flags. If a flag cannot be fixed without inventing something, keep the sentence and list it under `[ADD DETAIL]`.
+Repeat until no sentence has a `!` flag (plain facts and advisory-only sentences are fine). If a flag cannot be fixed without inventing something, keep the sentence and list it under `[ADD DETAIL]`. Sentence variety is checked because it is good writing; it overlaps with what detectors measure, which is exactly why this loop never targets a score and never adds filler or errors.
 
 ### 5. Show the result
 
@@ -97,4 +98,4 @@ The rewrite passes when:
 - [references/shared/authorship-evidence.md](references/shared/authorship-evidence.md): keeping a writing trail and responding to a false AI flag
 - `scripts/humanize_check.py`: red-flag scan (English + Indonesian), rhythm statistics, placeholders, `--per-sentence` view, before/after comparison
 
-> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/humanizer/scripts/...` for a personal install. Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/humanizer/scripts/...` (Claude Code) or `python ~/.agents/skills/humanizer/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.

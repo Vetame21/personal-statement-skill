@@ -60,7 +60,7 @@ These patterns give away generated text more reliably than single words.
 - **Triplets everywhere.** "curious, driven, and resilient"; "learn, grow, and contribute". Real writing mixes pairs, singles and lists of four.
 - **Every paragraph the same length** and the same shape (claim → example → lesson). Vary them.
 - **Uniform sentence length.** Mix short sentences (4-8 words) with medium and the occasional long one.
-- **Em-dash habit.** More than about one em dash (—) per 150 words reads as machine-made. Use commas, full stops or brackets.
+- **Em-dash habit.** A rule of thumb used in these skills (not a measured threshold): more than about one em dash (—) per 150 words starts to read as machine-made. Use commas, full stops or brackets.
 - **Lesson-at-the-end on every paragraph.** "This taught me the importance of..." Keep one or two; let the rest of the stories speak.
 - **Rhetorical questions** as openers ("Have you ever wondered...?"). Avoid.
 - **Summary closings.** "In conclusion", "Ultimately", "All in all". End on a concrete forward step or an echo of the opening instead.

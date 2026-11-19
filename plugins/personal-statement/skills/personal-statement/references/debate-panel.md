@@ -1,6 +1,6 @@
 # Debate Panel
 
-Two debates run in every personal statement job: one **before writing** (decide what the statement should say) and one **after the draft** (attack the draft before a real reader does). The point is to catch weak choices that a single "looks good" pass would wave through.
+Two debates are available: one **before writing** (decide what the statement should say) and one **after the draft** (attack the draft before a real reader does). They run in Build mode, when new content or facts are added, or on request. A light polish gets the **quick Check** instead (end of this file).
 
 The rules in `shared/debate-rules.md` apply to every panelist: no instant agreement, research before any factual verdict, steelman the other side, and change position only for evidence or a better argument.
 
@@ -104,6 +104,10 @@ Score: Clarity 4 · Fit 5 · Truth 3 (two [VERIFY] left) · Voice 5 · Human ton
 ```
 
 Use the user's language for the debate, and the application's language for quotes and fixes.
+
+## Quick Check (light polish)
+
+After a light rewrite, give one short list instead of the panel: up to 5 bullets of what the Skeptic (facts, `[VERIFY]` items, claims that need a source) and the Tone Detector (`ps_check.py` flags, register) would raise, each with its fix. No approval stop, no scores.
 
 ## Skipping
 

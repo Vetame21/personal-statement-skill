@@ -23,6 +23,34 @@ Six skills, one shared set of rules:
 
 ## Install
 
+### Any agent: Claude Code, Codex, Gemini CLI, Qwen Code, Kimi Code, OpenCode, DeepSeek-TUI, ...
+
+The skills use the open **Agent Skills** format (a folder with a `SKILL.md`), which many coding agents read. Clone the repo and run the installer (Python 3.9+, no extra packages, works on Windows, macOS and Linux):
+
+```bash
+git clone https://github.com/Vetame21/personal-statement-skill
+```
+
+```bash
+python personal-statement-skill/scripts/install.py
+```
+
+By default it copies the skills to `~/.claude/skills` (Claude Code), `~/.agents/skills` (Codex CLI, Gemini CLI, Kimi Code CLI, OpenCode, DeepSeek-TUI) and `~/.qwen/skills` (Qwen Code). Pick tools with `--tools codex gemini qwen kimi opencode deepseek claude`, install into one project with `--project .`, keep them in sync with `git pull` using `--link`, see every folder with `--list`, and remove them with `--uninstall`. It never overwrites a same-named skill it did not install.
+
+| Tool | Reads skills from (user level) |
+|---|---|
+| Claude Code | `~/.claude/skills` (or the plugin marketplace below) |
+| Codex CLI | `~/.agents/skills` (older versions: `~/.codex/skills`) |
+| Gemini CLI | `~/.gemini/skills` or `~/.agents/skills` |
+| Qwen Code | `~/.qwen/skills` |
+| Kimi Code CLI | `~/.kimi-code/skills` or `~/.agents/skills` |
+| OpenCode | `~/.config/opencode/skills`, `~/.claude/skills` or `~/.agents/skills` |
+| DeepSeek, Qwen, Kimi and other **models** | Use them through one of the tools above; skills belong to the tool, not the model |
+
+Paths checked against each tool's documentation in November 2026; tools change, so `python scripts/install.py --list` shows what the installer uses. OpenCode reads both `~/.claude/skills` and `~/.agents/skills`; OpenCode users should install to only one (for example `--tools codex`).
+
+### Claude Code plugin marketplace
+
 ```bash
 claude plugin marketplace add Vetame21/personal-statement-skill
 ```
