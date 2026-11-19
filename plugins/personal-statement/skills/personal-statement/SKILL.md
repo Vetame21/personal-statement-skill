@@ -68,7 +68,7 @@ Offer to save the context to a file such as `personal-statement-context.md` in t
 
 ### 5. Finalise
 
-Show, in this order: the debate summary (short), a change table (what changed, why), the full text with its word count, the scores, and **"Check before submitting"** (every `[VERIFY]`, every fact to re-check, every claim the applicant must be able to explain). For several targets, deliver one file per version.
+Show, in this order: the debate summary (short), a change table (what changed, why), the full text with its word count, the **fact trace** (rule 9 in [references/shared/integrity.md](references/shared/integrity.md): every new name, number, topic, tool or scope word quoted, then removed or marked `[VERIFY]`), the scores, and **"Check before submitting"** (every `[VERIFY]`, every fact to re-check, every claim the applicant must be able to explain). For several targets, deliver one file per version.
 
 ## Upgrade mode details
 
@@ -76,7 +76,7 @@ Show, in this order: the debate summary (short), a change table (what changed, w
 1. **Map**: one line per paragraph on what it does; keep the order unless it is broken.
 2. **Keep list**: the applicant's best details and phrases, kept verbatim where possible.
 3. **Fix list**, in priority order: factual errors → leftovers (placeholders, comment markers) → missing pieces the application needs → repetition → register that does not fit the applicant.
-4. Lightest rewrite → `ps_check.py` with the limit → quick Check → finalise. Run Debate 1 first only if the user wants additions (news, facts, new sections) or asks for a debate; run the full Debate 2 only on request.
+4. Lightest rewrite → fact trace (quote any detail not in the original; remove it or mark `[VERIFY]`) → `ps_check.py` with the limit → quick Check → finalise. Run Debate 1 first only if the user wants additions (news, facts, new sections) or asks for a debate; run the full Debate 2 only on request.
 5. If the user says it feels too stiff or too casual, move one step, not to the other extreme.
 
 ## References

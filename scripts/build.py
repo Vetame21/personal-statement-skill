@@ -157,6 +157,21 @@ def update_readme(root: Path, info: dict) -> None:
     write(readme, new)
 
 
+def build_chat(root: Path) -> None:
+    """chat/vetame-writing-chat.md (.txt): one file people download from GitHub for any chat AI, free or paid."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("make_bundle", root / "scripts" / "make_bundle.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    mod.ROOT = root
+    mod.SHARED = sorted(p.stem for p in (root / "shared" / "references").glob("*.md"))
+    with tempfile.TemporaryDirectory() as tmp:
+        chat = mod.make_chat(Path(tmp))
+        (root / "chat").mkdir(exist_ok=True)
+        for src in (chat, chat.with_suffix(".txt")):
+            shutil.copyfile(src, root / "chat" / src.name)
+
+
 def build(root: Path) -> list:
     info = repo_info()
     version = (root / "VERSION").read_text().strip()
@@ -164,12 +179,13 @@ def build(root: Path) -> list:
     errors = validate(root)
     build_plugins(root, info, version)
     update_readme(root, info)
+    build_chat(root)
     return errors
 
 
 def same_tree(a: Path, b: Path) -> list:
     diffs = []
-    for rel in ["skills", "plugins", ".claude-plugin", "README.md"]:
+    for rel in ["skills", "plugins", ".claude-plugin", "README.md", "chat"]:
         pa, pb = a / rel, b / rel
         if pa.is_file() or pb.is_file():
             if not (pa.exists() and pb.exists() and filecmp.cmp(pa, pb, shallow=False)):

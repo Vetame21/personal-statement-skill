@@ -23,6 +23,30 @@ Six skills, one shared set of rules:
 
 ## Install
 
+### Any chat AI, free or paid: no install
+
+Download **[chat/vetame-writing-chat.md](chat/vetame-writing-chat.md)** (or the [.txt](chat/vetame-writing-chat.txt) if an app refuses `.md`). It is one file with the personal statement, humanizer and Harvard CV skills. Attach it at the start of a chat, or paste all of it, then say what you need:
+
+```
+Upgrade my personal statement for [program], keep my voice: [paste]
+```
+
+| App | Free plan | Paid plan |
+|---|---|---|
+| ChatGPT | attach the file (Free allows about 3 uploads a day) or paste it; a Project keeps it for every chat (Free projects hold 5 files) | put the file in a Project (Go/Plus: 25 files per project) |
+| Claude | upload [`vetame-writing.zip`](#build-the-bundles-yourself) (all six skills) under Settings → Capabilities → Skills; free accounts have had skills since February 2026 | same, or add the file to a Project |
+| Gemini | Settings → Skills → Upload skill → **folder**: `vetame-writing-lite` (the full 34-file bundle failed to save in our test); skills are still rolling out, so if you don't have them, attach the file | same |
+| DeepSeek, Kimi, Qwen | attach the file (or the `.txt`) at the start of each new chat, or paste it | same; these apps keep no skill or project for it, so attach it again in each new chat |
+| Grok | attach or paste | a Project with the file (reported for SuperGrok; free access to projects is unclear) |
+
+Chat apps can't run the checker scripts, so the AI does those checks by reading and says so. Plans change often: features checked November 2026 from the sources below; check the app's own pricing page.
+Sources: [OpenAI: custom GPTs](https://help.openai.com/en/articles/8555545-custom-gpts), [OpenAI: Projects](https://help.openai.com/en/articles/8555545-projects-in-chatgpt), [TechRadar: Claude free plan skills](https://techradar.com/ai-platforms-assistants/claude/claude-just-made-its-most-powerful-tools-free-from-file-creation-to-app-integration-all-without-ads), [Claude Help: skills](https://support.claude.com/en/articles/12512180-using-skills-on-claude-ai), [Gemini Apps Help: skills](https://support.google.com/gemini/answer/17094296?hl=en&co=GENIE.Platform%3DDesktop), [freeacademy: Grok Free vs SuperGrok](https://freeacademy.ai/blog/grok-free-vs-supergrok-2026), [macaron: Kimi vs DeepSeek vs Qwen](https://macaron.im/de/blog/kimi-vs-deepseek-vs-qwen).
+
+#### Build the bundles yourself
+
+`python3 scripts/make_bundle.py` writes `dist/vetame-writing/` (all six skills as one flat skill, plus `.zip`), `dist/vetame-writing-lite/` (three skills in 10 files, plus `.zip`) and the chat file.
+
+
 ### Any agent: Claude Code, Codex, Gemini CLI, Qwen Code, Kimi Code, OpenCode, DeepSeek-TUI, ...
 
 The skills use the open **Agent Skills** format (a folder with a `SKILL.md`), which many coding agents read. Clone the repo and run the installer (Python 3.9+, no extra packages, works on Windows, macOS and Linux):
@@ -65,7 +89,7 @@ Restart your agent after installing. Then either describe the task ("polish my s
 | Codex CLI | `$humanizer`, `$personal-statement`, ... |
 | Qwen Code | `/humanizer` (the folder name becomes the command) |
 | Gemini CLI, Kimi Code, OpenCode | describe the task, or check the tool's skills list (for example `/skills`) |
-| Gemini app, claude.ai (chat) | run `python3 scripts/make_bundle.py` to get **one** combined skill, `dist/vetame-writing/`. Upload that folder in the app's Skills settings: Gemini takes the folder, claude.ai the ZIP. The checker scripts don't run there |
+| Chat apps (ChatGPT, Claude, Gemini, DeepSeek, Kimi, Grok, Qwen) | see [Any chat AI, free or paid](#any-chat-ai-free-or-paid-no-install) |
 
 The checker scripts need Python 3.9+ (`python3`, or `py` on Windows). Skills that check current facts (debate-mode, news in a statement) need **web search turned on** in your agent; without it they label their verdicts "provisional".
 

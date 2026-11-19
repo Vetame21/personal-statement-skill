@@ -533,6 +533,27 @@ class Bundle(unittest.TestCase):
             self.assertIn("contains three", head)
 
 
+class ChatFile(unittest.TestCase):
+    """chat/vetame-writing-chat.md: one file for any chat AI. It must hold every lite file and the fact-trace rule."""
+
+    def test_chat_file_is_complete(self):
+        text = (ROOT / "chat" / "vetame-writing-chat.md").read_text(encoding="utf-8")
+        for name in ("SKILL.md", "shared-integrity.md", "ps-guide.md", "humanizer-guide.md", "cv-guide.md"):
+            self.assertIn("<<< FILE: " + name + " >>>", text)
+        self.assertIn("Fact trace after every rewrite", text)
+        self.assertNotIn("name: vetame-writing", text)          # no YAML front matter inside a chat prompt
+        self.assertLess(len(text), 80000)                        # keep it attachable and pasteable
+        self.assertEqual(text, (ROOT / "chat" / "vetame-writing-chat.txt").read_text(encoding="utf-8"))
+
+    def test_fact_trace_examples_from_the_gemini_test(self):
+        # The Gemini test added "probability" to a statement and "workstation" to a CV bullet unnoticed
+        integrity = (ROOT / "shared/references/integrity.md").read_text(encoding="utf-8")
+        self.assertIn("probability", integrity)
+        self.assertIn("workstation", integrity)
+        for skill in ("personal-statement", "harvard-cv", "humanizer"):
+            self.assertIn("act trace", (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8"), skill)
+
+
 class Installer(unittest.TestCase):
     def _run(self, home, *args):
         import os

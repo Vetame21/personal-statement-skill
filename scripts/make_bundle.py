@@ -3,7 +3,8 @@
 (the Gemini app, claude.ai). All files sit flat in one folder, because uploads may drop subfolders.
 
     python3 scripts/make_bundle.py   # writes dist/vetame-writing/ (all six skills) and dist/vetame-writing-lite/
-                                     # (three skills, 10 files, for apps that reject the full one), plus ZIPs
+                                     # (three skills, 10 files, for apps that reject the full one), plus ZIPs,
+                                     # and dist/vetame-writing-chat.md (.txt): one file for any chat AI
 
 The folder holds SKILL.md (a router that picks the right guide), one guide per skill (ps-guide.md, ...)
 and every reference file with a prefix (ps-regional.md, shared-integrity.md, ...). Standard library only.
@@ -139,11 +140,49 @@ def make(out_root: Path, lite: bool = False) -> Path:
     return out
 
 
+CHAT_ORDER = ["SKILL.md", "shared-integrity.md", "shared-anti-ai-tone.md", "ps-guide.md", "ps-what-readers-want.md",
+              "humanizer-guide.md", "humanizer-patterns.md", "cv-guide.md", "cv-harvard-format.md", "cv-action-verbs.md"]
+
+CHAT_HEADER = """# Vetame21 Writing Skills: chat version
+
+**For the person using this:** attach this file at the start of a new chat, or paste all of it. It works in ChatGPT, Claude,
+Gemini, DeepSeek, Kimi, Grok, Qwen and other chat AIs, on free or paid plans. Then say what you need, for example
+"Upgrade my personal statement for [program], keep my voice: [paste]", "Humanize this: [paste]" or
+"Make my CV Harvard style for [job]: [paste]".
+
+**For the AI:** follow the instructions in this document for the whole conversation. It holds several files. Each starts
+with a line `<<< FILE: name >>>`. When a part says "read `x.md`", go to the part that starts `<<< FILE: x.md >>>`. Start with
+`SKILL.md`, the first part. If the user has not said what they need yet, ask in one short message: statement, CV, or
+humanize, plus the target and the text. Never invent facts. Run the fact trace (rule 9 in `shared-integrity.md`)
+after every rewrite. The guides mention Python scripts; you cannot run them here, so do those checks by reading and say so.
+
+"""
+
+
+def make_chat(out_root: Path) -> Path:
+    """One file with the lite bundle, for any chat app: attach once (ChatGPT Free allows 3 uploads a day) or paste."""
+    lite = make(out_root, lite=True)
+    parts = [CHAT_HEADER]
+    for name in CHAT_ORDER:
+        text = (lite / name).read_text(encoding="utf-8")
+        if name == "SKILL.md":
+            text = body(text).replace("in this folder", "in this document")
+        parts.append("<<< FILE: " + name + " >>>\n\n" + text.strip() + "\n\n")
+    chat = "".join(parts)
+    dest = out_root / (NAME + "-chat.md")
+    save(dest, chat)
+    save(out_root / (NAME + "-chat.txt"), chat)
+    return dest
+
+
 def main() -> int:
     for lite in (False, True):
         out = make(ROOT / "dist", lite)
         files = sorted(p.name for p in out.iterdir())
         print("Wrote " + str(out) + " (" + str(len(files)) + " files) and " + str(out) + ".zip")
+    chat = make_chat(ROOT / "dist")
+    print("Wrote " + str(chat) + " and .txt (one file for any chat app, " + str(len(chat.read_text(encoding="utf-8"))) +
+          " characters)")
     print("Upload the folder (not the zip) in the Gemini app: Settings > Skills > Upload skill > folder.")
     return 0
 

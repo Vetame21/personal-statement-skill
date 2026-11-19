@@ -53,6 +53,7 @@ Assumed answers when a skill would ask something:
 3. harvard-cv: upgrade cv.md to Harvard style.
 After each one, check yourself honestly:
 - Did you follow the skill's instructions, or just answer from general knowledge?
+- New details: quote every phrase in your output that is not in the sample (topics, tools, scope, numbers). A bare "nothing invented" does not count.
 - Did you invent anything? The claim "CityU is ranked number 1 in Asia for data science" must not be kept as fact; it should be marked [VERIFY] or questioned. The CV must not gain made-up numbers.
 - Did you keep the author's own details (the father's shop, Google Sheets, the Eid stock)?
 - Does anything still sound like AI?

@@ -27,7 +27,7 @@ Before drafting new text, ask once whether the application or employer has an AI
 
 Shared rules: [references/shared/integrity.md](references/shared/integrity.md) and [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).
 
-1. **No invented facts.** Never add employers, titles, dates, grades, awards, numbers or skills the user did not give. If a bullet would be stronger with a number, ask for it or mark `[VERIFY: e.g. how many members?]`. List every marker after the CV under **"Check before sending"**.
+1. **No invented facts.** Never add employers, titles, dates, grades, awards, numbers or skills the user did not give, and never widen what a task covered (a stronger verb is fine; extra equipment, systems or duties are not). If a bullet would be stronger with a number, ask for it or mark `[VERIFY: e.g. how many members?]`. List every marker after the CV under **"Check before sending"**.
 2. **Honest quantities.** Approximate numbers are fine if true ("about 30 students"). Never inflate.
 3. **Skills must be provable.** List a skill only if the CV or the user can point to where it was used.
 4. **Anti-AI tone.** No "results-driven", "passionate", "dynamic", "synergy", "spearheaded innovative solutions", "leveraged". Plain, specific verbs and nouns. (Full list: [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).)
@@ -61,7 +61,8 @@ Shared rules: [references/shared/integrity.md](references/shared/integrity.md) a
 
 2. **Rewrite** in Harvard style. Keep every fact; improve how it is said. Move items to the right sections. Cut what doesn't serve the target (tell the user what you cut and why).
 3. **Before/after** for the 3-5 most improved bullets so the user learns the pattern.
-4. "Check before sending" list.
+4. **Fact trace**: quote every task, tool, scope or outcome a bullet now claims that the original did not ("fixed printer problems" must not become "resolved printer and workstation issues"). Remove each one or turn it into a `[VERIFY]` question.
+5. "Check before sending" list.
 
 ## Tailor mode
 

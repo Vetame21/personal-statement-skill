@@ -79,7 +79,8 @@ Repeat until no sentence has a `!` flag (plain facts and advisory-only sentences
 1. The rewritten text.
 2. **What changed**: 3-8 bullet before → after examples of the most important changes.
 3. **Check, before vs after**: run the script with `--compare old.txt new.txt` and report the red-flag counts and sentence-length spread.
-4. Any `[ADD DETAIL]` flags, and the disclosure reminder if relevant.
+4. **Fact trace**: any name, number, topic, example or claim in the new text that is not in the original, quoted, then removed or marked `[ADD DETAIL]`. Write "New details: none" if there are none.
+5. Any `[ADD DETAIL]` flags, and the disclosure reminder if relevant.
 
 ## Quality bar
 

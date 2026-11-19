@@ -13,6 +13,7 @@ Shared by every skill in this collection. They protect the person the writing is
 6. **No detector evasion.** Do not add deliberate errors, odd synonyms or filler to move an AI score, and do not promise lower scores. See `ai-detection.md`.
 7. **Similarity is fixed at the source.** For plagiarism checkers (Turnitin similarity), fix high matches by quoting and citing or by genuinely rewriting in the user's own words with a citation, never by "spinning" text. Limits are set per institution (examples: 25% for skripsi at one Universitas Airlangga faculty from 2025/26; 20% at UGM's Faculty of Cultural Sciences, with the supervisor deciding).
 8. **Every claim must survive a conversation.** If the user could not explain a sentence for a minute in an interview or defense, cut it or flag it.
+9. **Fact trace after every rewrite.** Small additions slip in even when big ones are caught: a topic ("practised probability" when the source only says "math club"), a tool, or a wider scope ("printer problems" becoming "printer and workstation issues", "helped with lab computers" becoming "troubleshot software and hardware"). After rewriting, compare the new text with the source and list, under **"New details"**, every name, number, topic, tool, place, role or scope word that is not in the source. Remove each one or mark it `[VERIFY]`. If there are none, write "New details: none". Quote the phrases; a bare "nothing invented" does not count as a check.
 
 ## Indonesia: Ministry guidance on generative AI (2024)
 
