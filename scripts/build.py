@@ -95,8 +95,8 @@ def validate(root: Path) -> list:
         if fm.get("name") != d.name:
             errors.append(f"{d.name}: front matter name is {fm.get('name')!r}")
         desc = (fm.get("description") or "").strip()
-        if not desc or len(desc) > 1024:
-            errors.append(f"{d.name}: description missing or over 1024 characters ({len(desc)})")
+        if not desc or len(desc.encode("utf-8")) > 500:   # Codex skips skills over 500; the open standard allows 1024
+            errors.append(f"{d.name}: description missing or over 500 bytes ({len(desc.encode('utf-8'))}); Codex skips it")
         for md in d.rglob("*.md"):
             text = md.read_text(encoding="utf-8")
             # ignore links inside fenced code blocks

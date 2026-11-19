@@ -65,6 +65,7 @@ Restart your agent after installing. Then either describe the task ("polish my s
 | Codex CLI | `$humanizer`, `$personal-statement`, ... |
 | Qwen Code | `/humanizer` (the folder name becomes the command) |
 | Gemini CLI, Kimi Code, OpenCode | describe the task, or check the tool's skills list (for example `/skills`) |
+| Gemini app, claude.ai (chat) | add a skill in the app's Skills settings by uploading its `SKILL.md` (or a ZIP of the folder on claude.ai), or attach `SKILL.md` to the chat; the checker scripts don't run there |
 
 The checker scripts need Python 3.9+ (`python3`, or `py` on Windows). Skills that check current facts (debate-mode, news in a statement) need **web search turned on** in your agent; without it they label their verdicts "provisional".
 
@@ -111,7 +112,7 @@ Or copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/
 
 ### Testing the skills for us
 
-Want to help? Follow [testing/TESTER_BRIEF.md](testing/TESTER_BRIEF.md). Your agent runs a 20-30 minute test on fictional samples and produces one PDF report (`testing/out/report.pdf`) to send back.
+Want to help? Follow [testing/TESTER_BRIEF.md](testing/TESTER_BRIEF.md). Your agent runs a 20-30 minute test on fictional samples and produces one PDF report (`testing/out/report.pdf`) to send back. Using the Gemini app or another chat app that can't run commands? Follow [testing/GEMINI_CHAT_TEST.md](testing/GEMINI_CHAT_TEST.md) instead.
 
 ## Example prompts
 

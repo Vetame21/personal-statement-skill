@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.4 - 2026-11-19
+
+- Skill descriptions shortened to about 400 characters: Codex skips skills whose description is over 500, so five of the six were not loading there. The build now fails over 500 bytes, and a test checks it.
+- `testing/GEMINI_CHAT_TEST.md`: a 15-minute test for the Gemini app and other chat apps (no scripts), with a PDF through Google Docs.
+- README: how to use the skills in chat apps (Gemini app, claude.ai).
+
 ## 2.1.3 - 2026-11-19
 
 - New tester kit in `testing/`: `TESTER_BRIEF.md` tells any agent (Codex, Claude Code, Gemini CLI, ...) to install the skills, run every checker and skill on fictional samples, score them honestly, ask the tester six questions, and write a report; `make_pdf.py` turns the report into a PDF with the standard library only.

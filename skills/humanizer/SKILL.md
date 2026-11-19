@@ -1,6 +1,6 @@
 ---
 name: humanizer
-description: Make any piece of writing sound natural and like its author instead of machine-written - personal statements, reports, thesis chapters, CVs, cover letters, emails, posts - in English or Indonesian. Diagnoses AI-sounding words, rhythm and structure, asks whether to also upgrade the content, then rewrites at the lightest touch while keeping every fact, number and citation. Use when the user says humanize, humanizer, make it sound human or natural, sounds like AI, kayak AI, kurang natural, terlalu kaku, pastes an AI-detector report (GPTZero, Turnitin, ZeroGPT), or calls it by name (/humanizer in Claude Code, $humanizer in Codex).
+description: Make writing sound natural and like its author, not machine-written (statements, reports, thesis chapters, CVs, emails, posts; English or Indonesian). Diagnoses AI-sounding words and rhythm, asks whether to also upgrade content, then rewrites lightly, keeping every fact and citation. Use for humanize, sounds like AI, kayak AI, kurang natural, terlalu kaku, or an AI-detector report (GPTZero, Turnitin).
 ---
 
 # Humanizer

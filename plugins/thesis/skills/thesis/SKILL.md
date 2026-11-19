@@ -1,6 +1,6 @@
 ---
 name: thesis
-description: Coach a student through an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis, graduation project / 毕业论文), from choosing a topic, writing the proposal, structuring chapters (Indonesian Bab I-V or international IMRaD), literature review, methodology, results and discussion, citations, similarity and AI-use rules, and preparing for the defense (sidang). Use when the user mentions skripsi, tugas akhir (TA), thesis, proposal penelitian, seminar proposal, sidang, bab 1/2/3/4/5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a thesis chapter reviewed, debated, or improved.
+description: Coach an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis) - topic, proposal, chapters (Bab I-V or IMRaD), literature review, methodology, results, citations, AI-use rules and defense (sidang) prep. Use when the user mentions skripsi, tugas akhir (TA), thesis, proposal penelitian, sidang, bab 1-5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a chapter reviewed.
 ---
 
 # Thesis (Skripsi / Tugas Akhir)

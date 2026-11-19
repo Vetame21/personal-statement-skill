@@ -559,6 +559,14 @@ class Installer(unittest.TestCase):
 
 
 class Build(unittest.TestCase):
+    def test_descriptions_fit_codex_limit(self):
+        # Codex skips skills whose description is over 500 characters (found when a tester's Codex ignored them)
+        import re
+        for skill in (ROOT / "skills").iterdir():
+            text = (skill / "SKILL.md").read_text(encoding="utf-8")
+            desc = re.search(r"^description: (.*)$", text, re.M).group(1)
+            self.assertLessEqual(len(desc.encode("utf-8")), 500, skill.name)
+
     def test_every_skill_front_matter_is_valid_yaml(self):
         import re
         import yaml

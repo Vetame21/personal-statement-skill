@@ -1,6 +1,6 @@
 ---
 name: report
-description: Plan, write, review and polish academic and technical reports - lab reports (laporan praktikum), programming lab and assignment reports, technical/project reports, makalah, internship reports (laporan magang / kerja praktik / KP), and research or progress reports - in Indonesian or English. Use for academic or student technical reports, when the user mentions a lab report, laporan praktikum, programming lab or assignment report, makalah, KP / magang / internship report, course project report or research progress report, or wants one checked for structure, citations or AI-sounding language. Not for business, financial, status or incident reports.
+description: Plan, write and review academic and technical reports in Indonesian or English - lab reports (laporan praktikum), programming lab and assignment reports, project reports, makalah, internship reports (KP / magang) and progress reports. Use when the user mentions one of these or wants a report checked for structure, citations or AI-sounding language. Not for business, financial or incident reports.
 ---
 
 # Report
