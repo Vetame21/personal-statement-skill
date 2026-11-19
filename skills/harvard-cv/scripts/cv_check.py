@@ -28,8 +28,12 @@ BUZZWORDS = ["results-driven", "passionate", "dynamic", "synergy", "synergies", 
              "go-getter", "hard-working", "hardworking", "self-starter", "successfully",
              "innovative solutions", "think outside the box", "best-in-class"]
 NUMBER = re.compile(r"\d|\b(one|two|three|four|five|six|seven|eight|nine|ten|dozens?|hundreds?)\b", re.I)
+# Technical terms that contain buzzwords but are not buzzwords
+TECH_TERMS = re.compile(r"dynamic (?:programming|systems?|pricing|range|analysis|typing|memory|routing|loading|web|content)"
+                        r"|(?:synergy|synergies) (?:effect|coefficient)s?", re.I)
 DATE_STYLES = {
-    "Mon YYYY": re.compile(r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.? \d{4}\b"),
+    # "May" is the same in both styles, so it never counts as either
+    "Mon YYYY": re.compile(r"\b(?:Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.? \d{4}\b"),
     "Month YYYY": re.compile(r"\b(?:January|February|March|April|June|July|August|September|October|November|December) \d{4}\b"),
     "MM/YYYY": re.compile(r"\b\d{1,2}/\d{4}\b"),
 }
@@ -81,8 +85,9 @@ def main() -> int:
             notes.append("weak opener")
         if PRONOUNS.search(b):
             notes.append("personal pronoun")
+        tech_free = TECH_TERMS.sub(" ", low)
         for w in BUZZWORDS:
-            if w in low:
+            if re.search(r"(?<![\w-])" + re.escape(w) + r"(?![\w-])", tech_free):
                 notes.append(f"buzzword '{w}'")
         words = len(b.split())
         if words > 32:

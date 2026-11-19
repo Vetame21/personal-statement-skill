@@ -32,7 +32,8 @@ Shared rules: [references/shared/integrity.md](references/shared/integrity.md) a
 3. **Skills must be provable.** List a skill only if the CV or the user can point to where it was used.
 4. **Anti-AI tone.** No "results-driven", "passionate", "dynamic", "synergy", "spearheaded innovative solutions", "leveraged". Plain, specific verbs and nouns. (Full list: [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).)
 5. **Consistency with the personal statement.** If both exist, the same facts must match (dates, project names, roles).
-6. **Debate before adding risky items.** If the user wants to add something weak, outdated, unverifiable or off-target, say so with reasons first (use `debate-mode` if installed).
+6. **Respect AI-use policies.** Before drafting new text, ask once whether the application or employer has an AI-use policy for CVs, and follow it.
+7. **Debate before adding risky items.** If the user wants to add something weak, outdated, unverifiable or off-target, say so with reasons first (use `debate-mode` if installed).
 
 ## Create mode
 

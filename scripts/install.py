@@ -157,7 +157,11 @@ def main() -> int:
         print("Note: OpenCode reads both ~/.claude/skills and ~/.agents/skills. If you use OpenCode, install to only "
               "one of them (e.g. --tools codex gemini) to avoid duplicate skill names.\n")
 
+    if args.project and not Path(args.project).is_dir():
+        raise SystemExit(f"--project folder not found: {args.project} (create it first or check the path)")
+
     failures = 0
+    counts = {"COPY": 0, "LINK": 0, "SKIP": 0, "REMOVE": 0, "KEEP": 0}
     for loc in locations:
         base = target_dir(loc, args.project)
         print(f"[{loc}] {base}  ({LOCATIONS[loc][2]})")
@@ -171,11 +175,24 @@ def main() -> int:
                 failures += 1
             if msg:
                 print("  " + msg)
+                key = msg.split()[0]
+                if key in counts:
+                    counts[key] += 1
     if failures:
         print(f"\n{failures} item(s) failed; see ERROR lines above.")
         return 1
+    if args.uninstall and not args.dry_run:
+        print(f"\nRemoved {counts['REMOVE']}, kept {counts['KEEP']} that this script did not install.")
     if not args.uninstall and not args.dry_run:
-        print("\nDone. Restart your agent (or start a new session) so it discovers the skills.")
+        installed = counts["COPY"] + counts["LINK"]
+        print(f"\nInstalled {installed}, skipped {counts['SKIP']}.")
+        if installed == 0:
+            print("Nothing was installed: every target already holds a skill with the same name that this script did "
+                  "not install. Your agent will keep using those. Use --force to replace them.")
+            return 1
+        if counts["SKIP"]:
+            print("Some skills were skipped (see SKIP lines); your agent keeps its existing skills with those names.")
+        print("Restart your agent (or start a new session) so it discovers the skills.")
         print("Use a skill by describing the task, or by name: /skill-name in Claude Code, $skill-name in Codex.")
     return 0
 

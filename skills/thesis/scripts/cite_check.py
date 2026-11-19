@@ -46,6 +46,10 @@ REF_HEADINGS = re.compile(
 REF_END = re.compile(r"^\s*#+\s+\S|^\s*(?:lampiran|appendix|appendices|annex|附录)\b.*$", re.I | re.M)
 FOOTNOTE = re.compile(r"\[\^\w+\]|^\[\^\w+\]:", re.M)
 YEAR = r"(?:1[5-9]|20)\d{2}[a-z]?|n\.d\."
+MONTHS = {m.lower() for m in (
+    "January February March April May June July August September October November December "
+    "Januari Februari Maret April Mei Juni Juli Agustus September Oktober November Desember "
+    "Jan Feb Mar Apr Jun Jul Aug Agu Sep Sept Oct Okt Nov Dec Des").split()}
 PARTICLES = {"van", "von", "de", "der", "den", "da", "di", "du", "del", "della", "la", "le", "bin", "binti", "al"}
 LEAD_WORDS = {"see", "e.g.", "e.g.,", "cf.", "i.e.", "lihat", "misalnya", "also", "and", "dan", "in", "by", "oleh"}
 
@@ -57,6 +61,8 @@ def norm(s: str) -> str:
 
 
 def strip_code(text: str) -> str:
+    """Remove code blocks and spans, and undo Markdown escapes that converters add (pandoc writes \\[WHO\\])."""
+    text = re.sub(r"\\([\[\]*_()#`.&])", r"\1", text)
     text = re.sub(r"```.*?```", " ", text, flags=re.S)
     text = re.sub(r"~~~.*?~~~", " ", text, flags=re.S)
     return re.sub(r"`[^`\n]*`", " ", text)
@@ -89,11 +95,53 @@ def first_author(author_part: str) -> str:
 REF_YEAR = re.compile(r"\((" + YEAR + r")(?:,[^)]*)?\)|(?<=[\s.])(" + YEAR + r")\.(?=\s|$)")
 
 
+# A line that starts a new reference entry (as opposed to a wrapped continuation line)
+ENTRY_START = re.compile(
+    r"^\s*(?:[-*]\s+|\d+[.)]\s+|\[\d+\]\s*)"                     # bullet, "1." or "[1]"
+    r"|^\s*(?:(?:van|von|de|der|den|da|di|du|del|la|le)\s+)?[A-Z][\w'’\-]+(?:\s[\w'’\-]+){0,2},\s+[A-Z]"  # "Lee, J." / "van Dijk, T."
+    r"|^\s*[A-Z][\w'’&\-]+(?:\s[\w'’&\-]+){0,6}\.?\s*(?:\[[A-Z][\w&.\- ]{1,15}\]\.?\s*)?\((?:1[5-9]|20)\d{2}"  # "World Health Organization. (2020)"
+    r"|^\s*[A-Z][\w'’\-]+\.\s+(?:\(|1[5-9]\d{2}|20\d{2})"            # "Sugiyono. (2019)" / "Sugiyono. 2019."
+)
+
+
+ENTRY_MARK = re.compile(r"^\s*(?:[-*]\s+|\d+[.)]\s+|\[\d+\]\s*)")
+ENTRY_YEAR = re.compile(r"(?:1[5-9]|20)\d{2}")
+CONTINUES = re.compile(r"(?:[,&;]|\b(?:and|dan|et al\.?))\s*$", re.I)
+
+
+def starts_entry(line: str, current) -> bool:
+    """Bullets and numbers always start an entry. An author-style line only does once the entry so far
+    has its year and the previous line does not end mid-list ("Zhao, M., &" then "Sun, R. (2021)")."""
+    if ENTRY_MARK.match(line):
+        return True
+    if not ENTRY_START.match(line):
+        return False
+    return bool(ENTRY_YEAR.search(" ".join(current))) and not CONTINUES.search(current[-1])
+
+
+def split_entries(refs: str):
+    """Group reference-list lines into entries, so wrapped entries (pandoc wraps at 72 columns,
+    Word copies break lines) are read as one. Blank lines always separate entries."""
+    entries = []
+    for block in re.split(r"\n\s*\n", refs):
+        current = []
+        for line in block.splitlines():
+            if not line.strip():
+                continue
+            if current and starts_entry(line, current):
+                entries.append(" ".join(current))
+                current = []
+            current.append(line.strip())
+        if current:
+            entries.append(" ".join(current))
+    return entries
+
+
 def ref_entries(refs: str):
     """Return a list of (aliases, year). Handles (2020), (2021, March 5) and the Indonesian 'Nama, A. 2020.' style.
     'World Health Organization [WHO]. (2020)' gets both the full name and 'who' as aliases."""
     entries = []
-    for line in refs.splitlines():
+    for line in split_entries(refs):
         line = re.sub(r"^\s*(?:[-*]|\d+[.)])\s+", "", line).strip()
         m = REF_YEAR.search(line)
         if not line or not m:
@@ -107,7 +155,9 @@ def ref_entries(refs: str):
             author_part = author_part[: abbr.start()]
         first = author_part.split(",")[0] if "," in author_part else author_part
         aliases.add(norm(first))
-        entries.append((frozenset(a for a in aliases if a), year))
+        aliases = frozenset(a for a in aliases if a)
+        if aliases:  # an entry with no author text before the year cannot be matched; skip it
+            entries.append((aliases, year))
     return entries
 
 
@@ -172,7 +222,7 @@ def apa(body: str, refs: str, report_unused: bool = True) -> int:
         paren_spans.append(m.span())
         for part in m.group(1).split(";"):
             pm = IN_PAREN.search(part.strip())
-            if not pm or not re.search(r"[A-Z]", pm.group(1)):
+            if not pm or not re.search(r"[A-Z]", pm.group(1)) or norm(pm.group(1)) in MONTHS:
                 continue  # "(2019)" after a narrative citation, or "(born 2001)"
             author = re.sub(r"\s*\[[^\]]+\]", "", re.sub(r"['’]s\b", "", pm.group(1)))
             for year in re.split(r"\s*,\s*", pm.group(2)):
@@ -184,7 +234,7 @@ def apa(body: str, refs: str, report_unused: bool = True) -> int:
         if any(s < m.start() and m.end() <= e for s, e in paren_spans):
             continue  # inside a larger parenthesis, already handled
         key = resolve(best_key(m.group(1), m.group(2), entries))
-        if not key or not key[:1].isalpha():
+        if not key or not key[:1].isalpha() or key in MONTHS:
             continue
         known_author = key in {a for a, _ in listed}
         if (key, m.group(2)) in listed or known_author or AUTHOR_MARKER.search(m.group(1)[-40:]):
@@ -197,7 +247,7 @@ def apa(body: str, refs: str, report_unused: bool = True) -> int:
         print("! No author-year citations or entries found. Is this a numeric ([1]) document? Try --style ieee.")
         return 1
     missing = sorted(cited - listed)
-    unused = sorted((sorted(aliases, key=len)[-1], y) for aliases, y in entries
+    unused = sorted((max(aliases, key=len), y) for aliases, y in entries
                     if not any((a, y) in cited for a in aliases)) if report_unused else []
     years_by_author = {}
     for a, y in listed:

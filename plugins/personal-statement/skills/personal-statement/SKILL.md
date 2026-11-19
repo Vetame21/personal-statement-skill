@@ -62,7 +62,7 @@ Offer to save the context to a file such as `personal-statement-context.md` in t
 
 ### 4. Stress-test
 
-1. Run `python scripts/ps_check.py <file> --limit-words N` (counts, sentence spread, em dashes, red flags, placeholders).
+1. Run `python scripts/ps_check.py <file> --limit-words N` (counts, sentence spread, em dashes, red flags, placeholders). Words are counted as whitespace-separated tokens, as Word and most application portals do; if the portal counts differently, trust the portal.
 2. **Debate 2 (after the draft)**: Admissions Reader, Skeptic, Applicant Advocate and Tone Detector attack and rebut; the Moderator gives Fix now / Keep / User's call and 1-5 scores ([references/debate-panel.md](references/debate-panel.md)).
 3. Apply fixes at the lightest touch; re-run the script.
 

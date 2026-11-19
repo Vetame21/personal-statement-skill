@@ -65,12 +65,12 @@ If the user already said which they want, skip the question. If they don't answe
 
 ### 4b. Self-check loop (required)
 
-Before showing anything, save the rewrite and run `python scripts/humanize_check.py <rewrite> --per-sentence` (add `--register report` for lab reports, Methods sections and other objective prose, where passive voice and no first person are correct). For every flagged sentence:
+Before showing anything, save the rewrite and run `python scripts/humanize_check.py <rewrite> --per-sentence` (add `--register report` for lab reports and Methods sections, or `--register academic` for theses and papers: passive voice and no first person are correct there, and "significant" then needs a test result). For every flagged sentence:
 
 - **generic transition opener** ("Next,", "Then,", "Furthermore,", "Selanjutnya,"): cut it, or join the sentence to its neighbour, or open with the subject and a concrete verb.
 - **vague claim** ("for decades", "sharply", "experts say"): replace with the specific fact from the user's source, or attribute it ("the film says..."), or flag `[ADD DETAIL]`.
 - AI-typical words and padding phrases: replace with plain, specific wording.
-- `~ advisory: no concrete anchor` is a hint, not a fix list. Act on it only when the sentence also has a `!` flag or the whole paragraph has no concrete detail; a vivid or natural sentence stays as it is.
+- `~ advisory` lines (no concrete anchor, a possible AI word such as "landscape" or "crucial", "significant" in everyday prose) are hints, not a fix list. Act on it only when the sentence also has a `!` flag or the whole paragraph has no concrete detail; a vivid or natural sentence stays as it is.
 
 Repeat until no sentence has a `!` flag (plain facts and advisory-only sentences are fine). If a flag cannot be fixed without inventing something, keep the sentence and list it under `[ADD DETAIL]`. Sentence variety is checked because it is good writing; it overlaps with what detectors measure, which is exactly why this loop never targets a score and never adds filler or errors.
 

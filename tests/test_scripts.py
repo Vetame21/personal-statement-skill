@@ -139,7 +139,8 @@ class HumanizeCheck(unittest.TestCase):
         self.assertTrue(any("Scientists have warned" in l for l in flagged))
 
     def test_significance_needs_test_in_sentence(self):
-        out = run(self.script, "Hasilnya signifikan. Perbedaannya signifikan (uji t, p = 0,03).", "--per-sentence")
+        out = run(self.script, "Hasilnya signifikan. Perbedaannya signifikan (uji t, p = 0,03).", "--per-sentence",
+                  "--register", "academic")
         flagged = [l for l in out.splitlines() if l.startswith("!")]
         self.assertEqual(len(flagged), 1, out)
         self.assertIn("Hasilnya signifikan", flagged[0])
@@ -408,6 +409,46 @@ class ReviewFiveRegressions(unittest.TestCase):
         self.assertIn("File not found", out.stderr)
 
 
+class ReviewSixRegressions(unittest.TestCase):
+    """Cases found by the sixth independent review (v2.1.2)."""
+
+    def test_pandoc_output_with_wrapped_references(self):
+        text = (ROOT / "tests/fixtures/pandoc_bab2.md").read_text(encoding="utf-8")
+        out = run("shared/scripts/cite_check.py", text)
+        self.assertIn("Result: OK", out)
+
+    def test_wrapped_six_author_entry_and_month(self):
+        text = ("Menurut Wang et al. (2021), hasilnya baik. Data dirilis (Maret 2020).\n\n"
+                "## Daftar Pustaka\n"
+                "Wang, L., Chen, Y., Liu, H., Zhang, Q., Zhao, M., &\n"
+                "  Sun, R. (2021). A long title that wraps onto\n"
+                "  a second line. Journal, 3(2), 1-10.\n")
+        out = run("shared/scripts/cite_check.py", text)
+        self.assertNotIn("Traceback", out)
+        self.assertIn("Result: OK", out)
+        self.assertNotIn("Maret", out)
+
+    def test_humanizer_context_words_and_everyday_significant_are_advisory(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "The landscape of the valley changed after the flood. That was a significant day for my family.",
+                  "--per-sentence")
+        self.assertFalse([l for l in out.splitlines() if l.startswith("!")], out)
+        self.assertIn("~", out)
+
+    def test_cv_technical_terms_and_may_dates(self):
+        cv = ("## Experience\n"
+              "**Tutor** | Club | May 2024 - August 2024\n"
+              "- Taught dynamic programming to 20 students, raising average quiz scores from 55 to 71\n")
+        out = run("skills/harvard-cv/scripts/cv_check.py", cv)
+        self.assertNotIn("buzzword 'dynamic'", out)
+        self.assertNotIn("Mixed date formats", out)
+
+    def test_ps_word_count_matches_word_processors(self):
+        out = run("skills/personal-statement/scripts/ps_check.py",
+                  "I studied in the U.S. with a 3.85 GPA, see https://example.org/page.")
+        self.assertIn("Words: 11", out)
+
+
 class Installer(unittest.TestCase):
     def _run(self, home, *args):
         import os
@@ -455,6 +496,22 @@ class Installer(unittest.TestCase):
             out = self._run(home, "--tools", "codex", "--skills", "humanizer", "--uninstall")
             self.assertIn("KEEP", out.stdout)
             self.assertTrue(link.is_symlink())
+
+    def test_all_skipped_is_not_reported_as_done(self):
+        with tempfile.TemporaryDirectory() as home:
+            home = Path(home)
+            for name in ("debate-mode", "harvard-cv", "humanizer", "personal-statement", "report", "thesis"):
+                (home / ".agents/skills" / name).mkdir(parents=True)
+            out = self._run(home, "--tools", "codex")
+            self.assertEqual(out.returncode, 1, out.stdout)
+            self.assertIn("Nothing was installed", out.stdout)
+
+    def test_missing_project_folder_is_an_error(self):
+        with tempfile.TemporaryDirectory() as home:
+            out = self._run(Path(home), "--project", str(Path(home) / "no-such-project"))
+            self.assertNotEqual(out.returncode, 0)
+            self.assertIn("--project folder not found", out.stderr)
+            self.assertFalse((Path(home) / "no-such-project").exists())
 
     def test_tool_names_and_list(self):
         with tempfile.TemporaryDirectory() as home:

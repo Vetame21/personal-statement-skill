@@ -29,7 +29,7 @@ from writing_rules import (FIRST_PERSON, MORAL, NOT_JUST, NUMBER_WORDS, PASSIVE,
 WORD = re.compile(r"\b[\w'’-]+\b")
 
 
-def scan(text: str, lang: str) -> dict:
+def scan(text: str, lang: str, register: str = "general") -> dict:
     low = text.lower()
     words = WORD.findall(text)
     paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip()]
@@ -51,7 +51,8 @@ def scan(text: str, lang: str) -> dict:
         "morals": len(re.findall(MORAL[lang], low)),
         "em_dash_per150": text.count("—") / max(len(words), 1) * 150,
         "placeholders": PLACEHOLDER.findall(text),
-        "unsupported_significance": unsupported_significance(sents),
+        # the statistical-significance rule applies to reports and academic writing only
+        "unsupported_significance": unsupported_significance(sents) if register != "general" else [],
     }
 
 
@@ -79,12 +80,16 @@ def per_sentence(text: str, lang: str, register: str = "general") -> int:
         low = s.lower()
         notes = []
         strong, context = word_hits(s, lang)
-        notes += [f"word:{w}" for w in strong] + [f"possible word (check context):{w}" for w in context]
+        notes += [f"word:{w}" for w in strong]
+        advisory = [f"advisory: possible AI word '{w}' (fine if literal or natural here)" for w in context]
         notes += [f'phrase:"{ph}"' for ph in phrase_hits(s, lang)]
         if GENERIC_OPENERS.match(s.strip()):
             notes.append("generic transition opener")
         if SIGNIF.search(s) and not TEST_RESULT.search(s):
-            notes.append("'significant' without a test result")
+            if register == "general":
+                advisory.append("advisory: 'significant' has a statistical meaning; fine in everyday prose")
+            else:
+                notes.append("'significant' without a test result")
         if VAGUE.search(s) and not re.search(r"\d", s):
             notes.append("vague claim (no number/source)")
         tokens = WORD.findall(s)
@@ -95,7 +100,6 @@ def per_sentence(text: str, lang: str, register: str = "general") -> int:
         has_attribution = bool(ATTRIBUTION.search(low))
         anchored = (CONCRETE.search(s) or NUMBER_WORDS.search(s) or FIRST_PERSON.search(s) or PASSIVE.search(s)
                     or has_name or has_attribution)
-        advisory = []
         if register == "general" and not anchored and len(tokens) > 6:
             advisory.append("advisory: no concrete anchor (number, name, or writer's voice); fine if the sentence already sounds natural")
         flagged += bool(notes)
@@ -149,7 +153,8 @@ def main() -> int:
     ap.add_argument("--lang", choices=["en", "id", "auto"], default="auto")
     ap.add_argument("--per-sentence", action="store_true", help="list each sentence with its flags")
     ap.add_argument("--register", choices=["general", "report", "academic"], default="general",
-                    help="report/academic: skip the 'no concrete anchor' check (objective prose, Methods sections)")
+                    help="report/academic: objective prose (lab reports, theses): skip the 'no concrete anchor' advisory "
+                         "and require a test result for 'significant'")
     ap.add_argument("--strict", action="store_true",
                     help="exit with code 1 if flags are found (with --compare: if the AFTER text still has flags)")
     args = ap.parse_args()
@@ -163,7 +168,7 @@ def main() -> int:
                 print(f"! Empty input: {name} has no text to compare.")
                 return 1 if args.strict else 0
         lang = detect_lang(a) if args.lang == "auto" else args.lang
-        ra, rb = scan(a, lang), scan(b, lang)
+        ra, rb = scan(a, lang, args.register), scan(b, lang, args.register)
         rows = [
             ("Words", ra["words"], rb["words"]),
             ("Sentence-length spread (sd)", f"{ra['sd_len']:.1f}", f"{rb['sd_len']:.1f}"),
@@ -194,7 +199,7 @@ def main() -> int:
     if args.per_sentence:
         flagged = per_sentence(text, lang, args.register)
         return 1 if (args.strict and flagged) else 0
-    result = scan(text, lang)
+    result = scan(text, lang, args.register)
     report(result)
     return 1 if (args.strict and total_flags(result)) else 0
 

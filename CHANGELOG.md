@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.2 - 2026-11-19
+
+Fixes from a sixth independent review.
+
+- cite_check: references that pandoc or Word wrap over several lines are grouped into one entry (no more crash on wrapped author lists); pandoc's escaped brackets (`\[WHO\]`) are read correctly; month names such as "(Maret 2020)" are not taken for author citations. The thesis guide now suggests `pandoc --wrap=none`.
+- humanizer: in `--per-sentence`, context-dependent words ("landscape", "journey") and an everyday "significant" are advisory (`~`) by default; `--register report` or `--register academic` makes "significant" without a statistical test a required fix again.
+- cv_check: buzzwords are matched as whole words and technical terms ("dynamic programming", "dynamic pricing") are not flagged; "May 2024" no longer counts as a different date format.
+- ps_check: words are counted as whitespace-separated tokens, like Word and application portals ("U.S.", "3.85" and URLs are one word each).
+- Installer: prints how many skills were installed and skipped; when everything was skipped it says so and exits with code 1 instead of "Done"; `--project` must be an existing folder.
+- harvard-cv: the AI-use policy question is now rule 6 in the numbered list; thesis trigger says "tugas akhir (TA)".
+- Tests: regression tests for every item above, including a real pandoc output fixture.
+
 ## 2.1.1 - 2026-11-19
 
 Fixes from a fifth independent review, focused on Codex users.

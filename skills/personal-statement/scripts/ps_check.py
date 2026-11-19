@@ -57,7 +57,8 @@ def main() -> int:
     if is_empty(text):
         print("! Empty input: nothing to check.")
         return 1 if args.strict else 0
-    words = WORD.findall(text)
+    # Count like Word and application portals: whitespace-separated tokens ("U.S.", "3.85" and URLs are one word)
+    words = [tok for tok in text.split() if re.search(r"\w", tok)]
     paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip()]
     sents = split_sentences(text)
     lang = detect_lang(text) if args.lang == "auto" else args.lang

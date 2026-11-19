@@ -1,6 +1,6 @@
 ---
 name: thesis
-description: Coach a student through an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis, graduation project / 毕业论文), from choosing a topic, writing the proposal, structuring chapters (Indonesian Bab I-V or international IMRaD), literature review, methodology, results and discussion, citations, similarity and AI-use rules, and preparing for the defense (sidang). Use when the user mentions skripsi, tugas akhir, TA, thesis, proposal penelitian, seminar proposal, sidang, bab 1/2/3/4/5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a thesis chapter reviewed, debated, or improved.
+description: Coach a student through an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis, graduation project / 毕业论文), from choosing a topic, writing the proposal, structuring chapters (Indonesian Bab I-V or international IMRaD), literature review, methodology, results and discussion, citations, similarity and AI-use rules, and preparing for the defense (sidang). Use when the user mentions skripsi, tugas akhir (TA), thesis, proposal penelitian, seminar proposal, sidang, bab 1/2/3/4/5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a thesis chapter reviewed, debated, or improved.
 ---
 
 # Thesis (Skripsi / Tugas Akhir)
@@ -31,7 +31,7 @@ Say the mode in one line, then start. Match the student's language (Indonesian, 
 ## Checking one chapter, and Word files
 
 - **One chapter (e.g. Bab II) without its own Daftar Pustaka:** run `python scripts/cite_check.py bab2.md --refs daftar-pustaka.md`. Only citations missing from the list are reported; entries not cited in that chapter are expected.
-- **.docx files:** the scripts read plain text or Markdown. Ask the student to save the chapter as .txt, convert it (for example `pandoc bab2.docx -t markdown -o bab2.md`), or paste the text.
+- **.docx files:** the scripts read plain text or Markdown. Ask the student to save the chapter as .txt, convert it (for example `pandoc bab2.docx -t markdown --wrap=none -o bab2.md`; the checker also handles wrapped lines), or paste the text.
 
 ## Stage 1: Gather
 
