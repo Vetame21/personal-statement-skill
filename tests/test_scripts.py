@@ -566,6 +566,10 @@ class ChatFile(unittest.TestCase):
             self.assertEqual(len(names), count, name)
             self.assertIn(top + "/SKILL.md", names)
             self.assertTrue(all(n.count("/") == 1 for n in names), name + " must be one flat folder")
+            with zipfile.ZipFile(ROOT / "download" / name) as z:
+                for info in z.infolist():                       # same bytes on every OS (Windows CI regression)
+                    self.assertEqual(info.create_system, 3, info.filename)
+                    self.assertEqual(info.date_time, (2026, 1, 1, 0, 0, 0), info.filename)
 
     def test_fact_trace_examples_from_the_gemini_test(self):
         # The Gemini test added "probability" to a statement and "workstation" to a CV bullet unnoticed

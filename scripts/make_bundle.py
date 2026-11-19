@@ -143,6 +143,7 @@ def write_zip(folder: Path, dest: Path) -> None:
         for f in sorted(folder.iterdir()):
             info = zipfile.ZipInfo(folder.name + "/" + f.name, date_time=(2026, 1, 1, 0, 0, 0))
             info.external_attr = 0o644 << 16
+            info.create_system = 3            # zipfile records 0 on Windows and 3 elsewhere; pin it (found by Windows CI)
             z.writestr(info, f.read_bytes())
 
 

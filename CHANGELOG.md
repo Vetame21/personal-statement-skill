@@ -11,7 +11,7 @@ New README, ready-to-download files, and fixes from a seventh independent review
 - **Checkers:** a paragraph that starts right under a heading ("## Hasil" then "Selain itu, ...") is counted, and repeated connectors are caught. cite_check accepts pandoc headings with attributes (`# Daftar Pustaka {#refs .unnumbered}`).
 - **make_pdf.py:** wraps text using real Helvetica widths, so capitals and bold headings no longer run off the page. Table cells wrap inside their columns (very wide tables become one line per cell). "2025. That year…" is no longer read as a numbered list.
 - **Sources added** to detector-reports.md and formats.md. README links corrected. Duplicate AI-policy rule removed from harvard-cv. Bundle link text fixed. The tester brief explains that the sample banner lines are counted.
-- Tests: 83 (was 76).
+- Tests: 83 (was 76). The ZIPs record the same "created on" system on every OS (Windows CI caught the difference).
 
 ## 2.2.0 - 2026-11-19
 
