@@ -24,8 +24,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from writing_rules import (FIRST_PERSON, MORAL, NOT_JUST, NUMBER_WORDS, PASSIVE, PLACEHOLDER,  # noqa: E402
                            SIGNIF, TEST_RESULT, TRIPLET, detect_lang, is_empty, phrase_hits, read_input,
-                           paragraphs, repeated_openers, split_sentences, unsupported_significance, word_hits,
-                           word_severity)
+                           paragraphs, repeated_openers, split_sentences, template_signals, unsupported_significance,
+                           word_hits, word_severity)
 
 WORD = re.compile(r"\b[\w'’-]+\b")
 
@@ -52,6 +52,7 @@ def scan(text: str, lang: str, register: str = "general") -> dict:
         "morals": len(re.findall(MORAL[lang], low)),
         "em_dash_per150": text.count("—") / max(len(words), 1) * 150,
         "placeholders": PLACEHOLDER.findall(text),
+        "template": template_signals(text, lang),
         # the statistical-significance rule applies to reports and academic writing only
         "unsupported_significance": unsupported_significance(sents) if register != "general" else [],
     }
@@ -115,7 +116,7 @@ def per_sentence(text: str, lang: str, register: str = "general") -> int:
 def total_flags(r: dict) -> int:
     return (word_severity(r["strong_words"], r["context_words"]) + len(r["phrase_hits"]) + len(r["not_just"])
             + max(0, r["triplets"] - 1) + sum(r["repeated_openers"].values()) + max(0, r["morals"] - 1)
-            + len(r["unsupported_significance"]) + (1 if r["em_dash_per150"] > 1 else 0) + (1 if r["sentences"] > 5 and r["sd_len"] < 4 else 0))
+            + len(r["unsupported_significance"]) + len(r["template"]) + (1 if r["em_dash_per150"] > 1 else 0) + (1 if r["sentences"] > 5 and r["sd_len"] < 4 else 0))
 
 
 def report(r: dict) -> None:
@@ -140,6 +141,10 @@ def report(r: dict) -> None:
         print(f"'This taught me...' endings: {r['morals']}  (keep one at most)")
     if r["unsupported_significance"]:
         print(f"'Significant/signifikan' without a test result in the sentence: {len(r['unsupported_significance'])}")
+    if r["template"]:
+        print("Template structure (hints, not an AI score):")
+        for name, detail in r["template"]:
+            print(f"  - {name}: {detail}")
     if r["placeholders"]:
         print(f"Placeholders left: {', '.join(r['placeholders'][:6])}")
     n = total_flags(r)
@@ -180,6 +185,7 @@ def main() -> int:
             ("Lists of three", ra["triplets"], rb["triplets"]),
             ("Repeated paragraph openers", sum(ra["repeated_openers"].values()), sum(rb["repeated_openers"].values())),
             ("Em dashes / 150 words", f"{ra['em_dash_per150']:.1f}", f"{rb['em_dash_per150']:.1f}"),
+            ("Template structure signals", len(ra["template"]), len(rb["template"])),
             ("Total flags", total_flags(ra), total_flags(rb)),
         ]
         print(f"{'Check':32} {'Before':>8} {'After':>8}")

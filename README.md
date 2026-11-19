@@ -170,6 +170,22 @@ Skill:  Mode: Upgrade. Keeping your shop story and voice.
 
 See the full run, with the map, keep list, change table and checker output, in [`examples/personal-statement-upgrade.md`](examples/personal-statement-upgrade.md). The sample is fictional, and the university name is replaced with [University] here.
 
+## 📊 Benchmark
+
+An open benchmark in [`bench/`](bench/): 3 fictional samples (including a ChatGPT-written "Harvard" essay), the same "humanize only, keep every fact" task for every condition, and each condition run in a fresh agent. November 2026, Claude for both arms, 1 run each.
+
+| Condition | Facts kept | Invented specifics | AI-tone flags left | Template signals left (GPT essay) |
+|---|---|---|---|---|
+| Plain prompt, no skill | 37/37 | 0 | 7 | 4 of 4 |
+| This repository's `humanizer` | 37/37 | 0 | 0 | 0 of 4 |
+
+**What this does and doesn't show:**
+- **Facts: a tie.** Both kept every fact and invented nothing on these samples.
+- **Template feel:** with no skill, the GPT essay keeps all of its template structure. With the skill, the punchline paragraphs and stock reflection lines are rewritten. But the last two columns use **this repository's own checker, which the skill is told to run**, so they favour it. For example, the closing lesson was merged into a longer sentence, not removed.
+- **Not tested yet:** [blader/humanizer](https://github.com/blader/humanizer) and commercial humanizer websites, other models, and blind human ratings. That's the comparison that matters most, and [`bench/README.md`](bench/README.md) explains how to add it.
+
+Per-sample results: [`bench/RESULTS.md`](bench/RESULTS.md).
+
 ## ❓ FAQ
 
 **Will it write my essay for me?** It drafts from *your* material when the application allows AI help, and coaches your own draft when it doesn't. It asks about the AI-use rules first. You still need to be able to explain every sentence in an interview.

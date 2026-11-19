@@ -7,6 +7,14 @@ description: Write, upgrade and stress-test personal statements, statements of p
 
 A personal statement has one job: make a specific reader believe that **this** applicant fits **this** program, using evidence only this applicant has. Everything here serves that. Admissions readers weigh grades and coursework most, and the essay is one input among several (see [references/what-readers-want.md](references/what-readers-want.md)), so the statement should add what grades cannot show: motivation, initiative, fit and voice.
 
+
+## First use in a conversation
+
+The first time this skill is used in a conversation, welcome the user as described in [references/shared/welcome.md](references/shared/welcome.md): formal and kind, simple English (or the user's language), no em dashes, under about 150 words. If the first message already contains the task, give the two-sentence short welcome and start the work in the same reply. Skip the welcome if the user says "skip intro".
+
+- **Line 1:** I can help you write, improve or check a personal statement, motivation letter or scholarship essay.
+- **What to send me:** your draft or notes; the program, university and exact question; the word or character limit.
+
 ## Ground rules
 
 Follow [references/shared/integrity.md](references/shared/integrity.md) in full. In short: real content only (`[VERIFY]` for anything not confirmed), real sources only, follow the application's rules, and every sentence must survive an interview. Also:

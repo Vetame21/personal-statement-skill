@@ -250,6 +250,51 @@ MORAL = {
 TRIPLET = re.compile(r"\b[\w-]+(?:\s[\w-]+)?,\s[\w-]+(?:\s[\w-]+)?,\s(?:(?:and|or|dan|atau|serta)\s)?[\w-]+")
 
 
+# Template structure: patterns that survive in polished AI drafts after the tell-tale words are gone
+# (found when a GPT-written "Harvard" essay scored 0 red flags). Hints about structure, not an AI score.
+STOCK_REFLECTION = {
+    "en": [r"\b(?:that|this) (?:experience|moment|project) (?:changed|shaped|transformed) (?:the way|how) i\b",
+           r"\bchanged the way i (?:think|see|look)\b",
+           r"\bthere is something (?:satisfying|special|powerful|beautiful|magical|rewarding) about\b",
+           r"\bi used to (?:see|think of|view|believe)\b[^.]{0,120}\.\s+now i (?:see|think|know|understand)\b",
+           r"\bthat (?:was|is) when i (?:realized|discovered|learned|understood)\b",
+           r"\blooking back,", r"\bin that moment,"],
+    "id": [r"\bpengalaman (?:itu|ini) (?:mengubah|membentuk) cara saya\b", r"\bsaat itulah saya (?:sadar|menyadari)\b",
+           r"\bada sesuatu yang (?:memuaskan|istimewa|berharga) (?:dari|tentang)\b", r"\bkalau dipikir-pikir\b"],
+}
+CONTRAST_TEMPLATE = re.compile(r"\bit (?:wasn't|was not|isn't|is not|didn't|did not)\b[^.!?]*[.!?](?:\s+[^.!?]*[.!?]){0,2}?\s+but it (?:was|is|did|does)\b", re.I)
+CLOSING_MORAL = re.compile(r"\b(?:reminds|taught|showed) me (?:that|how)\b|^(?:sometimes|not every|every|a|an|the best)\b[^.]{0,80}\b(?:can|cannot|can't|is|isn't|must)\b", re.I)
+
+
+def template_signals(text: str, lang: str):
+    """Return (name, detail) pairs for structural template patterns. Short texts are skipped."""
+    paras = [p for p in paragraphs(text) if not re.match(r"^\s*([-*+]|\d+[.)])\s", p)]
+    out = []
+    if len(paras) >= 6:
+        prose = [p for p in paras if not re.match(r"^\s*(?:\*\*|__|<|`|\||!\[|>)", p) and "|" not in p]
+        one_liners = [p for p in prose if len(split_sentences(p)) == 1 and len(p.split()) <= 20
+                      and re.search(r"[.!?][\"'”’)]*\s*$", p)]       # a full sentence, not a label or heading
+        if len(one_liners) >= 3 and len(one_liners) / max(len(prose), 1) >= 0.2:
+            out.append(("punchline paragraphs", str(len(one_liners)) + " of " + str(len(prose)) +
+                        " paragraphs are a single short sentence; keep one or two"))
+    low = text.lower()
+    spans = sorted((m.start(), m.end()) for ph in STOCK_REFLECTION[lang] for m in re.finditer(ph, low))
+    stock, last_end = [], -1
+    for start, end in spans:                       # overlapping matches count once
+        if start >= last_end:
+            stock.append(" ".join(low[start:end].split()))
+            last_end = end
+    if stock:
+        out.append(("stock reflection", "; ".join('"' + s[:50] + '"' for s in stock)))
+    if lang == "en" and CONTRAST_TEMPLATE.search(text):
+        out.append(("contrast template", '"It wasn\'t X... But it was Y"'))
+    if paras:
+        last = paras[-1]
+        if len(split_sentences(last)) == 1 and len(last.split()) <= 25 and CLOSING_MORAL.search(last.strip()):
+            out.append(("closing moral", "the essay ends on a one-line lesson; end on a specific image or plan instead"))
+    return out
+
+
 def phrase_hits(text: str, lang: str):
     low = text.lower()
     return [m.group(0) for p in (ID_PHRASES if lang == "id" else EN_PHRASES) for m in re.finditer(p, low)]

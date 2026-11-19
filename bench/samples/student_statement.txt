@@ -1,0 +1,7 @@
+In today's rapidly evolving digital landscape, data science plays a pivotal role in shaping our future. My journey with data began when I was in grade 10. My father runs a small phone accessories shop in Surabaya and every month he wrote the sales in a notebook. I asked him if I could put it in Google Sheets. I made a chart and we saw that phone cases sold much more in the month before Eid. He ordered more stock the next year and the shop did better.
+
+After that I wanted to learn more. I took a free Python course online and finished about half of it. I also joined the math club at my school and I was in the top 3 of the school olympiad selection. [add more achievements here]
+
+I want to study Data Science at CityU because Hong Kong is a global financial hub and CityU is ranked number 1 in Asia for data science. I am passionate, hardworking, and resilient. I really hope you accept me because this is my dream and my family cannot afford to pay the full tuition.
+
+In the future I want to build tools that help small shops like my father's understand their customers. In conclusion, I believe I am a perfect fit for this program.

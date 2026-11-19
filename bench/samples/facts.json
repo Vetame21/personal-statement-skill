@@ -1,0 +1,140 @@
+{
+  "_about": "Facts each output must keep. A fact counts as kept if any of its patterns (regular expressions, lower case) appears in the output.",
+  "gpt_essay.txt": {
+    "the time 12:17": [
+      "12:17"
+    ],
+    "a Tuesday": [
+      "tuesday"
+    ],
+    "peer tutoring club": [
+      "peer[- ]tutoring"
+    ],
+    "three students had no one": [
+      "three students",
+      "3 students"
+    ],
+    "two tutors, same room": [
+      "two tutors",
+      "2 tutors"
+    ],
+    "same room": [
+      "same room"
+    ],
+    "one student unavailable match": [
+      "wasn't (?:even )?available",
+      "not (?:even )?available",
+      "unavailable",
+      "wasn't (?:even )?free",
+      "not (?:even )?free",
+      "couldn't make it"
+    ],
+    "Python": [
+      "python"
+    ],
+    "coordinator": [
+      "coordinator"
+    ],
+    "spreadsheets before": [
+      "spreadsheet"
+    ],
+    "optional section for special requests": [
+      "special request",
+      "optional section"
+    ],
+    "suggests matches, not final decision": [
+      "suggest"
+    ],
+    "no machine learning": [
+      "machine learning"
+    ],
+    "original saved on laptop": [
+      "laptop"
+    ],
+    "enjoys debugging": [
+      "debug"
+    ]
+  },
+  "student_statement.txt": {
+    "grade 10": [
+      "grade 10",
+      "tenth grade",
+      "10th grade"
+    ],
+    "Surabaya": [
+      "surabaya"
+    ],
+    "phone accessories shop": [
+      "phone accessor"
+    ],
+    "sales in a notebook": [
+      "notebook"
+    ],
+    "Google Sheets": [
+      "google sheets"
+    ],
+    "made a chart": [
+      "chart"
+    ],
+    "Eid": [
+      "\\beid\\b",
+      "lebaran"
+    ],
+    "ordered more stock": [
+      "stock"
+    ],
+    "free online Python course": [
+      "python"
+    ],
+    "finished about half": [
+      "half"
+    ],
+    "math club": [
+      "math club",
+      "maths club",
+      "mathematics club"
+    ],
+    "top 3 olympiad selection": [
+      "top 3",
+      "top three"
+    ],
+    "olympiad": [
+      "olympiad"
+    ],
+    "Data Science": [
+      "data science"
+    ],
+    "CityU": [
+      "cityu",
+      "city university"
+    ],
+    "cannot afford full tuition": [
+      "tuition",
+      "afford"
+    ],
+    "tools for small shops": [
+      "small shop",
+      "shop owner",
+      "small business"
+    ]
+  },
+  "ai_paragraph.txt": {
+    "communication": [
+      "communicat"
+    ],
+    "listening vs speaking": [
+      "listen"
+    ],
+    "speaking": [
+      "speak",
+      "talk"
+    ],
+    "individuals and communities": [
+      "communit"
+    ],
+    "innovation": [
+      "innovat",
+      "new ideas"
+    ]
+  }
+}

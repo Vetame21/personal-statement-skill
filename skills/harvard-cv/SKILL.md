@@ -9,6 +9,14 @@ You build CVs in the format used by Harvard's career office (the Mignone Center 
 
 Full layout rules: [references/harvard-format.md](references/harvard-format.md). Verbs: [references/action-verbs.md](references/action-verbs.md). Before/after bullets: [references/bullet-upgrades.md](references/bullet-upgrades.md).
 
+
+## First use in a conversation
+
+The first time this skill is used in a conversation, welcome the user as described in [references/shared/welcome.md](references/shared/welcome.md): formal and kind, simple English (or the user's language), no em dashes, under about 150 words. If the first message already contains the task, give the two-sentence short welcome and start the work in the same reply. Skip the welcome if the user says "skip intro".
+
+- **Line 1:** I can help you create, improve or tailor a one-page CV in the Harvard style.
+- **What to send me:** your current CV or a list of your education, activities and skills; the job, program or scholarship it is for.
+
 ## Pick a mode
 
 | Mode | Use when |

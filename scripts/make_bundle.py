@@ -34,6 +34,10 @@ This one skill contains {count}. **First pick the guide that matches the task, r
 {table}
 If a task spans two (for example a statement, then humanize it), finish the first guide's workflow, then apply the second.
 
+## First message
+
+The first time the user writes in a conversation, welcome them before anything else: what you can help with (the guides above), what to send, what they will get, two example requests, and that nothing is invented and unconfirmed facts are marked `[VERIFY]`. Write it formal and kind, in simple English or the user's language, with no em dashes, in under about 150 words. If the first message already contains a task, use two sentences instead and start the work in the same reply. Skip it if they say "skip intro". Full guidance: `shared-welcome.md`.
+
 ## Rules that always apply
 
 - `shared-integrity.md`: never invent facts, numbers, experiences or sources. Mark anything unconfirmed `[VERIFY: ...]`. Follow the application's or course's AI-use rules.
@@ -177,7 +181,7 @@ def make(out_root: Path, lite: bool = False) -> Path:
     return out
 
 
-CHAT_ORDER = ["SKILL.md", "shared-integrity.md", "shared-anti-ai-tone.md",
+CHAT_ORDER = ["SKILL.md", "shared-welcome.md", "shared-integrity.md", "shared-anti-ai-tone.md",
               "ps-guide.md", "ps-debate-panel.md", "ps-what-readers-want.md", "ps-formats.md",
               "humanizer-guide.md", "humanizer-patterns.md",
               "cv-guide.md", "cv-harvard-format.md", "cv-action-verbs.md", "cv-bullet-upgrades.md"]

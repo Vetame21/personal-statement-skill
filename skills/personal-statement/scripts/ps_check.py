@@ -18,7 +18,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from writing_rules import (NOT_JUST, PLACEHOLDER, detect_lang, is_empty, phrase_hits, read_input,  # noqa: E402
-                           paragraphs, split_sentences, word_hits, word_severity)
+                           paragraphs, split_sentences, template_signals, word_hits, word_severity)
 
 # Statement-specific phrases on top of the shared lists in writing_rules.py
 PS_PHRASES = {
@@ -108,6 +108,14 @@ def main() -> int:
     # Pleading or "it's not about X" lines break the statement's own rules: one is enough to report
     if word_severity(strong, context) + phrase_count >= 3 or ps_specific:
         problems += 1
+
+    template = template_signals(text, lang)
+    if template:
+        print(f"Template structure (hints, not an AI score): {len(template)}")
+        for name, detail in template:
+            print(f"  - {name}: {detail}")
+        if len(template) >= 2:      # one pattern is a choice; several together read as a formula
+            problems += 1
 
     ph = PLACEHOLDER.findall(text)
     if ph:

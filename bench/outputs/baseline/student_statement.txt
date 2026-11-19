@@ -1,0 +1,7 @@
+I started working with data in grade 10. My father runs a small phone accessories shop in Surabaya, and every month he wrote his sales down in a notebook. I asked if I could put them into Google Sheets instead. When I made a chart, we could see that phone cases sold much more in the month before Eid. The next year he ordered more stock ahead of time, and the shop did better.
+
+After that I wanted to learn more. I signed up for a free online Python course and got through about half of it. I also joined my school's math club and finished in the top 3 of the school olympiad selection.
+
+I want to study Data Science at CityU because Hong Kong is a global financial hub and CityU is ranked number 1 in Asia for data science. I work hard, and I don't give up easily. This is my dream, and I really hope you'll accept me, because my family can't afford the full tuition.
+
+One day I want to build tools that help small shops like my father's understand their customers. I think this program is the right place for me to start.

@@ -1,0 +1,69 @@
+FICTIONAL TEST ESSAY, written by ChatGPT on request (November 2026). Not a real applicant.
+
+At 12:17 on a Tuesday afternoon, my program announced that every student in our peer tutoring
+club had been assigned a tutor. I was pretty proud of it. Then our club coordinator pointed out
+that three students had no one to meet, two tutors had been assigned to the same room, and
+one student had been matched with someone who wasn't even available that day.
+
+I stared at the screen for a few seconds. The program had worked exactly as I had written it.
+Unfortunately, I had written it badly.
+
+I had volunteered to build a small Python program to help organize our school's peer tutoring
+club. Until then, the coordinator had been managing everything through spreadsheets,
+messages, and a remarkable ability to remember everyone's schedules. I thought the solution
+was straightforward: collect everyone's subjects and availability, compare the information, and
+find the best matches.
+
+It sounded like a problem made for a computer.
+
+For the first few days, I enjoyed the process more than I expected. I liked breaking a messy task
+into smaller pieces. I liked watching a few lines of code turn into something useful. When I finally
+got the matching algorithm to run without errors, I sent the results to the coordinator almost
+immediately.
+
+That was when I discovered how little I had considered the people using it.
+
+Some students had written their availability in ways my program couldn't understand. Others
+had selected every available time because they didn't know which sessions would be
+comfortable for them. One student had a specific reason for requesting a particular tutor, but my
+form had never given them a place to explain it.
+
+I had reduced everyone's situation to a few columns in a spreadsheet.
+
+I initially wanted to fix everything by adding more conditions to the code. But after talking to the
+coordinator, I realized that the bigger problem was the way I had collected the information. I had
+designed the system around what was convenient for me to program, not what was convenient
+for the people using it.
+
+So I went back to the beginning. I changed the form, added an optional section for special
+requests, and made the program suggest possible matches instead of making the final decision.
+The coordinator could review the suggestions and speak with students before confirming
+anything.
+It wasn't an especially impressive piece of software. It didn't use machine learning or some
+complicated algorithm. In fact, the final version was probably less technically ambitious than my
+first attempt.
+
+But it was more useful.
+
+That experience changed the way I think about computer science. I used to see programming
+primarily as a process of finding the right instructions to give a machine. Now I see it as a
+process that begins long before the first line of code. It begins with deciding what problem is
+worth solving, asking the right questions, and understanding the people affected by the solution.
+
+I still enjoy spending an unreasonable amount of time debugging a program. There is something
+satisfying about finding the one small mistake responsible for a much bigger problem. But I have
+also learned that not every problem can be solved by looking at the code.
+
+I want to study computer science because I enjoy the combination of logic, creativity, and
+uncertainty it brings. I am particularly interested in how computing, data, and artificial
+intelligence can help people make better decisions. At Harvard, I hope to explore these areas
+while learning from people who approach problems differently from me. I don't expect to arrive
+with all the answers. Honestly, I would rather be surrounded by people who make me realize
+how many questions I haven't thought to ask.
+
+I still have the original version of that tutoring program saved on my laptop. Sometimes I open it
+and look at the code. It reminds me of how excited I was when it first ran successfully.
+
+It also reminds me that a program can be technically correct and still get the problem completely
+wrong.
+

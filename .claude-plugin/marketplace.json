@@ -11,42 +11,42 @@
       "name": "debate-mode",
       "source": "./plugins/debate-mode",
       "description": "Evidence-first debate. Researches a claim or proposal and returns a sourced verdict (Yes / No / Partly / Not enough evidence) before recommending anything. Use when the user asks to debate, argue, push back or fact-check (\"debat pakai fakta\", \"jangan iya-iya aja\", \"don't just agree\", \"prove it\"), or wants a sourced verdict on a claim or on a change to a statement or CV. Not for ordinary questions.",
-      "version": "2.3.1",
+      "version": "2.4.0",
       "category": "productivity"
     },
     {
       "name": "harvard-cv",
       "source": "./plugins/harvard-cv",
       "description": "Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education → Experience → Leadership & Activities → Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions \"Harvard CV\", \"Harvard resume\", \"Harvard format\", or needs a CV to go with a university, scholarship, internship, or job application.",
-      "version": "2.3.1",
+      "version": "2.4.0",
       "category": "productivity"
     },
     {
       "name": "humanizer",
       "source": "./plugins/humanizer",
       "description": "Make writing sound natural and like its author, not machine-written (statements, reports, thesis chapters, CVs, emails, posts; English or Indonesian). Diagnoses AI-sounding words and rhythm, asks whether to also upgrade content, then rewrites lightly, keeping every fact and citation. Use for humanize, sounds like AI, kayak AI, kurang natural, terlalu kaku, or an AI-detector report (GPTZero, Turnitin).",
-      "version": "2.3.1",
+      "version": "2.4.0",
       "category": "productivity"
     },
     {
       "name": "personal-statement",
       "source": "./plugins/personal-statement",
       "description": "Write, upgrade and stress-test personal statements, statements of purpose, motivation letters, scholarship essays and short application answers, for undergraduate, graduate and job applicants. Keeps the applicant's own story and voice, checks every fact, debates content choices and preps interview or video answers. Use when the user shares a statement to improve, wants one written from their material, or needs interview prep.",
-      "version": "2.3.1",
+      "version": "2.4.0",
       "category": "productivity"
     },
     {
       "name": "report",
       "source": "./plugins/report",
       "description": "Plan, write and review academic and technical reports in Indonesian or English - lab reports (laporan praktikum), programming lab and assignment reports, project reports, makalah, internship reports (KP / magang) and progress reports. Use when the user mentions one of these or wants a report checked for structure, citations or AI-sounding language. Not for business, financial or incident reports.",
-      "version": "2.3.1",
+      "version": "2.4.0",
       "category": "productivity"
     },
     {
       "name": "thesis",
       "source": "./plugins/thesis",
       "description": "Coach an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis) - topic, proposal, chapters (Bab I-V or IMRaD), literature review, methodology, results, citations, AI-use rules and defense (sidang) prep. Use when the user mentions skripsi, tugas akhir (TA), thesis, proposal penelitian, sidang, bab 1-5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a chapter reviewed.",
-      "version": "2.3.1",
+      "version": "2.4.0",
       "category": "productivity"
     }
   ]

@@ -560,7 +560,7 @@ class ChatFile(unittest.TestCase):
 
     def test_downloads_exist_and_zips_are_flat_skills(self):
         import zipfile
-        for name, top, count in (("vetame-writing.zip", "vetame-writing", 34), ("vetame-writing-lite.zip", "vetame-writing-lite", 10)):
+        for name, top, count in (("vetame-writing.zip", "vetame-writing", 35), ("vetame-writing-lite.zip", "vetame-writing-lite", 10)):
             with zipfile.ZipFile(ROOT / "download" / name) as z:
                 names = z.namelist()
             self.assertEqual(len(names), count, name)
@@ -624,6 +624,81 @@ class ReviewSevenRegressions(unittest.TestCase):
     def test_bundle_link_text(self):
         text = (ROOT / "download" / "vetame-writing-chat.md").read_text(encoding="utf-8")
         self.assertNotIn("files ](", text)
+
+
+class TemplateStructure(unittest.TestCase):
+    """A ChatGPT-written essay scored 0 red flags; its structure gave it away (v2.4.0)."""
+
+    def test_gpt_essay_shows_template_signals(self):
+        text = (ROOT / "tests/fixtures/gpt_essay.txt").read_text(encoding="utf-8")
+        out = run("skills/personal-statement/scripts/ps_check.py", text, "--limit-words", "700")
+        for name in ("punchline paragraphs", "stock reflection", "contrast template", "closing moral"):
+            self.assertIn(name, out)
+        self.assertNotIn("Result: OK", out)
+        out = run("skills/humanizer/scripts/humanize_check.py", text)
+        self.assertIn("Template structure", out)
+
+    def test_plain_writing_and_docs_have_no_template_signals(self):
+        for path in ("testing/samples/personal_statement.txt", "README.md", "testing/TESTER_BRIEF.md"):
+            out = run("skills/humanizer/scripts/humanize_check.py", (ROOT / path).read_text(encoding="utf-8"))
+            self.assertNotIn("Template structure", out, path)
+
+    def test_single_pattern_is_only_a_hint(self):
+        text = ("I built a timetable tool for my club in 2024. It matched 40 students in a week.\n\n"
+                "It wasn't elegant. It didn't scale. But it was finished, and the coordinator used it all term.\n\n"
+                "Next year I want to rewrite it with a proper database and tests.\n")
+        out = run("skills/personal-statement/scripts/ps_check.py", text)
+        self.assertIn("contrast template", out)
+        self.assertIn("Result: OK", out)                       # one pattern alone is a choice, not a formula
+
+
+class Welcome(unittest.TestCase):
+    """First use in a conversation: a formal, simple-English welcome with no em dashes (v2.4.0)."""
+
+    def test_every_skill_has_a_first_use_section(self):
+        import re
+        for skill in (ROOT / "skills").iterdir():
+            text = (skill / "SKILL.md").read_text(encoding="utf-8")
+            m = re.search(r"## First use in a conversation\n(.*?)\n## ", text, re.S)
+            self.assertTrue(m, skill.name)
+            self.assertIn("references/shared/welcome.md", m.group(1))
+            self.assertIn("**What to send me:**", m.group(1))
+            self.assertNotIn("\u2014", m.group(1), skill.name)
+
+    def test_welcome_guide_and_chat_file(self):
+        guide = (ROOT / "shared/references/welcome.md").read_text(encoding="utf-8")
+        self.assertNotIn("\u2014", guide)
+        self.assertIn("skip intro", guide)
+        chat = (ROOT / "download/vetame-writing-chat.md").read_text(encoding="utf-8")
+        self.assertIn("<<< FILE: shared-welcome.md >>>", chat)
+        self.assertIn("## First message", chat)
+
+
+class Benchmark(unittest.TestCase):
+    """bench/: samples, fact lists and the scorer stay consistent (v2.4.0)."""
+
+    def test_every_sample_has_facts_and_the_scorer_runs(self):
+        import json
+        facts = json.loads((ROOT / "bench/samples/facts.json").read_text(encoding="utf-8"))
+        samples = sorted(p.name for p in (ROOT / "bench/samples").glob("*.txt"))
+        self.assertEqual(samples, sorted(k for k in facts if not k.startswith("_")))
+        for name in samples:            # every fact must be present in its own input
+            text = (ROOT / "bench/samples" / name).read_text(encoding="utf-8").lower()
+            for fact, pats in facts[name].items():
+                self.assertTrue(any(__import__("re").search(pt, text) for pt in pats), name + ": " + fact)
+        out = subprocess.run([sys.executable, str(ROOT / "bench/score.py")], capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(out.returncode, 0, out.stderr)
+        self.assertIn("## Totals", out.stdout)
+
+    def test_new_specifics_catches_invented_numbers_and_names(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("score", ROOT / "bench" / "score.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        found = mod.new_specifics("I fixed printer problems in the lab.", "I fixed 12 printers for Dr. Lee in the lab.")
+        self.assertIn("12", found)
+        self.assertIn("Lee", found)
+        self.assertEqual(mod.new_specifics("I joined the math club.", "I joined the math club."), [])
 
 
 class Installer(unittest.TestCase):

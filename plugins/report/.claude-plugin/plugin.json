@@ -1,6 +1,6 @@
 {
   "name": "report",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Plan, write and review academic and technical reports in Indonesian or English - lab reports (laporan praktikum), programming lab and assignment reports, project reports, makalah, internship reports (KP / magang) and progress reports. Use when the user mentions one of these or wants a report checked for structure, citations or AI-sounding language. Not for business, financial or incident reports.",
   "author": {
     "name": "Vetame21",

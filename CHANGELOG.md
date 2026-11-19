@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.4.0 - 2026-11-19
+
+- **Template-structure checks.** A ChatGPT-written "Harvard" essay scored 0 AI-tone red flags, because newer models avoid the old tell-tale words. `humanize_check.py` and `ps_check.py` now also report four structural patterns: punchline paragraphs, stock reflection ("That experience changed the way I think…"), the "It wasn't X. But it was Y." contrast, and a closing one-line moral. They are hints, not an AI score. In `ps_check`, two or more together count as an issue. Short texts, documentation, labels and table rows are skipped. The essay is a test fixture, and `anti-ai-tone.md` explains the patterns.
+- **First-use welcome.** The first time a skill is used in a conversation, it greets the user formally, in simple English (or the user's language), with no em dashes and in under about 150 words. The welcome covers what the skill does, what to send, what they get, and two example requests. If the first message already contains the task, the welcome is two sentences and the work starts right away. "skip intro" turns it off. The guide is in `shared/references/welcome.md`, and the bundles and chat file include it too.
+- **Benchmark** in `bench/`: 3 fictional samples with fact lists, a scorer (`bench/score.py`: facts kept, invented numbers and names, flags, template signals, length), and first results for a plain prompt and this humanizer, each run in a fresh agent. Limits and how to add other tools are in `bench/README.md`. There is a summary in the README.
+- Tests: 90 (was 83).
+
 ## 2.3.1 - 2026-11-19
 
 - Re-release with the correct downloads. The v2.3.0 release on GitHub has older copies of `vetame-writing.zip` and `vetame-writing-lite.zip` attached, from before the fact-trace and chat-file fixes. Releases on this repository are immutable, so those files can't be replaced; use v2.3.1 or the [`download/`](download/) folder.

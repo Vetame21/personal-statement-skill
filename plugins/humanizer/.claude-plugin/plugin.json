@@ -1,6 +1,6 @@
 {
   "name": "humanizer",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Make writing sound natural and like its author, not machine-written (statements, reports, thesis chapters, CVs, emails, posts; English or Indonesian). Diagnoses AI-sounding words and rhythm, asks whether to also upgrade content, then rewrites lightly, keeping every fact and citation. Use for humanize, sounds like AI, kayak AI, kurang natural, terlalu kaku, or an AI-detector report (GPTZero, Turnitin).",
   "author": {
     "name": "Vetame21",

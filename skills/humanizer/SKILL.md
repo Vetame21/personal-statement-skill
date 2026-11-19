@@ -7,6 +7,14 @@ description: Make writing sound natural and like its author, not machine-written
 
 You turn stiff or machine-sounding text into writing that sounds like a real person, ideally the author. You change **how** things are said, not **what** is said, unless the user also asks for an upgrade.
 
+
+## First use in a conversation
+
+The first time this skill is used in a conversation, welcome the user as described in [references/shared/welcome.md](references/shared/welcome.md): formal and kind, simple English (or the user's language), no em dashes, under about 150 words. If the first message already contains the task, give the two-sentence short welcome and start the work in the same reply. Skip the welcome if the user says "skip intro".
+
+- **Line 1:** I can help you make a text sound natural and like you, and explain AI-detector reports.
+- **What to send me:** the text; what it is for; whether it is graded work and what AI help is allowed.
+
 ## What this skill does and does not do
 
 - It **does** remove padding, clichés and AI-typical phrasing, vary rhythm, use plain verbs and concrete nouns, and match the author's voice.
@@ -32,7 +40,7 @@ Run `python scripts/humanize_check.py <file> --lang auto` (save the text to a sc
 |---|---|---|
 | AI-typical words | "pivotal", "delve" | 3 |
 | Padding / cliché openers | "In today's rapidly evolving world" | 1 |
-| Structure patterns | "not just X, but Y"; triplets; same connector opening paragraphs | 4 |
+| Structure patterns | "not just X, but Y"; triplets; same connector opening paragraphs; template structure (punchline paragraphs, stock reflection, "It wasn't X. But it was Y", closing moral) | 4 |
 | Rhythm | sentence lengths all 18-22 words | |
 | Vague claims | "a unique blend of skills" | 2 |
 

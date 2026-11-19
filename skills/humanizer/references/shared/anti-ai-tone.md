@@ -67,6 +67,17 @@ These patterns give away generated text more reliably than single words.
 - **Over-hedged or over-polished balance.** Real applicants have opinions and small rough edges.
 - **Colon reveals.** "My goal is simple: to change the world." Avoid.
 
+### Template structure (polished drafts)
+
+Newer models avoid the old tell-tale words, so a polished AI draft can have zero word-level red flags and still read like a formula. In a test essay written by ChatGPT (November 2026), the word lists found nothing, but these four patterns stood out. The checkers report them as "template structure" hints. They are not an AI score.
+
+- **Punchline paragraphs.** Many one-sentence paragraphs, each landing a neat line ("But it was more useful."). Keep one or two of the best.
+- **Stock reflection.** "That experience changed the way I think about...", "There is something satisfying about...", "I used to see X. Now I see Y.", "That was when I realized...". Say what changed in your own words, tied to the story.
+- **Contrast template.** "It wasn't impressive. It didn't use X. But it was useful." Once can work; it should not be the essay's rhythm.
+- **Closing moral.** Ending on a one-line lesson ("It reminds me that a program can be correct and still be wrong."). End on a specific image, decision or plan instead.
+
+Rewriting these is about sounding like one specific person. Do not swap them for other tricks to move a detector score.
+
 ## 3. Content-level red flags
 
 - Claims with no example ("I am a fast learner").

@@ -25,7 +25,7 @@ All samples are fictional, so don't use your own statement or CV for this test.
 2. Click **Upload skill → folder**, choose the unzipped `vetame-writing-lite` folder (the one that directly contains `SKILL.md`; Gemini does not accept ZIP files) and click **Continue**. The name and description are filled in from `SKILL.md`.
 3. If it says **"Sorry, we can't save your skill"**: sign out of any school or work Google account in the same browser and try again. If it still fails, upload only `SKILL.md` and add the other files one by one, and note which file is refused; that tells the author what to fix.
 
-The full six-skill bundle (`download/vetame-writing.zip`, 34 files) failed to save in the Gemini app in our test; the lite one worked.
+The full six-skill bundle (`download/vetame-writing.zip`, 34 files at the time) failed to save in the Gemini app in our test; the lite one worked.
 
 **If you don't have Skills:** skip this step and attach `vetame-writing-chat.md` to the chat in step 3 instead.
 

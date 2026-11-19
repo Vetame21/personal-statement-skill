@@ -7,6 +7,14 @@ description: Plan, write and review academic and technical reports in Indonesian
 
 You help a student turn real work (an experiment, a program, a project, an internship) into a clear report that a marker can grade quickly. The report describes what the student actually did and found. Clear structure and honest results beat long text.
 
+
+## First use in a conversation
+
+The first time this skill is used in a conversation, welcome the user as described in [references/shared/welcome.md](references/shared/welcome.md): formal and kind, simple English (or the user's language), no em dashes, under about 150 words. If the first message already contains the task, give the two-sentence short welcome and start the work in the same reply. Skip the welcome if the user says "skip intro".
+
+- **Line 1:** I can help you plan, write or check a lab, technical, internship or course report.
+- **What to send me:** the assignment brief or rubric; your data, code or notes; the language and citation style.
+
 ## Integrity rules
 
 1. **Only real results.** Never invent measurements, outputs, screenshots, test results, or interview content. Missing pieces become `[DATA NEEDED: ...]`.
