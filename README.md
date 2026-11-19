@@ -1,6 +1,6 @@
 # Vetame21 Writing Skills
 
-**Application and academic writing skills for Claude Code and Cowork**, built from research on what admissions readers, examiners and markers actually look for, and on how AI-writing detectors such as Turnitin work.
+**Application and academic writing skills for AI coding agents** (Claude Code, Codex, Gemini CLI, Qwen Code, Kimi Code, OpenCode and other Agent Skills tools), built from research on what admissions readers, examiners and markers actually look for, and on how AI-writing detectors such as Turnitin work.
 
 Six skills, one shared set of rules:
 
@@ -10,7 +10,7 @@ Six skills, one shared set of rules:
 | **harvard-cv** | Create, upgrade or tailor a one-page Harvard-style CV with action-verb, result-focused bullets |
 | **thesis** | Coach an undergraduate thesis (skripsi / tugas akhir / 毕业论文): topic, Bab I-V or IMRaD chapters, citations, examiner simulation, defense prep |
 | **report** | Lab, programming-lab, technical, makalah, internship (KP/magang) and progress reports |
-| **humanizer** | `/humanizer`: make any text sound natural and like its author, explain AI-detector flags, and protect genuine authors |
+| **humanizer** | Make any text sound natural and like its author, explain AI-detector flags, and protect genuine authors |
 | **debate-mode** | Claude researches before agreeing and returns sourced verdicts (Yes / No / Partly / Not enough evidence) |
 
 ## What makes these different
@@ -32,7 +32,13 @@ git clone https://github.com/Vetame21/personal-statement-skill
 ```
 
 ```bash
-python personal-statement-skill/scripts/install.py
+python3 personal-statement-skill/scripts/install.py
+```
+
+On Windows use `py` instead of `python3`:
+
+```bash
+py personal-statement-skill\scripts\install.py
 ```
 
 By default it copies the skills to `~/.claude/skills` (Claude Code), `~/.agents/skills` (Codex CLI, Gemini CLI, Kimi Code CLI, OpenCode, DeepSeek-TUI) and `~/.qwen/skills` (Qwen Code). Pick tools with `--tools codex gemini qwen kimi opencode deepseek claude`, install into one project with `--project .`, keep them in sync with `git pull` using `--link`, see every folder with `--list`, and remove them with `--uninstall`. It never overwrites a same-named skill it did not install.
@@ -40,7 +46,7 @@ By default it copies the skills to `~/.claude/skills` (Claude Code), `~/.agents/
 | Tool | Reads skills from (user level) |
 |---|---|
 | Claude Code | `~/.claude/skills` (or the plugin marketplace below) |
-| Codex CLI | `~/.agents/skills` (older versions: `~/.codex/skills`) |
+| Codex CLI | `~/.agents/skills` (Codex also reads `~/.codex/skills`) |
 | Gemini CLI | `~/.gemini/skills` or `~/.agents/skills` |
 | Qwen Code | `~/.qwen/skills` |
 | Kimi Code CLI | `~/.kimi-code/skills` or `~/.agents/skills` |
@@ -48,6 +54,37 @@ By default it copies the skills to `~/.claude/skills` (Claude Code), `~/.agents/
 | DeepSeek, Qwen, Kimi and other **models** | Use them through one of the tools above; skills belong to the tool, not the model |
 
 Paths checked against each tool's documentation in November 2026; tools change, so `python scripts/install.py --list` shows what the installer uses. OpenCode reads both `~/.claude/skills` and `~/.agents/skills`; OpenCode users should install to only one (for example `--tools codex`).
+
+### Using the skills
+
+Restart your agent after installing. Then either describe the task ("polish my scholarship essay, keep my voice"); the agent picks the skill from its description; or call a skill by name:
+
+| Tool | Call a skill by name |
+|---|---|
+| Claude Code | `/humanizer`, `/personal-statement`, ... |
+| Codex CLI | `$humanizer`, `$personal-statement`, ... |
+| Qwen Code | `/humanizer` (the folder name becomes the command) |
+| Gemini CLI, Kimi Code, OpenCode | describe the task, or check the tool's skills list (for example `/skills`) |
+
+The checker scripts need Python 3.9+ (`python3`, or `py` on Windows). Skills that check current facts (debate-mode, news in a statement) need **web search turned on** in your agent; without it they label their verdicts "provisional".
+
+### Codex quick start
+
+```bash
+git clone https://github.com/Vetame21/personal-statement-skill
+```
+
+```bash
+python3 personal-statement-skill/scripts/install.py --tools codex
+```
+
+Restart Codex, then type for example `$personal-statement Upgrade this statement for ...` or just describe what you need. To update later:
+
+```bash
+cd personal-statement-skill && git pull && python3 scripts/install.py --tools codex
+```
+
+Re-installing replaces the installed copies, so keep your own edits in a fork rather than in the installed folders.
 
 ### Claude Code plugin marketplace
 
@@ -79,7 +116,7 @@ Upgrade this personal statement for CityU Data Science, undergraduate + scholars
 ```
 
 ```
-/humanizer [paste text]  (it asks: humanize only, or upgrade too?)
+/humanizer [paste text]   (Codex: $humanizer [paste text])  it asks: humanize only, or upgrade too?
 ```
 
 ```

@@ -69,7 +69,8 @@ def main() -> int:
         print(f"Possible (check context): {', '.join(possible)}")
     if heavy:
         print(f"  ! Paragraphs opened with the same connector: {heavy}")
-    if len(hits) + max(0, sum(context.values()) - 2) >= 3 or heavy:
+    # Any padding phrase or strong AI word counts; context words only when they pile up
+    if hits or max(0, sum(context.values()) - 2) > 0 or heavy:
         issues += 1
 
     for s in sents:

@@ -25,7 +25,8 @@ Say the mode in one line and begin.
 Before drafting new text, ask once whether the application or employer has an AI-use policy for CVs, and follow it.
 
 
-0. Shared rules: [references/shared/integrity.md](references/shared/integrity.md) and [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).
+Shared rules: [references/shared/integrity.md](references/shared/integrity.md) and [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).
+
 1. **No invented facts.** Never add employers, titles, dates, grades, awards, numbers or skills the user did not give. If a bullet would be stronger with a number, ask for it or mark `[VERIFY: e.g. how many members?]`. List every marker after the CV under **"Check before sending"**.
 2. **Honest quantities.** Approximate numbers are fine if true ("about 30 students"). Never inflate.
 3. **Skills must be provable.** List a skill only if the CV or the user can point to where it was used.
@@ -93,4 +94,4 @@ Before drafting new text, ask once whether the application or employer has an AI
 - [ ] Every `[VERIFY]` resolved or listed
 - [ ] Matches the personal statement's facts
 
-> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/harvard-cv/scripts/...` (Claude Code) or `python ~/.agents/skills/harvard-cv/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python3 <this skill's folder>/scripts/x.py <file>` (`py` on Windows), for example `python ~/.claude/skills/harvard-cv/scripts/...` (Claude Code) or `python ~/.agents/skills/harvard-cv/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. If `python3` is missing, try `python` or `py`. Add `--strict` to exit with code 1 when issues are found.

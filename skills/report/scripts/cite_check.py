@@ -35,9 +35,11 @@ import unicodedata
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from writing_rules import read_input  # noqa: E402
 
+# Plain, Markdown (#) or bold (**...**, __...__) headings, optionally numbered: "**References**", "5. Daftar Pustaka"
 REF_HEADINGS = re.compile(
-    r"^\s*(?:#+\s*)?(?:\d+[.)]?\s*)?(references|reference\s+list|bibliography|works\s+cited|literature\s+cited|sources|"
-    r"daftar\s+pustaka|daftar\s+referensi|referensi|kepustakaan|参考文献)\s*:?\s*$",
+    r"^\s*(?:#+\s*)?(?:\*\*|__)?\s*(?:\d+[.)]?\s*)?(references?|reference\s+list|bibliography|works\s+cited|literature\s+cited|"
+    r"sources|daftar\s+pustaka|pustaka\s+acuan|daftar\s+rujukan|daftar\s+referensi|referensi|rujukan|kepustakaan|参考文献)"
+    r"\s*:?\s*(?:\*\*|__)?\s*:?\s*$",
     re.I | re.M,
 )
 # Where the reference list ends: the next Markdown heading, or an appendix heading
@@ -184,7 +186,8 @@ def apa(body: str, refs: str, report_unused: bool = True) -> int:
         key = resolve(best_key(m.group(1), m.group(2), entries))
         if not key or not key[:1].isalpha():
             continue
-        if (key, m.group(2)) in listed or AUTHOR_MARKER.search(m.group(1)[-40:]):
+        known_author = key in {a for a, _ in listed}
+        if (key, m.group(2)) in listed or known_author or AUTHOR_MARKER.search(m.group(1)[-40:]):
             cited.add((key, m.group(2)))
         else:
             possible.add((key, m.group(2)))  # "Indonesia (2020)" may be a place or event, not an author
@@ -196,8 +199,15 @@ def apa(body: str, refs: str, report_unused: bool = True) -> int:
     missing = sorted(cited - listed)
     unused = sorted((sorted(aliases, key=len)[-1], y) for aliases, y in entries
                     if not any((a, y) in cited for a in aliases)) if report_unused else []
+    years_by_author = {}
+    for a, y in listed:
+        years_by_author.setdefault(a, set()).add(y)
     for a, y in missing:
-        print(f"  ! Cited but not in references: {a.title()} ({y})")
+        if a in years_by_author:
+            listed_years = ", ".join(sorted(years_by_author[a]))
+            print(f"  ! Year mismatch: {a.title()} ({y}) is cited, but the reference list has {a.title()} ({listed_years})")
+        else:
+            print(f"  ! Cited but not in references: {a.title()} ({y})")
     for a, y in unused:
         print(f"  ! In references but never cited: {a.title()} ({y})")
     for a, y in sorted(possible - listed):

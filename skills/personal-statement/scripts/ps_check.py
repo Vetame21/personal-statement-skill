@@ -24,11 +24,13 @@ from writing_rules import (NOT_JUST, PLACEHOLDER, detect_lang, is_empty, phrase_
 PS_PHRASES = {
     "en": [
         r"it'?s not about [^.;]{1,60}?[;,—-]\s*it'?s about",
-        r"i (?:really|truly|do) hope (?:you|i) (?:will |can )?(?:accept|get accepted)",
+        r"i (?:really |truly |do |sincerely )?hope (?:that )?(?:you|i) (?:will |can |would )?(?:accept|admit|get accepted|be accepted|be admitted)",
+        r"please (?:accept|consider|admit) (?:me|my application)",
         r"\bi promise\b",
     ],
     "id": [
         r"saya (?:sangat |benar-benar )?berharap (?:dapat |bisa )?diterima",
+        r"mohon (?:untuk )?(?:menerima|diterima|mempertimbangkan) (?:saya|lamaran saya)",
         r"\bsaya berjanji\b",
         r"sejak kecil saya (?:sudah )?(?:bercita-cita|bermimpi|menyukai)",
     ],
@@ -94,14 +96,16 @@ def main() -> int:
     hits += [f"{w} x{n}" for w, n in strong.items()]
     hits += [f"{w} x{n} (possible, check context)" for w, n in context.items()]
     found = phrase_hits(text, lang) + [m.group(0) for m in re.finditer(NOT_JUST[lang], low)]
-    found += [m.group(0) for ph in PS_PHRASES[lang] for m in re.finditer(ph, low)]
+    ps_specific = [m.group(0) for ph in PS_PHRASES[lang] for m in re.finditer(ph, low)]
+    found += ps_specific
     hits += [f'"{f[:60]}"' for f in found]
     phrase_count = len(found)
     print(f"Language: {lang}")
     print(f"AI-tone red flags: {len(hits)}")
     for h in hits:
         print(f"  - {h}")
-    if word_severity(strong, context) + phrase_count >= 3:
+    # Pleading or "it's not about X" lines break the statement's own rules: one is enough to report
+    if word_severity(strong, context) + phrase_count >= 3 or ps_specific:
         problems += 1
 
     ph = PLACEHOLDER.findall(text)

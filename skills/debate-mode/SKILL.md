@@ -36,7 +36,7 @@ Also note the hidden assumption if there is one (e.g. "fraud detection is CS, no
 - Use the environment's web search. Use a deeper/extended search for recent events, statistics, policy and prices. If a `deep-research` skill or research subagents are available and the question is broad, use them.
 - Use at least 2 independent sources for any number. Follow [references/shared/evidence-standards.md](references/shared/evidence-standards.md) for which sources count most.
 - Record conflicts between sources instead of hiding them.
-- If no search tool is available, say so at the top and mark every verdict **provisional (from memory)**.
+- If no search tool is available (in some agents web search must be switched on first), say so at the top and mark every verdict **provisional (from memory)**.
 - Scale the effort to the stakes: a quick check for a small claim, deeper research for anything that will be submitted, published, or acted on.
 
 ### 3. Verdicts

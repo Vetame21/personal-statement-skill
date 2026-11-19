@@ -2,7 +2,7 @@
 """Install these skills for Claude Code, Codex, Gemini CLI, Qwen Code, Kimi Code, OpenCode and other
 agents that read the open Agent Skills format (a folder with a SKILL.md).
 
-    python scripts/install.py                       # default: Claude Code + the shared ~/.agents/skills + Qwen Code
+    python3 scripts/install.py                      # (py on Windows) default: Claude Code + the shared ~/.agents/skills + Qwen Code
     python scripts/install.py --tools codex gemini  # only what those tools read
     python scripts/install.py --project .           # install into the current project instead of your home folder
     python scripts/install.py --list                # show where each tool looks
@@ -79,34 +79,47 @@ def target_dir(location: str, project):
     return (Path(project).resolve() / project_rel) if project else (Path.home() / user_rel)
 
 
+def is_ours(dest: Path) -> bool:
+    """A copy carrying our marker, or a symlink that points into this repository's skills folder."""
+    if dest.is_symlink():
+        try:
+            target = Path(os.path.realpath(dest))
+            return target.parent == (ROOT / "skills").resolve()
+        except OSError:
+            return False
+    return (dest / MARKER).exists()
+
+
 def install_one(src: Path, dest: Path, link: bool, force: bool, dry: bool) -> str:
+    replaced = False
     if dest.exists() or dest.is_symlink():
-        ours = dest.is_symlink() or (dest / MARKER).exists()
-        if not ours and not force:
+        if not is_ours(dest) and not force:
             return f"SKIP   {dest} (exists and was not installed by this script; use --force to replace)"
+        replaced = True
         if not dry:
             if dest.is_symlink() or dest.is_file():
                 dest.unlink()
             else:
                 shutil.rmtree(dest)
     if dry:
-        return f"WOULD  {'link' if link else 'copy'} {src.name} -> {dest}"
+        return f"WOULD  {'replace' if replaced else 'add'} ({'link' if link else 'copy'}) {dest}"
     dest.parent.mkdir(parents=True, exist_ok=True)
+    note = " (replaced the previous copy; edits made to it are gone)" if replaced and not dest.is_symlink() else ""
     if link:
         try:
             os.symlink(src, dest, target_is_directory=True)
             return f"LINK   {dest} -> {src}"
         except OSError:
-            pass  # Windows without symlink rights: fall back to a copy
+            note += " (symlinks not permitted here, so this is a copy: re-run the installer after 'git pull')"
     shutil.copytree(src, dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
     (dest / MARKER).write_text("Installed by scripts/install.py; safe to delete with --uninstall.\n", encoding="utf-8")
-    return f"COPY   {dest}"
+    return f"COPY   {dest}{note}"
 
 
 def uninstall_one(dest: Path, dry: bool) -> str:
     if not (dest.exists() or dest.is_symlink()):
         return ""
-    if not (dest.is_symlink() or (dest / MARKER).exists()):
+    if not is_ours(dest):
         return f"KEEP   {dest} (not installed by this script)"
     if not dry:
         if dest.is_symlink():
@@ -144,17 +157,26 @@ def main() -> int:
         print("Note: OpenCode reads both ~/.claude/skills and ~/.agents/skills. If you use OpenCode, install to only "
               "one of them (e.g. --tools codex gemini) to avoid duplicate skill names.\n")
 
+    failures = 0
     for loc in locations:
         base = target_dir(loc, args.project)
         print(f"[{loc}] {base}  ({LOCATIONS[loc][2]})")
         for name in wanted:
             dest = base / name
-            msg = uninstall_one(dest, args.dry_run) if args.uninstall else \
-                install_one(ROOT / "skills" / name, dest, args.link, args.force, args.dry_run)
+            try:
+                msg = uninstall_one(dest, args.dry_run) if args.uninstall else \
+                    install_one(ROOT / "skills" / name, dest, args.link, args.force, args.dry_run)
+            except OSError as exc:
+                msg = f"ERROR  {dest}: {exc.strerror or exc} (check permissions or close programs using it)"
+                failures += 1
             if msg:
                 print("  " + msg)
+    if failures:
+        print(f"\n{failures} item(s) failed; see ERROR lines above.")
+        return 1
     if not args.uninstall and not args.dry_run:
         print("\nDone. Restart your agent (or start a new session) so it discovers the skills.")
+        print("Use a skill by describing the task, or by name: /skill-name in Claude Code, $skill-name in Codex.")
     return 0
 
 

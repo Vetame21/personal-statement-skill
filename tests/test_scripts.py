@@ -379,6 +379,35 @@ class ReviewFourRegressions(unittest.TestCase):
         self.assertIn("memainkan peran yang sangat penting", out)
 
 
+class ReviewFiveRegressions(unittest.TestCase):
+    """Cases found by the fifth independent review (v2.1.1)."""
+
+    def test_bold_and_alternative_reference_headings(self):
+        for heading in ("**References**", "__Daftar Pustaka__", "Pustaka Acuan", "Reference", "5. Daftar Rujukan"):
+            out = run("shared/scripts/cite_check.py", f"As (Lee, 2020) said.\n\n{heading}\nLee, J. (2020). X.\n")
+            self.assertIn("Result: OK", out, heading)
+
+    def test_year_mismatch_is_an_error(self):
+        out = run("shared/scripts/cite_check.py", "According to Smith (2021), yes.\n\n## References\nSmith, A. (2020). Y.\n")
+        self.assertIn("Year mismatch: Smith (2021)", out)
+
+    def test_text_check_any_padding_phrase_counts(self):
+        out = run("shared/scripts/text_check.py", "Di era digital, teknologi memegang peranan penting bagi kami semua.",
+                  "--lang", "id", "--strict", code=1)
+        self.assertNotIn("Result: OK", out)
+
+    def test_plain_pleading_is_flagged(self):
+        out = run("skills/personal-statement/scripts/ps_check.py", "I hope you will accept me into your program next year.")
+        self.assertIn("i hope you will accept", out)
+        self.assertNotIn("Result: OK", out)
+
+    def test_missing_file_is_a_clear_message(self):
+        out = subprocess.run([sys.executable, str(ROOT / "shared/scripts/cite_check.py"), "no-such-file.md"],
+                             capture_output=True, text=True, encoding="utf-8")
+        self.assertNotIn("Traceback", out.stderr)
+        self.assertIn("File not found", out.stderr)
+
+
 class Installer(unittest.TestCase):
     def _run(self, home, *args):
         import os
@@ -407,6 +436,25 @@ class Installer(unittest.TestCase):
             out = self._run(home, "--tools", "codex")
             self.assertIn("SKIP", out.stdout)
             self.assertEqual((foreign / "SKILL.md").read_text(encoding="utf-8"), "mine")
+
+    def test_foreign_symlink_is_left_alone(self):
+        import os
+        with tempfile.TemporaryDirectory() as home:
+            home = Path(home)
+            mine = home / "mine" / "humanizer"
+            mine.mkdir(parents=True)
+            (mine / "SKILL.md").write_text("mine", encoding="utf-8")
+            (home / ".agents/skills").mkdir(parents=True)
+            link = home / ".agents/skills/humanizer"
+            try:
+                os.symlink(mine, link, target_is_directory=True)
+            except OSError:
+                self.skipTest("symlinks not permitted on this system")
+            out = self._run(home, "--tools", "codex", "--skills", "humanizer")
+            self.assertIn("SKIP", out.stdout)
+            out = self._run(home, "--tools", "codex", "--skills", "humanizer", "--uninstall")
+            self.assertIn("KEEP", out.stdout)
+            self.assertTrue(link.is_symlink())
 
     def test_tool_names_and_list(self):
         with tempfile.TemporaryDirectory() as home:

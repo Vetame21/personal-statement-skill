@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.1.1 - 2026-11-19
+
+Fixes from a fifth independent review, focused on Codex users.
+
+- Codex and multi-tool usage: README "Using the skills" (call skills with `/name` in Claude Code and Qwen Code, `$name` in Codex, or just describe the task), a Codex quick start, `python3`/`py` everywhere, a note that fact-checking needs web search turned on, and `~/.codex/skills` described as also read by Codex. Tagline no longer says Claude-only.
+- Installer: a symlink counts as "ours" only if it points into this repository, so a user's own symlinked skill is never replaced or removed; permission errors print a clear ERROR line instead of a traceback; it says when a reinstall replaced an edited copy and when `--link` fell back to a copy.
+- cite_check: bold reference headings (`**References**`), "Reference", "Pustaka Acuan", "Daftar Rujukan" and numbered headings; a cited year that differs from the reference list ("Smith (2021)" vs "Smith (2020)") is reported as a year mismatch.
+- text_check: any padding phrase now counts (no more "Result: OK" next to listed problems).
+- ps_check: plain pleading ("I hope you will accept me", "please consider my application", "mohon menerima saya") is flagged and counts as an issue.
+- All checkers: a missing or unreadable file gives a one-line message, not a traceback.
+- harvard-cv rule list numbering fixed.
+- Tests: 61 (was 55).
+
 ## 2.1.0 - 2026-11-19
 
 **Works beyond Claude Code.** Fixes from a fourth independent review.

@@ -44,8 +44,15 @@ def read_input(path: str) -> str:
     if path == "-":
         stream = getattr(sys.stdin, "buffer", None)
         return decode_bytes(stream.read()) if stream else normalise_newlines(sys.stdin.read())
-    with open(path, "rb") as f:
-        return decode_bytes(f.read())
+    try:
+        with open(path, "rb") as f:
+            return decode_bytes(f.read())
+    except IsADirectoryError:
+        sys.exit(f"! {path} is a folder; give a text or Markdown file.")
+    except FileNotFoundError:
+        sys.exit(f"! File not found: {path}")
+    except OSError as exc:
+        sys.exit(f"! Cannot read {path}: {exc.strerror or exc}")
 
 
 def is_empty(text: str) -> bool:
