@@ -109,6 +109,10 @@ Then install the skills you want:
 
 Or copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/skills/` (project).
 
+### Testing the skills for us
+
+Want to help? Follow [testing/TESTER_BRIEF.md](testing/TESTER_BRIEF.md). Your agent runs a 20-30 minute test on fictional samples and produces one PDF report (`testing/out/report.pdf`) to send back.
+
 ## Example prompts
 
 ```
@@ -150,6 +154,7 @@ skills/<name>/
 plugins/           generated plugin packages
 scripts/build.py   sync shared files, validate, generate plugins and this table
 tests/             tests for every checker script and the build
+testing/           tester brief, fictional samples, make_pdf.py (Markdown -> PDF, standard library)
 VERSION, CHANGELOG.md
 ```
 

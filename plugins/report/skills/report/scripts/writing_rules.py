@@ -64,6 +64,8 @@ def is_empty(text: str) -> bool:
 # snake_case angle brackets only, so "x < 3 and y > 9", <div> and <https://...> pass.
 PLACEHOLDER = re.compile(
     r"\[(?:ADD DETAIL|DATA NEEDED|VERIFY|TODO|CITATION NEEDED|REF\b|XX+|MS\d)[^\]]*\]"
+    # leftover instructions: [add more achievements here], [insert name], [your school], [tambahkan contoh]
+    r"|\[(?i:add|insert|your|put|write|fill|include|mention|tambahkan|tambah|isi|masukkan|tulis|sebutkan)\b[^\]]*\](?!\()"
     r"|\bTODO\b|\bXXX+\b|\bTBD\b"
     r"|<[a-z]+(?:_[a-z]+)+>"
     r"|<[A-Z][A-Z0-9 _\-]{2,40}>"

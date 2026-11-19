@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.3 - 2026-11-19
+
+- New tester kit in `testing/`: `TESTER_BRIEF.md` tells any agent (Codex, Claude Code, Gemini CLI, ...) to install the skills, run every checker and skill on fictional samples, score them honestly, ask the tester six questions, and write a report; `make_pdf.py` turns the report into a PDF with the standard library only.
+- Placeholders: leftover instructions in brackets ("[add more achievements here]", "[insert name]", "[tambahkan contoh]") are now flagged by every checker; Markdown links and numeric citations are not.
+- Tests: 71 (was 68).
+
 ## 2.1.2 - 2026-11-19
 
 Fixes from a sixth independent review.

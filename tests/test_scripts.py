@@ -449,6 +449,42 @@ class ReviewSixRegressions(unittest.TestCase):
         self.assertIn("Words: 11", out)
 
 
+class TesterBrief(unittest.TestCase):
+    """The tester kit in testing/: samples behave as the brief says, and the PDF maker works."""
+
+    def test_leftover_instruction_brackets_are_placeholders(self):
+        for text in ("I won a prize. [add more achievements here]", "My school is [insert name].",
+                     "Saya suka data. [tambahkan contoh proyek]"):
+            out = run("skills/personal-statement/scripts/ps_check.py", text)
+            self.assertIn("Placeholders", out, text)
+        out = run("skills/personal-statement/scripts/ps_check.py", "See [your guide](https://example.org) and [1].")
+        self.assertNotIn("Placeholders", out)
+
+    def test_samples_match_the_brief(self):
+        ps = run("skills/personal-statement/scripts/ps_check.py", (ROOT / "testing/samples/personal_statement.txt")
+                 .read_text(encoding="utf-8"), "--limit-words", "500")
+        self.assertIn("Placeholders", ps)
+        self.assertIn("i really hope you accept", ps)
+        cite = run("skills/report/scripts/cite_check.py", (ROOT / "testing/samples/report.md").read_text(encoding="utf-8"))
+        self.assertIn("Sedgewick (2011)", cite)
+        self.assertIn("Knuth (1998)", cite)
+
+    def test_make_pdf(self):
+        md = ("# Test report\n\n## Summary\n- works \u2192 yes, caf\u00e9 \u201cquoted\u201d (parens) \\ slash\n\n"
+              "| a | b |\n|---|---|\n| 1 | 2 |\n\n```\ncode line\n```\n" + "Long paragraph text. " * 400)
+        with tempfile.TemporaryDirectory() as d:
+            src, dest = Path(d, "r.md"), Path(d, "r.pdf")
+            src.write_text(md, encoding="utf-8")
+            out = subprocess.run([sys.executable, str(ROOT / "testing/make_pdf.py"), str(src), str(dest)],
+                                 capture_output=True, text=True, encoding="utf-8")
+            self.assertEqual(out.returncode, 0, out.stderr)
+            data = dest.read_bytes()
+        self.assertTrue(data.startswith(b"%PDF-1.4"))
+        self.assertTrue(data.rstrip().endswith(b"%%EOF"))
+        self.assertIn(b"/Count 2", data)          # long text flows onto a second page
+        self.assertIn(b"\\(parens\\)", data)    # parentheses escaped
+
+
 class Installer(unittest.TestCase):
     def _run(self, home, *args):
         import os
