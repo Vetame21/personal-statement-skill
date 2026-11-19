@@ -1,6 +1,6 @@
 {
   "name": "debate-mode",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Evidence-first debate. Researches a claim or proposal and returns a sourced verdict (Yes / No / Partly / Not enough evidence) before recommending anything. Use when the user asks to debate, argue, push back or fact-check (\"debat pakai fakta\", \"jangan iya-iya aja\", \"don't just agree\", \"prove it\"), or wants a sourced verdict on a claim or on a change to a statement or CV. Not for ordinary questions.",
   "author": {
     "name": "Vetame21",

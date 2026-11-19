@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.1 - 2026-11-19
+
+- Re-release with the correct downloads. The v2.3.0 release on GitHub has older copies of `vetame-writing.zip` and `vetame-writing-lite.zip` attached, from before the fact-trace and chat-file fixes. Releases on this repository are immutable, so those files can't be replaced; use v2.3.1 or the [`download/`](download/) folder.
+- No changes to the skills since 2.3.0.
+
 ## 2.3.0 - 2026-11-19
 
 New README, ready-to-download files, and fixes from a seventh independent review.
