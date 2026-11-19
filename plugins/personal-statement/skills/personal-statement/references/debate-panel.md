@@ -32,7 +32,7 @@ For scholarship statements, the Admissions Reader also reads as a **Scholarship 
 
 ## Debate 1: before writing
 
-Run at the end of Stage 2 (Plan) in Full mode, and before the rewrite in Upgrade mode.
+Run at the end of step 2 (Angle) in Build mode, and before the rewrite in Upgrade mode.
 
 **1. Pick the motions.** Turn the open decisions into 2-5 short motions, for example:
 
@@ -60,7 +60,7 @@ Always include at least one motion about **the main story** and one about **anyt
 
 ## Debate 2: after the draft
 
-Run after Stage 4 (Polish) in Full mode, and after the rewrite in Upgrade mode. Run `scripts/ps_check.py` first and give the results to the Tone Detector.
+Run in step 4 (Stress-test) in Build mode, and after the rewrite in Upgrade mode. Run `scripts/ps_check.py` first and give the results to the Tone Detector.
 
 **1. Attacks.** Each panelist names its **top 3 problems**, each with a short quote from the draft and a proposed fix.
 

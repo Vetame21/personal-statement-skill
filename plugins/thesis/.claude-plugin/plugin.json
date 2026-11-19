@@ -1,6 +1,6 @@
 {
   "name": "thesis",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Coach a student through an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis, graduation project / 毕业论文), from choosing a topic, writing the proposal, structuring chapters (Indonesian Bab I-V or international IMRaD), literature review, methodology, results and discussion, citations, similarity and AI-use rules, and preparing for the defense (sidang). Use when the user mentions skripsi, tugas akhir, TA, thesis, proposal penelitian, seminar proposal, sidang, bab 1/2/3/4/5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a thesis chapter reviewed, debated, or improved.",
   "author": {
     "name": "Vetame21",

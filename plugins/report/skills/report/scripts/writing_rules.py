@@ -6,21 +6,29 @@ Standard library only; works on Python 3.9+.
 """
 
 import re
+import sys
 
 # ---------------------------------------------------------------- input
 
 def read_input(path: str) -> str:
-    """Read a file (or '-' for stdin) as text: UTF-8, UTF-8 with BOM, or UTF-16 with BOM."""
-    import sys
+    """Read a file (or '-' for stdin) as text: UTF-8 (with or without BOM) or UTF-16 (with or without BOM).
+    Line endings are normalised to \\n so character counts match what portals count."""
     if path == "-":
-        return sys.stdin.read()
+        return sys.stdin.read().replace("\r\n", "\n").replace("\r", "\n")
     with open(path, "rb") as f:
         raw = f.read()
     if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
-        return raw.decode("utf-16")
-    if raw.startswith(b"\xef\xbb\xbf"):
-        raw = raw[3:]
-    return raw.decode("utf-8", errors="replace")
+        text = raw.decode("utf-16")
+    elif len(raw) >= 4 and raw.count(b"\x00") > len(raw) // 4:
+        # UTF-16 without a byte-order mark: NULs sit in the odd (LE) or even (BE) positions
+        text = raw.decode("utf-16-le" if raw[1:2] == b"\x00" else "utf-16-be", errors="replace")
+    else:
+        if raw.startswith(b"\xef\xbb\xbf"):
+            raw = raw[3:]
+        text = raw.decode("utf-8", errors="replace")
+    if text.count("\ufffd") > max(3, len(text) // 200):
+        print("! Warning: parts of this file could not be decoded; save it as UTF-8 and re-run.", file=sys.stderr)
+    return text.replace("\r\n", "\n").replace("\r", "\n")
 
 
 def is_empty(text: str) -> bool:
@@ -81,7 +89,7 @@ ID_CONTEXT = {
 TECH_ALLOWLIST = re.compile(
     r"robust (?:standard errors?|regression|estimat\w*|statistics?|to outliers)"
     r"|(?:wiring|test|safety) harness|harness(?:es|ed)? (?:the )?(?:power|energy|wind|solar)"
-    r"|landscape (?:mode|orientation|survey|ecolog\w*|architect\w*)|(?:land|sea)scape"
+    r"|landscape (?:mode|orientation|survey|ecolog\w*|architect\w*|photograph\w*|painting)"
     r"|(?:cpu|gpu|memory|bandwidth|capacity|resource) utili[sz]ation|utili[sz]ation rates?"
     r"|navigat\w* (?:bar|stack|menu|drawer|controller|system|to the)|(?:page|screen|app) navigation"
     r"|vital signs?|crucial (?:point|temperature|exponent)"
@@ -112,4 +120,91 @@ def word_severity(strong: dict, context: dict) -> int:
 
 
 # ---------------------------------------------------------------- first person
-FIRST_PERSON = re.compile(r"\b(?:i|me|my|mine|we|us|our|saya|aku|kami|kita)\b", re.I)
+# "I" only as a pronoun (not "Bab I", "Part I", "World War I"); "us" lowercase only (not "US")
+FIRST_PERSON = re.compile(
+    r"(?<!Bab )(?<!Part )(?<!Chapter )(?<!Bagian )(?<!War )(?<!Tahap )\bI\b(?!\.)"
+    r"|\b(?:[Mm]e|[Mm]y|[Mm]ine|[Ww]e|[Oo]urs?|us|Us|[Ss]aya|[Aa]ku|[Kk]ami|[Kk]ita)\b"
+)
+NUMBER_WORDS = re.compile(
+    r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|forty|fifty|hundred|thousand|million|"
+    r"half|dozen|satu|dua|tiga|empat|lima|enam|tujuh|delapan|sembilan|sepuluh|puluh|ratus|ribu|juta)\b", re.I)
+# Procedural passive ("was heated", "were weighed"): normal in Methods sections
+PASSIVE = re.compile(r"\b(?:was|were|is|are|been|being|be)\s+(?:\w+ly\s+)?\w+(?:ed|en|wn|ung|ept|ade|ut|et)\b"
+                     # Indonesian di- passives (dipanaskan, ditimbang), not digital, diri, dia, disini
+                     r"|\bdi(?!gital|ri\b|rinya|a\b|ana|ni\b|sini|situ|mana|skusi|ploma|rektur|ksi|et)[a-z]{4,}\b", re.I)
+
+
+# ---------------------------------------------------------------- sentences and language
+ABBREVIATIONS = ["U.S.", "U.K.", "e.g.", "i.e.", "etc.", "et al.", "vs.", "Dr.", "Mr.", "Mrs.", "Ms.", "Prof.",
+                 "No.", "Fig.", "Figs.", "Eq.", "Vol.", "pp.", "p.", "St.", "Jr.", "Sr.", "dkk.", "hlm.", "dll.",
+                 "dsb.", "Jl.", "a.n.", "S.Kom.", "M.T.", "Ph.D."]
+_PROTECT = {a: a.replace(".", "\u2024") for a in ABBREVIATIONS}
+
+
+def split_sentences(text: str):
+    """Split prose into sentences without breaking on common abbreviations (U.S., Dr., e.g., et al., dkk.)."""
+    s = re.sub(r"\s+", " ", text.strip())
+    for a, b in _PROTECT.items():
+        s = s.replace(a, b)
+    s = re.sub(r"\b([A-Z])\.(?=\s[A-Z])", "\\1\u2024", s)  # initials such as "J. Smith"
+    parts = re.split(r"(?<=[.!?])\s+(?=[\"'“(\[]?[A-Z0-9])", s)
+    return [p.replace("\u2024", ".") for p in parts if re.search(r"\w", p)]
+
+
+def detect_lang(text: str) -> str:
+    low = f" {text.lower()} "
+    id_hits = sum(low.count(w) for w in (" yang ", " dan ", " dengan ", " untuk ", " adalah ", " dalam ", " saya ", " ini "))
+    en_hits = sum(low.count(w) for w in (" the ", " and ", " with ", " for ", " is ", " of ", " my ", " this "))
+    return "id" if id_hits > en_hits else "en"
+
+
+# ---------------------------------------------------------------- phrases and structures
+EN_PHRASES = [
+    r"in today'?s (?:rapidly |fast-paced |ever-)?(?:evolving|changing|digital|modern)(?: world| landscape| era)?",
+    r"plays? an? (?:vital|crucial|key|pivotal|important|significant) role",
+    r"it is (?:important|worth|crucial) (?:to note|noting) that",
+    r"a unique blend of", r"\bin conclusion\b", r"\bultimately,", r"\ball in all\b",
+    r"have you ever wondered", r"(?:this|it) (?:experience )?taught me the importance of",
+    r"make the world a better place", r"knows no bounds", r"golden ticket",
+]
+ID_PHRASES = [
+    r"di era (?:digital|globalisasi|modern|teknologi)",
+    r"seiring (?:dengan )?(?:perkembangan|berkembangnya) (?:zaman|teknologi)",
+    r"semakin (?:pesat|berkembang)nya (?:perkembangan )?",
+    r"tidak dapat dipungkiri", r"tak dapat dipungkiri",
+    r"memainkan peran (?:yang )?(?:penting|krusial|vital|kunci)",
+    r"memegang peranan (?:yang )?(?:penting|krusial)",
+    r"merupakan hal yang (?:sangat )?penting",
+    r"hal ini menunjukkan bahwa", r"dapat disimpulkan bahwa", r"dalam rangka", r"oleh karena itu,? (?:dapat|perlu)",
+    r"sangat(?:lah)? (?:penting|krusial)", r"berbagai macam", r"secara keseluruhan",
+    r"pernahkah (?:anda|kamu) (?:bertanya|berpikir)",
+]
+NOT_JUST = {
+    "en": r"\bnot (?:just|only|merely)\b[^.;!?]{1,80}?\bbut\b",
+    "id": r"\b(?:bukan|tidak) (?:hanya|sekadar|cuma)\b[^.;!?]{1,80}?\b(?:tetapi|tapi|melainkan)\b",
+}
+OPENERS = {
+    "en": ["furthermore", "moreover", "additionally", "in addition", "however", "therefore", "overall"],
+    "id": ["selain itu", "lebih lanjut", "oleh karena itu", "dengan demikian", "di sisi lain", "hal ini", "secara keseluruhan"],
+}
+MORAL = {
+    "en": r"(?:this|it|that) (?:taught|showed|reminded) me (?:that|the importance|how)",
+    "id": r"(?:hal ini|pengalaman ini) (?:mengajarkan|menunjukkan|mengingatkan) (?:saya|kita)",
+}
+# Lists of three with two commas ("A, B, and C" / "A, B, C"); "Yesterday, I went and..." no longer counts
+TRIPLET = re.compile(r"\b[\w-]+(?:\s[\w-]+)?,\s[\w-]+(?:\s[\w-]+)?,\s(?:(?:and|or|dan|atau|serta)\s)?[\w-]+")
+
+
+def phrase_hits(text: str, lang: str):
+    low = text.lower()
+    return [m.group(0) for p in (ID_PHRASES if lang == "id" else EN_PHRASES) for m in re.finditer(p, low)]
+
+
+def repeated_openers(paragraphs, lang: str):
+    counts = {}
+    for para in paragraphs:
+        start = para.strip().lower()
+        for o in OPENERS[lang]:
+            if start.startswith(o):
+                counts[o] = counts.get(o, 0) + 1
+    return {o: n for o, n in counts.items() if n >= 2}

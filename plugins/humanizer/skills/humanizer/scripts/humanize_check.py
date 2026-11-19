@@ -22,72 +22,20 @@ import statistics
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from writing_rules import (FIRST_PERSON, PLACEHOLDER, SIGNIF, TEST_RESULT, is_empty, read_input,  # noqa: E402
-                           unsupported_significance, word_hits, word_severity)
+from writing_rules import (FIRST_PERSON, MORAL, NOT_JUST, NUMBER_WORDS, PASSIVE, PLACEHOLDER,  # noqa: E402
+                           SIGNIF, TEST_RESULT, TRIPLET, detect_lang, is_empty, phrase_hits, read_input,
+                           repeated_openers, split_sentences, unsupported_significance, word_hits, word_severity)
 
-EN_PHRASES = [
-    r"in today'?s (?:rapidly |fast-paced |ever-)?(?:evolving|changing|digital|modern)",
-    r"plays? an? (?:vital|crucial|key|pivotal|important|significant) role",
-    r"it is (?:important|worth|crucial) (?:to note|noting) that",
-    r"a unique blend of", r"\bin conclusion\b", r"\bultimately,", r"\ball in all\b",
-    r"have you ever wondered", r"(?:this|it) taught me the importance of",
-    r"make the world a better place", r"knows no bounds",
-]
-EN_NOTJUST = r"\bnot (?:just|only|merely)\b[^.;!?]{1,80}?\bbut\b"
-EN_OPENERS = ["furthermore", "moreover", "additionally", "in addition", "however", "therefore", "overall"]
-EN_MORAL = r"(?:this|it|that) (?:taught|showed|reminded) me (?:that|the importance|how)"
-
-ID_PHRASES = [
-    r"di era (?:digital|globalisasi|modern|teknologi)",
-    r"seiring (?:dengan )?(?:perkembangan|berkembangnya) (?:zaman|teknologi)",
-    r"tidak dapat dipungkiri", r"tak dapat dipungkiri",
-    r"memainkan peran (?:yang )?(?:penting|krusial|vital|kunci)",
-    r"memegang peranan (?:yang )?(?:penting|krusial)",
-    r"merupakan hal yang (?:sangat )?penting",
-    r"hal ini menunjukkan bahwa", r"dapat disimpulkan bahwa", r"dalam rangka",
-    r"sangat(?:lah)? (?:penting|krusial)", r"berbagai macam", r"secara keseluruhan",
-    r"pernahkah (?:anda|kamu) (?:bertanya|berpikir)",
-]
-ID_NOTJUST = r"\b(?:bukan|tidak) (?:hanya|sekadar|cuma)\b[^.;!?]{1,80}?\b(?:tetapi|tapi|melainkan)\b"
-ID_OPENERS = ["selain itu", "lebih lanjut", "oleh karena itu", "dengan demikian", "di sisi lain", "hal ini", "secara keseluruhan"]
-ID_MORAL = r"(?:hal ini|pengalaman ini) (?:mengajarkan|menunjukkan|mengingatkan) (?:saya|kita)"
-
-TRIPLET = re.compile(r"\b\w+(?:\s\w+)?,\s\w+(?:\s\w+)?,?\s(?:and|or|dan|atau|serta)\s\w+")
 WORD = re.compile(r"\b[\w'’-]+\b")
-
-
-def detect_lang(text: str) -> str:
-    low = f" {text.lower()} "
-    id_hits = sum(low.count(w) for w in (" yang ", " dan ", " dengan ", " untuk ", " adalah ", " dalam ", " saya "))
-    en_hits = sum(low.count(w) for w in (" the ", " and ", " with ", " for ", " is ", " of ", " my "))
-    return "id" if id_hits > en_hits else "en"
 
 
 def scan(text: str, lang: str) -> dict:
     low = text.lower()
     words = WORD.findall(text)
     paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip()]
-    sents = [s for s in re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text.strip())) if WORD.search(s)]
+    sents = split_sentences(text)
     lens = [len(WORD.findall(s)) for s in sents]
-
-    if lang == "id":
-        phrases, notjust, openers, moral = ID_PHRASES, ID_NOTJUST, ID_OPENERS, ID_MORAL
-    else:
-        phrases, notjust, openers, moral = EN_PHRASES, EN_NOTJUST, EN_OPENERS, EN_MORAL
-
     strong, context = word_hits(text, lang)
-    phrase_hits = []
-    for p in phrases:
-        for m in re.finditer(p, low):
-            phrase_hits.append(m.group(0))
-    opener_counts = {}
-    for p in paras:
-        start = p.strip().lower()
-        for o in openers:
-            if start.startswith(o):
-                opener_counts[o] = opener_counts.get(o, 0) + 1
-    repeated_openers = {o: n for o, n in opener_counts.items() if n >= 2}
-
     return {
         "lang": lang,
         "words": len(words),
@@ -96,11 +44,11 @@ def scan(text: str, lang: str) -> dict:
         "sd_len": statistics.pstdev(lens) if len(lens) > 1 else 0,
         "strong_words": strong,
         "context_words": context,
-        "phrase_hits": phrase_hits,
-        "not_just": [m.group(0) for m in re.finditer(notjust, low)],
+        "phrase_hits": phrase_hits(text, lang),
+        "not_just": [m.group(0) for m in re.finditer(NOT_JUST[lang], low)],
         "triplets": len(TRIPLET.findall(text)),
-        "repeated_openers": repeated_openers,
-        "morals": len(re.findall(moral, low)),
+        "repeated_openers": repeated_openers(paras, lang),
+        "morals": len(re.findall(MORAL[lang], low)),
         "em_dash_per150": text.count("—") / max(len(words), 1) * 150,
         "placeholders": PLACEHOLDER.findall(text),
         "unsupported_significance": unsupported_significance(sents),
@@ -113,24 +61,26 @@ STARTERS = {"the", "a", "an", "it", "its", "she", "he", "they", "this", "that", 
             "we", "i", "our", "my", "in", "on", "at", "for", "with", "after", "before", "when", "while",
             "next", "then", "first", "finally", "however", "but", "and", "so", "as", "if", "because",
             "ini", "itu", "dia", "mereka", "kami", "saya", "kita", "pada", "dalam", "setelah", "sebelum",
-            "namun", "tetapi", "dan", "jadi", "karena", "selain", "kemudian", "selanjutnya", "hal"}
+            "namun", "tetapi", "dan", "jadi", "karena", "selain", "kemudian", "selanjutnya", "hal",
+            "bab", "bagian", "chapter", "part", "section", "table", "figure", "tabel", "gambar"}
 ATTRIBUTION = re.compile(r"\b(?:the|this|her|his|their) (?:film|book|article|study|report|paper|video|talk|author|speaker|documentary|survey)\b|\b(?:film|buku|artikel|penelitian|laporan|video|penulis) ini\b|\baccording to\b|\bmenurut\b", re.I)
 CONCRETE = re.compile(r"\d|[A-Z][a-z]+\s[A-Z][a-z]+")
 
 
-def per_sentence(text: str, lang: str) -> int:
-    phrases = EN_PHRASES if lang == "en" else ID_PHRASES
+def per_sentence(text: str, lang: str, register: str = "general") -> int:
     flagged = 0
-    sents = [s for s in re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text.strip())) if WORD.search(s)]
+    sents = split_sentences(text)
     # words written with a capital in mid-sentence somewhere = names/proper nouns
-    names = {t for s in sents for t in WORD.findall(s)[1:] if t[:1].isupper()}
+    roman = re.compile(r"^[IVXLC]+$")
+    names = {t for s in sents for t in WORD.findall(s)[1:]
+             if t[:1].isupper() and len(t) > 1 and not roman.match(t)}
     low_words = {t for t in WORD.findall(text) if t.islower()}
     for i, s in enumerate(sents, 1):
         low = s.lower()
         notes = []
         strong, context = word_hits(s, lang)
         notes += [f"word:{w}" for w in strong] + [f"possible word (check context):{w}" for w in context]
-        notes += [f'phrase:"{m.group(0)}"' for p in phrases for m in re.finditer(p, low)]
+        notes += [f'phrase:"{ph}"' for ph in phrase_hits(s, lang)]
         if GENERIC_OPENERS.match(s.strip()):
             notes.append("generic transition opener")
         if SIGNIF.search(s) and not TEST_RESULT.search(s):
@@ -143,7 +93,9 @@ def per_sentence(text: str, lang: str) -> int:
                          and not first.lower().endswith("s") and first.lower() not in low_words)
         has_name = first_is_name or any(t in names for t in tokens[1:])
         has_attribution = bool(ATTRIBUTION.search(low))
-        if not (CONCRETE.search(s) or FIRST_PERSON.search(s) or has_name or has_attribution) and len(tokens) > 6:
+        anchored = (CONCRETE.search(s) or NUMBER_WORDS.search(s) or FIRST_PERSON.search(s) or PASSIVE.search(s)
+                    or has_name or has_attribution)
+        if register == "general" and not anchored and len(tokens) > 6:
             notes.append("no concrete anchor (number, name, or writer's voice)")
         flagged += bool(notes)
         tag = "  " if not notes else "! "
@@ -195,6 +147,8 @@ def main() -> int:
     ap.add_argument("--compare", nargs=2, metavar=("BEFORE", "AFTER"))
     ap.add_argument("--lang", choices=["en", "id", "auto"], default="auto")
     ap.add_argument("--per-sentence", action="store_true", help="list each sentence with its flags")
+    ap.add_argument("--register", choices=["general", "report", "academic"], default="general",
+                    help="report/academic: skip the 'no concrete anchor' check (objective prose, Methods sections)")
     ap.add_argument("--strict", action="store_true",
                     help="exit with code 1 if flags are found (with --compare: if the AFTER text still has flags)")
     args = ap.parse_args()
@@ -203,6 +157,10 @@ def main() -> int:
 
     if args.compare:
         a, b = (load(p) for p in args.compare)
+        for name, txt in zip(args.compare, (a, b)):
+            if is_empty(txt):
+                print(f"! Empty input: {name} has no text to compare.")
+                return 1 if args.strict else 0
         lang = detect_lang(a) if args.lang == "auto" else args.lang
         ra, rb = scan(a, lang), scan(b, lang)
         rows = [
@@ -233,7 +191,7 @@ def main() -> int:
         return 1 if args.strict else 0
     lang = detect_lang(text) if args.lang == "auto" else args.lang
     if args.per_sentence:
-        flagged = per_sentence(text, lang)
+        flagged = per_sentence(text, lang, args.register)
         return 1 if (args.strict and flagged) else 0
     result = scan(text, lang)
     report(result)

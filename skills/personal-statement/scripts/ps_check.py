@@ -7,7 +7,7 @@ Usage:
 
 Reports word/character counts, paragraph lengths, sentence-length spread,
 em-dash density, leftover placeholders, and AI-sounding phrases
-(see references/anti-ai-tone.md). Standard library only.
+(see references/shared/anti-ai-tone.md). Standard library only.
 """
 
 import argparse
@@ -17,24 +17,22 @@ import statistics
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from writing_rules import PLACEHOLDER, is_empty, read_input, word_hits, word_severity  # noqa: E402
+from writing_rules import (NOT_JUST, PLACEHOLDER, detect_lang, is_empty, phrase_hits, read_input,  # noqa: E402
+                           split_sentences, word_hits, word_severity)
 
-RED_FLAG_PHRASES = [
-    r"not (?:just|only|merely) [^.;]{1,60}?(?:,|;|—|-)?\s*but",
-    r"it'?s not about [^.;]{1,60}?[;,—-]\s*it'?s about",
-    r"in today'?s (?:fast-paced|ever-evolving|rapidly changing)",
-    r"a unique blend of",
-    r"\bin conclusion\b",
-    r"\ball in all\b",
-    r"\bultimately,",
-    r"this (?:experience )?taught me the importance of",
-    r"have you ever wondered",
-    r"knows no bounds",
-    r"golden ticket",
-    r"make the world a better place",
-    r"i (?:really|truly|do) hope (?:you|i) (?:will |can )?(?:accept|get accepted)",
-    r"\bi promise\b",
-]
+# Statement-specific phrases on top of the shared lists in writing_rules.py
+PS_PHRASES = {
+    "en": [
+        r"it'?s not about [^.;]{1,60}?[;,—-]\s*it'?s about",
+        r"i (?:really|truly|do) hope (?:you|i) (?:will |can )?(?:accept|get accepted)",
+        r"\bi promise\b",
+    ],
+    "id": [
+        r"saya (?:sangat |benar-benar )?berharap (?:dapat |bisa )?diterima",
+        r"\bsaya berjanji\b",
+        r"sejak kecil saya (?:sudah )?(?:bercita-cita|bermimpi|menyukai)",
+    ],
+}
 
 
 WORD = re.compile(r"\b[\w'’-]+\b")
@@ -44,16 +42,12 @@ def count_words(text: str) -> int:
     return len(WORD.findall(text))
 
 
-def sentences(text: str) -> list:
-    parts = re.split(r"(?<=[.!?])\s+", text.strip())
-    return [p for p in parts if re.search(r"[A-Za-z]", p)]
-
-
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("file", help="text/markdown file, or - for stdin")
     ap.add_argument("--limit-words", type=int)
     ap.add_argument("--limit-chars", type=int)
+    ap.add_argument("--lang", choices=["en", "id", "auto"], default="auto", help="language of the statement")
     ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
 
@@ -63,7 +57,8 @@ def main() -> int:
         return 1 if args.strict else 0
     words = WORD.findall(text)
     paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip()]
-    sents = sentences(text)
+    sents = split_sentences(text)
+    lang = detect_lang(text) if args.lang == "auto" else args.lang
     lens = [count_words(s) for s in sents]
     para_counts = [count_words(p) for p in paras]
     chars_no_space = len(re.sub(r"\s", "", text))
@@ -95,14 +90,14 @@ def main() -> int:
 
     low = text.lower()
     hits = []
-    strong, context = word_hits(text, "en")
+    strong, context = word_hits(text, lang)
     hits += [f"{w} x{n}" for w, n in strong.items()]
     hits += [f"{w} x{n} (possible, check context)" for w, n in context.items()]
-    phrase_count = 0
-    for ph in RED_FLAG_PHRASES:
-        for m in re.finditer(ph, low):
-            hits.append(f'"{m.group(0)[:60]}"')
-            phrase_count += 1
+    found = phrase_hits(text, lang) + [m.group(0) for m in re.finditer(NOT_JUST[lang], low)]
+    found += [m.group(0) for ph in PS_PHRASES[lang] for m in re.finditer(ph, low)]
+    hits += [f'"{f[:60]}"' for f in found]
+    phrase_count = len(found)
+    print(f"Language: {lang}")
     print(f"AI-tone red flags: {len(hits)}")
     for h in hits:
         print(f"  - {h}")

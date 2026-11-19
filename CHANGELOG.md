@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.3 - 2026-11-19
+
+Fixes from a third independent review (no High findings).
+
+- Integrity gate made consistent: personal-statement (Evidence step) and harvard-cv now ask once about the application's AI-use or authorship policy and follow it, matching the humanizer, thesis and report skills.
+- cite_check (APA): the reference list stops at the next heading or an appendix (Lampiran/Appendix); multi-year groups "(Santoso, 2020, 2021)"; APA 7 "(World Health Organization [WHO], 2020)" defines WHO for later citations; "(born 2001)" ignored; "Indonesia (2020)" shown as a "possible" citation, not an error; "Reference List", "Works Cited", "Daftar Referensi" and more headings recognised; footnote styles detected and reported as unsupported.
+- humanize_check: passive Methods prose and number words count as anchored; `--register report|academic` skips the anchor check; "Bab I", "Part I" and "US" no longer count as first person; "Bab"/"Part" are not names; empty AFTER text in `--compare` fails `--strict`.
+- ps_check: `--lang auto|en|id` with the shared Indonesian lists plus statement-specific phrases in both languages.
+- writing_rules.py is now the single source for word lists, phrases, structures, sentence splitting (abbreviation-aware), language detection, first person, number words and passive voice; text_check uses it too. "landscape" can be flagged again. Lists of three need two commas. CRLF is normalised; UTF-16 without a BOM is detected; undecodable files warn.
+- Triggers: debate-mode only on explicit debate/fact-check requests; report only for academic and student technical reports.
+- Privacy: context files may contain grades or research data; the skills tell users to keep them out of version control.
+- Sources: NACAC's own factors pages and UCAS's official reform page linked as primary sources; thesis and harvard-cv references gained source sections; Harvard section-order claim softened to "common convention"; README sourcing wording made accurate.
+- Leftover v1 stage names fixed in the personal-statement debate panel; stale docstring path fixed.
+- Tests: 42 (was 30), including a YAML front-matter check for every skill.
+
 ## 2.0.2 - 2026-11-19
 
 Fixes from a second independent review.

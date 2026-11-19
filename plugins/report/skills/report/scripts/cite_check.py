@@ -11,8 +11,12 @@ References, Bibliography, Daftar Pustaka, Referensi, 参考文献
 APA / author-year
   In text: (Santoso, 2023), (Santoso & Lee, 2023a), (Santoso, Lee, & Park, 2021),
   (Santoso et al., 2023; Lee, 2021), (World Health Organization, 2020),
-  Santoso (2023), van Dijk (2019), Wijaya et al. (2022), (Darwin, 1859), (Lee, n.d.).
-  Matched to reference entries by first author + year.
+  Santoso (2023), van Dijk (2019), Wijaya et al. (2022), (Darwin, 1859), (Lee, n.d.),
+  (Santoso, 2020, 2021), (World Health Organization [WHO], 2020) then (WHO, 2020).
+  Matched to reference entries by first author + year. A capitalised word before
+  "(year)" with no author signs ("Indonesia (2020)") is shown as "possible" only.
+The reference list runs from its heading to the next Markdown heading or an
+appendix (Lampiran/Appendix). Footnote styles ([^1], Chicago notes) are not supported.
 IEEE / numeric
   In text: [1], [1, 3, 5], [2]-[4], [2-4]. Brackets attached to a word
   (arr[7], x[0]) and code spans or fenced code blocks are ignored.
@@ -32,9 +36,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from writing_rules import read_input  # noqa: E402
 
 REF_HEADINGS = re.compile(
-    r"^\s*(?:#+\s*)?(references|bibliography|daftar\s+pustaka|referensi|参考文献)\s*:?\s*$",
+    r"^\s*(?:#+\s*)?(?:\d+[.)]?\s*)?(references|reference\s+list|bibliography|works\s+cited|literature\s+cited|sources|"
+    r"daftar\s+pustaka|daftar\s+referensi|referensi|kepustakaan|参考文献)\s*:?\s*$",
     re.I | re.M,
 )
+# Where the reference list ends: the next Markdown heading, or an appendix heading
+REF_END = re.compile(r"^\s*#+\s+\S|^\s*(?:lampiran|appendix|appendices|annex|附录)\b.*$", re.I | re.M)
+FOOTNOTE = re.compile(r"\[\^\w+\]|^\[\^\w+\]:", re.M)
 YEAR = r"(?:1[5-9]|20)\d{2}[a-z]?|n\.d\."
 PARTICLES = {"van", "von", "de", "der", "den", "da", "di", "du", "del", "della", "la", "le", "bin", "binti", "al"}
 LEAD_WORDS = {"see", "e.g.", "e.g.,", "cf.", "i.e.", "lihat", "misalnya", "also", "and", "dan", "in", "by", "oleh"}
@@ -58,7 +66,10 @@ def split_body_refs(text: str):
         pass  # the last matching heading wins (a contents page may mention it earlier)
     if not last:
         return text, ""
-    return text[: last.start()], text[last.end():]
+    rest = text[last.end():]
+    end = REF_END.search(rest)
+    refs = rest[: end.start()] if end else rest
+    return text[: last.start()], refs
 
 
 # ---------- APA ----------
@@ -103,7 +114,10 @@ def known_names(entries):
 
 
 PAREN = re.compile(r"\(([^()]*?(?:" + YEAR + r")[^()]*?)\)")
-IN_PAREN = re.compile(r"([^;]*?),?\s+(" + YEAR + r")(?:,\s*(?:p|pp|hlm|hal)\.?\s*[\d\-–]+)?\s*$")
+IN_PAREN = re.compile(r"([^;]*?),?\s+((?:" + YEAR + r")(?:\s*,\s*(?:" + YEAR + r"))*)(?:,\s*(?:p|pp|hlm|hal)\.?\s*[\d\-–]+)?\s*$")
+ABBR_IN_TEXT = re.compile(r"([A-Z][\w.&'’\- ]+?)\s*[\[(]([A-Z][A-Za-z0-9&]{1,10})[\])]\s*,\s*(?:" + YEAR + r")")
+# Signs that the words before "(year)" are authors: "et al.", "dkk.", or a co-author joined by &/and/dan
+AUTHOR_MARKER = re.compile(r"\b(?:et\s+al\.?|dkk\.?)|\s(?:&|and|dan)\s+[A-Z]", re.I)
 NARRATIVE = re.compile(r"((?:[\w'’\-.&,]+\s+){0,6}?[\w'’\-.]+)\s+\((" + YEAR + r")\)")
 
 
@@ -142,25 +156,36 @@ def best_key(candidate: str, year: str, known: set) -> str:
 def apa(body: str, refs: str) -> int:
     entries = ref_entries(refs)
     listed = {(a, y) for aliases, y in entries for a in aliases}
-    cited = set()
+    # "(World Health Organization [WHO], 2020)" defines WHO for later "(WHO, 2020)"
+    abbr = {norm(m.group(2)): norm(m.group(1)) for m in ABBR_IN_TEXT.finditer(body)}
+    cited, possible = set(), set()
     paren_spans = []
+
+    def resolve(key: str) -> str:
+        return abbr.get(key, key)
+
     for m in PAREN.finditer(body):
         paren_spans.append(m.span())
         for part in m.group(1).split(";"):
             pm = IN_PAREN.search(part.strip())
-            if pm and not re.search(r"[A-Za-z]", pm.group(1)):
-                continue  # just "(2019)" after a narrative citation
-            if pm and re.search(r"[A-Za-z]", pm.group(1)):
-                key = first_author(re.sub(r"['’]s\b", "", pm.group(1)))
-                if (key, pm.group(2)) not in listed:
-                    key = best_key(pm.group(1), pm.group(2), entries) or key
-                cited.add((key, pm.group(2)))
+            if not pm or not re.search(r"[A-Z]", pm.group(1)):
+                continue  # "(2019)" after a narrative citation, or "(born 2001)"
+            author = re.sub(r"\s*\[[^\]]+\]", "", re.sub(r"['’]s\b", "", pm.group(1)))
+            for year in re.split(r"\s*,\s*", pm.group(2)):
+                key = resolve(first_author(author))
+                if (key, year) not in listed:
+                    key = resolve(best_key(author, year, entries) or key)
+                cited.add((key, year))
     for m in NARRATIVE.finditer(body):
         if any(s < m.start() and m.end() <= e for s, e in paren_spans):
             continue  # inside a larger parenthesis, already handled
-        key = best_key(m.group(1), m.group(2), entries)
-        if key and key[:1].isalpha():
+        key = resolve(best_key(m.group(1), m.group(2), entries))
+        if not key or not key[:1].isalpha():
+            continue
+        if (key, m.group(2)) in listed or AUTHOR_MARKER.search(m.group(1)[-40:]):
             cited.add((key, m.group(2)))
+        else:
+            possible.add((key, m.group(2)))  # "Indonesia (2020)" may be a place or event, not an author
 
     print(f"Style: APA / author-year. Cited works: {len(cited)}  Reference entries: {len(entries)}")
     missing = sorted(cited - listed)
@@ -170,6 +195,8 @@ def apa(body: str, refs: str) -> int:
         print(f"  ! Cited but not in references: {a.title()} ({y})")
     for a, y in unused:
         print(f"  ! In references but never cited: {a.title()} ({y})")
+    for a, y in sorted(possible - listed):
+        print(f"  ? Possible citation, not in references (may be a name, place or event): {a.title()} ({y})")
     return len(missing) + len(unused)
 
 
@@ -245,6 +272,9 @@ def main() -> int:
     ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
     text = read_input(args.file)
+    if FOOTNOTE.search(text):
+        print("! Footnote/notes-style citations ([^1]) detected: this checker does not support them; check them manually.")
+        text = FOOTNOTE.sub(" ", text)
     has_heading = bool(REF_HEADINGS.search(text))
     body, refs = split_body_refs(strip_code(text))
     if has_heading and not refs.strip():

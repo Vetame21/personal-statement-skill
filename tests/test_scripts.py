@@ -230,7 +230,93 @@ class ReviewTwoRegressions(unittest.TestCase):
             self.assertIn("Empty input", out, script)
 
 
+class ReviewThreeRegressions(unittest.TestCase):
+    """Cases found by the third independent review (v2.0.3)."""
+
+    def test_landscape_is_detectable(self):
+        out = run("skills/humanizer/scripts/humanize_check.py", "The evolving landscape of AI is changing everything for us.")
+        self.assertIn("landscape", out)
+
+    def test_ps_check_indonesian(self):
+        out = run("skills/personal-statement/scripts/ps_check.py",
+                  "Di era digital yang semakin berkembang, teknologi memainkan peran penting. "
+                  "Tidak dapat dipungkiri bahwa data merupakan hal yang sangat penting bagi saya.")
+        self.assertIn("Language: id", out)
+        self.assertIn("di era digital", out)
+        self.assertNotIn("Result: OK", out)
+
+    def test_passive_methods_not_flagged(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "The solution was heated for ten minutes. The sample was weighed on a balance. The mixture was stirred until clear.",
+                  "--per-sentence")
+        self.assertIn("Sentences with flags: 0/3", out)
+
+    def test_register_report_skips_anchor(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "This section describes the overall approach used throughout the whole project.", "--per-sentence",
+                  "--register", "report")
+        self.assertNotIn("no concrete anchor", out)
+
+    def test_first_person_not_fooled_by_bab_i_or_us(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "Bab I membahas latar belakang secara umum dan menyeluruh sekali.", "--per-sentence", "--lang", "id")
+        self.assertIn("no concrete anchor", out)
+
+    def test_triplet_and_abbreviations(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "Yesterday, I went and bought bread. The U.S. data from Dr. Lee, e.g. the 2020 survey, was clear.")
+        self.assertNotIn("Lists of three", out)
+        self.assertIn("Sentences: 2", out)
+
+    def test_crlf_character_count(self):
+        a = run("skills/personal-statement/scripts/ps_check.py", "One line.\nTwo line.\n")
+        b = run("skills/personal-statement/scripts/ps_check.py", "One line.\r\nTwo line.\r\n")
+        grab = lambda s: [l for l in s.splitlines() if l.startswith("Characters (with spaces)")][0]
+        self.assertEqual(grab(a), grab(b))
+
+    def test_utf16_without_bom(self):
+        with tempfile.NamedTemporaryFile("wb", suffix=".txt", delete=False) as f:
+            f.write("My project was a testament to my passion.".encode("utf-16-le"))
+        out = subprocess.run([sys.executable, str(ROOT / "skills/personal-statement/scripts/ps_check.py"), f.name],
+                             capture_output=True, text=True, check=True).stdout
+        self.assertIn("testament", out)
+
+    def test_compare_with_empty_after(self):
+        with tempfile.TemporaryDirectory() as d:
+            a, b = Path(d, "a.txt"), Path(d, "b.txt")
+            a.write_text("This journey was a testament to my passion.", encoding="utf-8")
+            b.write_text("", encoding="utf-8")
+            out = subprocess.run([sys.executable, str(ROOT / "skills/humanizer/scripts/humanize_check.py"),
+                                  "--compare", str(a), str(b), "--strict"], capture_output=True, text=True)
+        self.assertEqual(out.returncode, 1)
+        self.assertIn("Empty input", out.stdout)
+
+    def test_cite_apa_appendix_multiyear_abbr_heading(self):
+        text = ("Data were collected (Hadi, 2017). In Indonesia (2020) the rules changed. Santoso was (born 2001) here "
+                "(Santoso, 2020, 2021). Health (World Health Organization [WHO], 2020); later (WHO, 2020).\n\n"
+                "# Reference List\n\nHadi, R. (2017). E.\nSantoso, B. (2020). A.\nSantoso, B. (2021). B.\n"
+                "World Health Organization. (2020). R.\n\n# Lampiran\n\nData collected in (2019) survey.\n")
+        out = run("shared/scripts/cite_check.py", text)
+        self.assertIn("Result: OK", out)
+        self.assertIn("? Possible citation", out)
+        self.assertNotIn("Data Collected", out)
+
+    def test_cite_footnotes_and_works_cited(self):
+        out = run("shared/scripts/cite_check.py", "A claim.[^1]\n\n[^1]: Smith, Book (2020).\n\n## Works Cited\n\nSmith, J. (2020). Book.\n")
+        self.assertIn("Footnote", out)
+
+
 class Build(unittest.TestCase):
+    def test_every_skill_front_matter_is_valid_yaml(self):
+        import re
+        import yaml
+        for skill_md in (ROOT / "skills").glob("*/SKILL.md"):
+            m = re.match(r"^---\s*\n(.*?)\n---", skill_md.read_text(encoding="utf-8"), re.S)
+            self.assertIsNotNone(m, skill_md)
+            fm = yaml.safe_load(m.group(1))
+            self.assertEqual(fm["name"], skill_md.parent.name)
+            self.assertLessEqual(len(fm["description"]), 1024, skill_md)
+
     def test_marketplace_name_is_fixed(self):
         import importlib.util
         spec = importlib.util.spec_from_file_location("build", ROOT / "scripts" / "build.py")

@@ -1,6 +1,6 @@
 # Harvard-Style Layout
 
-Based on the public resume guides from Harvard's Mignone Center for Career Success (formerly the Office of Career Services) and the many university guides that follow them. Check the current Harvard guides for updates; this file is a working summary, not an official template.
+A working summary of the widely used "Harvard style", informed by the public resume guides and example resumes from Harvard's Mignone Center for Career Success. Harvard's pages confirm one page as the norm for students and margins of at least three-quarters of an inch; the section order below is the common convention in those examples and in university guides that follow them, not a quoted Harvard rule. Check the current Mignone Center guide before relying on details.
 
 ---
 
@@ -123,3 +123,9 @@ Clubs, student organisations, volunteering, competitions, sport at a serious lev
 
 ### Skills & Interests
 Group them: Technical, Language (with level or test score), Laboratory/Tools, Certifications, Interests. Interests should be specific ("marathon running", not "sports"); they are conversation starters.
+
+## Sources (checked November 2026)
+
+- [Mignone Center: Bullet point resume template](https://careerservices.fas.harvard.edu/resources/bullet-point-resume-template/) · [Create a resume/CV or cover letter](https://careerservices.fas.harvard.edu/channels/create-a-resume-cv-or-cover-letter/) · [GSAS master's resume and cover letter (length, margins)](https://careerservices.fas.harvard.edu/resources/gsas-masters-resume-cover-letter/)
+- Example resumes: [Harvard College CS](https://cdn-careerservices.fas.harvard.edu/wp-content/uploads/sites/161/2025/07/Harvard-College-CS-Resume-Example.pdf) · [Harvard College Engineering](https://cdn-careerservices.fas.harvard.edu/wp-content/uploads/sites/161/2025/07/Harvard-College-Engineering-Example.pdf)
+- Guide PDF: [College resume and cover letter](https://cdn-careerservices.fas.harvard.edu:443/wp-content/uploads/sites/161/2023/08/College-resume-and-cover-letter-4.pdf) (includes the action-verb list)

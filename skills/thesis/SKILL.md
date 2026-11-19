@@ -38,7 +38,7 @@ Ask (at most 2-3 questions at a time):
 - What exists already: data, code, experiments, sources, drafts.
 - AI-use rules (see Integrity).
 
-Offer to save this to `.claude/thesis-context.md` with **Write**, and keep it updated with **Edit**.
+Offer to save this to `.claude/thesis-context.md` with **Write**, and keep it updated with **Edit**. Tell the student it may hold personal or research data and should stay out of version control (add it to `.gitignore`).
 
 ## Stage 2: Topic and proposal
 

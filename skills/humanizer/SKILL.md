@@ -65,7 +65,7 @@ If the user already said which they want, skip the question. If they don't answe
 
 ### 4b. Self-check loop (required)
 
-Before showing anything, save the rewrite and run `python scripts/humanize_check.py <rewrite> --per-sentence`. For every flagged sentence:
+Before showing anything, save the rewrite and run `python scripts/humanize_check.py <rewrite> --per-sentence` (add `--register report` for lab reports, Methods sections and other objective prose, where passive voice and no first person are correct). For every flagged sentence:
 
 - **generic transition opener** ("Next,", "Then,", "Furthermore,", "Selanjutnya,"): cut it, or join the sentence to its neighbour, or open with the subject and a concrete verb.
 - **vague claim** ("for decades", "sharply", "experts say"): replace with the specific fact from the user's source, or attribute it ("the film says..."), or flag `[ADD DETAIL]`.

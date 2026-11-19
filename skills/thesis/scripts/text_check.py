@@ -17,46 +17,12 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from writing_rules import PLACEHOLDER, SIGNIF, TEST_RESULT, is_empty, read_input  # noqa: E402
+from writing_rules import (NOT_JUST, PLACEHOLDER, SIGNIF, TEST_RESULT, detect_lang, is_empty,  # noqa: E402
+                           phrase_hits, read_input, repeated_openers, split_sentences, word_hits, word_severity)
 
-ID_FLAGS = [
-    r"di era (?:digital|globalisasi|modern|teknologi)",
-    r"seiring (?:dengan )?(?:perkembangan|berkembangnya) (?:zaman|teknologi)",
-    r"semakin (?:pesat|berkembang) (?:nya )?(?:perkembangan )?",
-    r"tidak dapat dipungkiri",
-    r"tak dapat dipungkiri",
-    r"memainkan peran (?:yang )?(?:penting|krusial|vital|kunci)",
-    r"memegang peranan (?:yang )?(?:penting|krusial)",
-    r"merupakan hal yang (?:sangat )?penting",
-    r"hal ini menunjukkan bahwa",
-    r"dapat disimpulkan bahwa",
-    r"oleh karena itu,? (?:dapat|perlu)",
-    r"dalam rangka",
-    r"sangat(?:lah)? (?:penting|krusial|signifikan)",
-    r"berbagai macam",
-    r"secara keseluruhan",
-]
-ID_OPENERS = ["selain itu", "lebih lanjut", "oleh karena itu", "dengan demikian", "di sisi lain", "hal ini"]
 
-EN_FLAGS = [
-    r"\bdelve", r"\bpivotal\b", r"\bcrucial\b", r"\bparamount\b", r"\blandscape\b", r"\bleverag",
-    r"\brealm\b", r"\btapestry\b", r"\btestament\b", r"\bunderscore", r"\bseamless",
-    r"plays? an? (?:vital|crucial|key|pivotal|important) role",
-    r"in today'?s (?:rapidly )?(?:evolving|changing|digital|fast-paced)",
-    r"it is (?:important|worth|crucial) to note that",
-    r"\bnot only\b[^.]{1,80}\bbut also\b",
-    r"\bfurthermore\b", r"\bmoreover\b",
-]
-EN_OPENERS = ["furthermore", "moreover", "additionally", "in addition", "however", "therefore"]
 
 WORD = re.compile(r"\b[\w'’-]+\b")
-
-
-def detect_lang(text: str) -> str:
-    low = text.lower()
-    id_hits = sum(low.count(w) for w in (" yang ", " dan ", " dengan ", " untuk ", " adalah ", " dalam "))
-    en_hits = sum(low.count(w) for w in (" the ", " and ", " with ", " for ", " is ", " of "))
-    return "id" if id_hits >= en_hits else "en"
 
 
 def main() -> int:
@@ -76,7 +42,7 @@ def main() -> int:
 
     words = WORD.findall(text)
     paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip() and not p.lstrip().startswith("#")]
-    sents = [s for s in re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text)) if WORD.search(s)]
+    sents = split_sentences(text)
     issues = 0
 
     print(f"Language: {lang}  Words: {len(words)}" + (f" / limit {args.limit_words}" if args.limit_words else ""))
@@ -90,21 +56,20 @@ def main() -> int:
         issues += 1
         print(f"  ! {len(long_s)} sentence(s) over {args.long} words, e.g.: {long_s[0][:90]}...")
 
-    flags = ID_FLAGS if lang == "id" else EN_FLAGS
-    openers = ID_OPENERS if lang == "id" else EN_OPENERS
-    hits = []
-    for f in flags:
-        found = [m.group(0) for m in re.finditer(f, low)]
-        if found:
-            hits.append(f'"{found[0][:50]}" x{len(found)}')
-    opener_counts = {o: sum(1 for p in paras if p.strip().lower().startswith(o)) for o in openers}
-    heavy = {o: n for o, n in opener_counts.items() if n >= 2}
+    strong, context = word_hits(text, lang)
+    hits = [f'"{h}"' for h in phrase_hits(text, lang)]
+    hits += [f'"{m.group(0)[:60]}"' for m in re.finditer(NOT_JUST[lang], low)]
+    hits += [f"{w} x{n}" for w, n in strong.items()]
+    possible = [f"{w} x{n}" for w, n in context.items()]
+    heavy = repeated_openers(paras, lang)
     print(f"Padding / AI-sounding phrases: {len(hits)}")
     for h in hits:
         print(f"  - {h}")
+    if possible:
+        print(f"Possible (check context): {', '.join(possible)}")
     if heavy:
         print(f"  ! Paragraphs opened with the same connector: {heavy}")
-    if len(hits) >= 3 or heavy:
+    if len(hits) + max(0, sum(context.values()) - 2) >= 3 or heavy:
         issues += 1
 
     for s in sents:

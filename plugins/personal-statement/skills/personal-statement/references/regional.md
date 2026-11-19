@@ -54,7 +54,7 @@ Rules change every admissions cycle. Treat everything below as a starting point 
 
 ## Sources (checked November 2026)
 
-- [UCAS personal statement guidance (PDF)](https://ucas.com/media/150031/download)
+- [UCAS: Reform of the personal statement (official)](https://www.ucas.com/reform) · [UCAS personal statement guidance (PDF)](https://ucas.com/media/150031/download)
 - [Study Mind: UCAS personal statement changes for 2026](https://studymind.co.uk/ucas-guide/ucas-personal-statement-changes/)
 - [CityU: Interview arrangements](https://www.cityu.edu.hk/admo/interview-arrangements-local-non-jupas-year-1-applicants)
 - [Personal statement guide for Hong Kong applications (third party)](https://dse-knowledge-hub.pages.dev/en/admission/personal-statement-guide/)

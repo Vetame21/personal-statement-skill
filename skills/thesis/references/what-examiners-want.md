@@ -19,7 +19,7 @@ There is no single national or international rubric: every program sets its own 
 | **Referencing** | Missing or mismatched citations, mixed styles | Every source cited and listed correctly in one style |
 | **Defense** | Reads slides, cannot explain choices | Explains every choice and number, handles critical questions calmly |
 
-Example weights from one Indonesian informatics defense rubric: problem complexity, depth of theory, methodological fit and data quality at about 15% each, with the rest on presentation and defense. Treat this as an example only.
+Example weights, as summarised from one Indonesian informatics defense rubric ([Universitas Mataram, Informatika](https://if.unram.ac.id/wp-content/uploads/2025/12/Rubrik-Penilaian-Kedalaman-Sidang-Tugas-Akhir.pdf); the document itself could not be opened when this was written): problem complexity, depth of theory, methodological fit and data quality at about 15% each, with the rest on presentation and defense. Treat this as an example only.
 
 What top bands add (from international descriptors): **originality** (going beyond what was taught), **critical engagement** with current research, **realistic appraisal of achievements and limitations**, and work close to publishable or professional quality.
 
@@ -81,3 +81,9 @@ Anything below 3 is a "fix before submission" item.
 - Figures and tables not referenced in the text.
 - Citation and reference list mismatches.
 - Text that reads as machine-written (see the tone rules in SKILL.md).
+
+## Sources (checked November 2026)
+
+- [Universitas Mataram: Rubrik Penilaian Kedalaman Sidang Tugas Akhir](https://if.unram.ac.id/wp-content/uploads/2025/12/Rubrik-Penilaian-Kedalaman-Sidang-Tugas-Akhir.pdf) · [ITENAS: Penilaian TA](https://info-data.itenas.ac.id/dokumen/luaran/buku/Penilaian_TA.pdf)
+- [UNSW: Assessing 4th Year Theses](https://cgi.cse.unsw.edu.au/~teachadmin/tc/meetings/2008/03/ThesisAssessment.2.html) (2008) · [Liverpool COMP591 marking descriptors](https://cgi.csc.liv.ac.uk/~comp591/2022-23/MarkingDescriptors.pdf) · [Sussex MSc dissertation marking criteria](https://www.sussex.ac.uk/ei/internal/forstudents/informatics/masters/dissertations/markingcriteriamsccs)
+- Common mistakes: [Mojok: 7 kesalahan skripsi](https://mojok.co/terminal/7-kesalahan-skripsi-yang-bikin-mahasiswa-dapat-banyak-revisi/) (opinion) and language-error studies listed in search results; treat as indicative.

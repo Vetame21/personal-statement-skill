@@ -51,12 +51,12 @@ Hiring readers skim for match: the role's top requirements, each answered with o
 
 ## Sources (checked November 2026)
 
-NACAC publishes a public summary at [Factors in College Admission](https://www.nacacnet.org/factors-in-college-admission/); the detailed tables are for members, so the figures above come from these summaries.
+Primary: NACAC's [Factors in the Admission Decision](https://www.nacacnet.org/factors-in-the-admission-decision/) and [Factors in College Admission](https://www.nacacnet.org/factors-in-college-admission/) pages, which give the 2023 essay figures (18.9% considerable, 37.3% moderate, 26.5% limited, 17.3% none); the full report is for members. Secondary summaries used for the other rows:
 
 - [GradPilot: Do college essays matter? NACAC data](https://gradpilot.com/news/do-college-essays-matter-nacac-data)
 - [Virginia Tech: College Essay Presentation 2025 (NACAC 2023 figures)](https://caregiving.vt.edu/content/dam/caregiving_vt_edu/College-Essay-Presentation-2025.pdf)
 - [EdWeek: College application essay increasing in importance (2010)](https://www.edweek.org/teaching-learning/college-application-essay-increasing-in-importance/2010/11)
-- [UCAS personal statement guidance (PDF)](https://ucas.com/media/150031/download)
+- [UCAS: Reform of the personal statement (official)](https://www.ucas.com/reform) · [UCAS personal statement guidance (PDF)](https://ucas.com/media/150031/download)
 - [Study Mind: Changes to the UCAS personal statement for 2026 entry](https://studymind.co.uk/ucas-guide/ucas-personal-statement-changes/)
 - [The Profs: The new UCAS personal statement questions for 2026](https://www.theprofs.co.uk/student-resources/university-applications/how-to-answer-the-new-ucas-personal-statement-questions-for-2026-entry/)
 - [CityU: Interview arrangements (example of selective video interviews)](https://www.cityu.edu.hk/admo/interview-arrangements-local-non-jupas-year-1-applicants)

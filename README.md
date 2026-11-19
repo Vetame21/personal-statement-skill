@@ -16,7 +16,7 @@ Six skills, one shared set of rules:
 ## What makes these different
 
 - **Evidence over templates.** Each skill starts from the user's real material and marks anything unconfirmed `[VERIFY]` instead of inventing it.
-- **Research-backed guidance.** What readers weigh (e.g. NACAC 2023 admission factors, UCAS's 2026 three-question format), what examiners reward, and how detectors decide, with sources.
+- **Research-backed guidance.** What readers weigh (e.g. NACAC 2023 admission factors, UCAS's 2026 three-question format), what examiners reward, and how detectors decide. Key facts link their sources with a check date; some figures come from secondary summaries and are labelled as such.
 - **Debate before and after writing.** Panels (Admissions Reader, Skeptic, Applicant Advocate, Tone Detector; Examiner, Supervisor, Methodologist) argue over choices and drafts, then a moderator decides.
 - **Honest about AI detection.** The shared `ai-detection.md` explains perplexity, burstiness, Turnitin's thresholds (300-word minimum, scores under 20% shown as `*`, about 4% sentence-level false positives by Turnitin's own figures), bypasser detection and Turnitin Clarity, with links. The skills use this to explain flags and protect genuine authors. **They do not use evasion tricks or optimise for detector scores.** For assessed work, they first check that the text is the user's own draft and what the rules allow, and they decline requests whose goal is to pass AI-written work off as human.
 - **Checker scripts** for five of the six skills (debate-mode has none), tested in CI. Python 3.9+; add `--strict` to make a script exit with code 1 when it finds issues.

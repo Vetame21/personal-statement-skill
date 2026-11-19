@@ -22,6 +22,9 @@ Say the mode in one line and begin.
 
 ## Non-negotiable rules
 
+Before drafting new text, ask once whether the application or employer has an AI-use policy for CVs, and follow it.
+
+
 0. Shared rules: [references/shared/integrity.md](references/shared/integrity.md) and [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).
 1. **No invented facts.** Never add employers, titles, dates, grades, awards, numbers or skills the user did not give. If a bullet would be stronger with a number, ask for it or mark `[VERIFY: e.g. how many members?]`. List every marker after the CV under **"Check before sending"**.
 2. **Honest quantities.** Approximate numbers are fine if true ("about 30 students"). Never inflate.

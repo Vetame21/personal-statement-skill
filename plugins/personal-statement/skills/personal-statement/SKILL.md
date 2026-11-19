@@ -37,7 +37,11 @@ Collect before writing (2-3 questions at a time; let the user dump material):
 - **Material**: grades and strong subjects, projects (with links: repos, sites), self-study, clubs, work, family responsibilities, competitions, a moment that started the interest.
 - **Voice**: a sample of the applicant's own writing or messages, and the register they want (casual, neutral, formal).
 
-Push past shallow motivation ("I like computers") with follow-up questions until there is a concrete moment, action or result. Offer to save the context to `.claude/personal-statement-context.md`.
+Push past shallow motivation ("I like computers") with follow-up questions until there is a concrete moment, action or result.
+
+**Rules check (once):** ask whether the application states an AI-use or authorship policy (many portals ask applicants to confirm the essay is their own work) and whether disclosure is required. Follow it: where AI drafting is not allowed, coach and edit the applicant's own sentences instead of drafting new ones. See rule 4 in [references/shared/integrity.md](references/shared/integrity.md).
+
+Offer to save the context to `.claude/personal-statement-context.md`. It can contain grades and family details, so tell the user to keep it out of version control (add it to `.gitignore`) and delete it when the application is done.
 
 ### 2. Angle
 
