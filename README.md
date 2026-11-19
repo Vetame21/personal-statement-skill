@@ -18,8 +18,8 @@ Six skills, one shared set of rules:
 - **Evidence over templates.** Each skill starts from the user's real material and marks anything unconfirmed `[VERIFY]` instead of inventing it.
 - **Research-backed guidance.** What readers weigh (e.g. NACAC 2023 admission factors, UCAS's 2026 three-question format), what examiners reward, and how detectors decide, with sources.
 - **Debate before and after writing.** Panels (Admissions Reader, Skeptic, Applicant Advocate, Tone Detector; Examiner, Supervisor, Methodologist) argue over choices and drafts, then a moderator decides.
-- **Honest about AI detection.** The shared `ai-detection.md` explains perplexity, burstiness, Turnitin's thresholds (300-word minimum, scores under 20% shown as `*`, about 4% sentence-level false positives by Turnitin's own figures), bypasser detection and Turnitin Clarity. The skills use this to explain flags and protect genuine authors. **They do not help AI-written work evade detection.**
-- **Checker scripts** for every skill, tested in CI.
+- **Honest about AI detection.** The shared `ai-detection.md` explains perplexity, burstiness, Turnitin's thresholds (300-word minimum, scores under 20% shown as `*`, about 4% sentence-level false positives by Turnitin's own figures), bypasser detection and Turnitin Clarity, with links. The skills use this to explain flags and protect genuine authors. **They do not use evasion tricks or optimise for detector scores**, and they decline requests whose goal is to pass AI-written work off as human.
+- **Checker scripts** for five of the six skills (debate-mode has none), tested in CI. Python 3.9+; add `--strict` to make a script exit with code 1 when it finds issues.
 
 ## Install
 
@@ -90,6 +90,8 @@ VERSION, CHANGELOG.md
 
 Development:
 
+Requires Python 3.9+.
+
 ```bash
 pip install pyyaml
 ```
@@ -102,7 +104,7 @@ python scripts/build.py
 python -m unittest discover -s tests -v
 ```
 
-CI runs the tests and `python scripts/build.py --check` on every push and pull request.
+CI runs the tests and `python scripts/build.py --check` on every push and pull request. Edit `shared/` and `skills/`; never edit `plugins/` or `skills/*/references/shared/` by hand (the build overwrites them).
 
 ## Credits
 

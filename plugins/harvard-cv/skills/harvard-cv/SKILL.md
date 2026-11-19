@@ -26,7 +26,7 @@ Say the mode in one line and begin.
 1. **No invented facts.** Never add employers, titles, dates, grades, awards, numbers or skills the user did not give. If a bullet would be stronger with a number, ask for it or mark `[VERIFY: e.g. how many members?]`. List every marker after the CV under **"Check before sending"**.
 2. **Honest quantities.** Approximate numbers are fine if true ("about 30 students"). Never inflate.
 3. **Skills must be provable.** List a skill only if the CV or the user can point to where it was used.
-4. **Anti-AI tone.** No "results-driven", "passionate", "dynamic", "synergy", "spearheaded innovative solutions", "leveraged". Plain, specific verbs and nouns. (Same principles as the `personal-statement` skill's anti-AI checklist.)
+4. **Anti-AI tone.** No "results-driven", "passionate", "dynamic", "synergy", "spearheaded innovative solutions", "leveraged". Plain, specific verbs and nouns. (Full list: [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).)
 5. **Consistency with the personal statement.** If both exist, the same facts must match (dates, project names, roles).
 6. **Debate before adding risky items.** If the user wants to add something weak, outdated, unverifiable or off-target, say so with reasons first (use `debate-mode` if installed).
 
@@ -89,3 +89,5 @@ Say the mode in one line and begin.
 - [ ] No photo or personal data unless the target requires it
 - [ ] Every `[VERIFY]` resolved or listed
 - [ ] Matches the personal statement's facts
+
+> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.

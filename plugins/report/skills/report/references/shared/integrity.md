@@ -39,3 +39,8 @@ In October 2024 the ministry (then Kemendikbudristek) released *Panduan Pengguna
 - Get permission for data collection (institution permits, informed consent for surveys and interviews), and anonymise personal data.
 - Keep raw data and analysis files; examiners may ask for them.
 - For code: credit libraries, tutorials and any AI-generated code in the thesis or repository.
+
+## Sources (checked November 2026)
+
+- Indonesia GenAI guidance: [detik: Panduan pakai AI buat mahasiswa dan dosen resmi Kemdikbud](https://www.detik.com/edu/perguruan-tinggi/d-7583794/panduan-pakai-ai-buat-mahasiswa-dan-dosen-resmi-kemdikbud-download-di-sini) · [Medcom: Kemendikbudristek luncurkan buku panduan GenAI](https://www.medcom.id/pendidikan/news-pendidikan/yNLBe4gk-kemendikbudristek-luncurkan-buku-panduan-genai-dukung-transformasi-digital-di-universitas) (the official e-book is linked from these articles)
+- Similarity limits: [Universitas Airlangga, Fakultas Psikologi: Edaran Turnitin (2025)](https://psikologi.unair.ac.id/wp-content/uploads/2025/08/2025-3585-Edaran-tentang-Penggunaan-Turnitin.pdf) · [UGM FIB: Prosedur cek similaritas (2025)](https://fib.ugm.ac.id/wp-content/uploads/sites/10/2025/08/Revisi-Prosedur-Layanan-Cek-Similaritas-FIB-2025.pdf)

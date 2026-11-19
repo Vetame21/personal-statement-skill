@@ -72,3 +72,5 @@ Plain, specific, objective ([references/shared/anti-ai-tone.md](references/share
 - [references/review-panel.md](references/review-panel.md): marker-style review debate
 - [references/shared/](references/shared/): integrity, anti-AI tone, verification, debate rules, AI detection, authorship evidence
 - `scripts/cite_check.py`, `scripts/text_check.py`: citation and language checkers (shared with `thesis`)
+
+> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.

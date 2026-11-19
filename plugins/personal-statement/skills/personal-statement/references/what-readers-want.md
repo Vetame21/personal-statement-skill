@@ -14,7 +14,7 @@ NACAC's 2023 State of College Admission survey (four-year colleges, as summarise
 | Positive character attributes | about 28% |
 | Essay or writing sample | about 19% |
 
-Adding "moderate importance", about 56% of colleges give the essay real weight, and the share rating it "considerable" has roughly doubled since the 1990s. Data describe colleges in aggregate, not any single school.
+Adding "moderate importance", about 56% of colleges give the essay real weight. The share rating it "considerable" has moved over time: about 14% in 1993, 27% in 2009 (EdWeek, from NACAC data) and about 19% in 2023. Data describe colleges in aggregate, not any single school.
 
 **What it means:** the essay rarely rescues weak grades, but at selective schools, where most applicants have strong grades, it shows what grades cannot: character, motivation, voice and fit.
 
@@ -48,3 +48,15 @@ Hiring readers skim for match: the role's top requirements, each answered with o
 - **The applicant's own voice**, at the right register for their age and level.
 - **Fit**: why this program, place or role, with details that would not fit a competitor.
 - **Honesty**: anything claimed can be asked about.
+
+## Sources (checked November 2026)
+
+NACAC's full tables are behind a member login; the figures above come from these summaries.
+
+- [GradPilot: Do college essays matter? NACAC data](https://gradpilot.com/news/do-college-essays-matter-nacac-data)
+- [Virginia Tech: College Essay Presentation 2025 (NACAC 2023 figures)](https://caregiving.vt.edu/content/dam/caregiving_vt_edu/College-Essay-Presentation-2025.pdf)
+- [EdWeek: College application essay increasing in importance (2010)](https://www.edweek.org/teaching-learning/college-application-essay-increasing-in-importance/2010/11)
+- [UCAS personal statement guidance (PDF)](https://ucas.com/media/150031/download)
+- [Study Mind: Changes to the UCAS personal statement for 2026 entry](https://studymind.co.uk/ucas-guide/ucas-personal-statement-changes/)
+- [The Profs: The new UCAS personal statement questions for 2026](https://www.theprofs.co.uk/student-resources/university-applications/how-to-answer-the-new-ucas-personal-statement-questions-for-2026-entry/)
+- [CityU: Interview arrangements (example of selective video interviews)](https://www.cityu.edu.hk/admo/interview-arrangements-local-non-jupas-year-1-applicants)

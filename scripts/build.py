@@ -21,7 +21,6 @@ import filecmp
 import json
 import re
 import shutil
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -41,17 +40,14 @@ LINK = re.compile(r"\]\(((?!https?:|mailto:|#)[^)\s#]+)")
 FRONT = re.compile(r"^---\s*\n(.*?)\n---", re.S)
 
 
+# Fixed on purpose: forks and contributors must not rename the marketplace or
+# rewrite install commands just by running the build from another remote.
+OWNER = "Vetame21"
+REPO = "personal-statement-skill"
+
+
 def repo_info() -> dict:
-    owner, repo = "Vetame21", "personal-statement-skill"
-    try:
-        url = subprocess.run(["git", "remote", "get-url", "origin"], cwd=ROOT,
-                             capture_output=True, text=True, check=True).stdout.strip()
-        m = re.search(r"github\.com[:/]([^/]+)/([^/.]+)", url)
-        if m:
-            owner, repo = m.group(1), m.group(2)
-    except Exception:
-        pass
-    return {"owner": owner, "repo": repo, "url": f"https://github.com/{owner}/{repo}"}
+    return {"owner": OWNER, "repo": REPO, "url": f"https://github.com/{OWNER}/{REPO}"}
 
 
 def skills(root: Path):

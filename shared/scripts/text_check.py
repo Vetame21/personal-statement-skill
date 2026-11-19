@@ -8,7 +8,7 @@ Reports word count, paragraph and sentence statistics, very long sentences,
 leftover placeholders ([DATA NEEDED], [VERIFY], TODO, XXX, <...>), and
 phrases that make academic text read as machine-written or padded.
 "signifikan"/"significant" is flagged when no test result (p-value, t, F,
-chi-square) appears nearby. Standard library only; read the text too.
+chi-square, "uji t") appears in the same sentence. --strict exits 1 on issues. Standard library only; read the text too.
 """
 
 import argparse
@@ -46,7 +46,7 @@ EN_FLAGS = [
 EN_OPENERS = ["furthermore", "moreover", "additionally", "in addition", "however", "therefore"]
 
 PLACEHOLDER = re.compile(r"\[(?:DATA NEEDED|VERIFY|TODO|CITATION NEEDED|REF)[^\]]*\]|\bTODO\b|\bXXX+\b|<[^<>\n]{2,60}>", re.I)
-TEST_NEAR = re.compile(r"p\s*[<=>≤]\s*0?[.,]\d|\bt\s*\(|\bF\s*\(|χ2|chi-?square|α\s*=|\bsig\.|\bp-value", re.I)
+TEST_NEAR = re.compile(r"p\s*[<=>≤]\s*0?[.,]\d|\bt\s*\(\d|\bF\s*\(\d|χ2|chi-?square|α\s*=|\bsig\.|\bp-value|\buji\s+(?:t|f|chi|anova|mann|wilcoxon|regresi)", re.I)
 SIGNIF = re.compile(r"\bsignifikan\w*|\bsignificant(?:ly)?\b", re.I)
 WORD = re.compile(r"\b[\w'’-]+\b")
 
@@ -64,6 +64,7 @@ def main() -> int:
     ap.add_argument("--lang", choices=["id", "en", "auto"], default="auto")
     ap.add_argument("--limit-words", type=int)
     ap.add_argument("--long", type=int, default=40, help="flag sentences longer than this many words")
+    ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
     text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8").read()
     lang = detect_lang(text) if args.lang == "auto" else args.lang
@@ -102,11 +103,11 @@ def main() -> int:
     if len(hits) >= 3 or heavy:
         issues += 1
 
-    for m in SIGNIF.finditer(text):
-        window = text[max(0, m.start() - 250): m.end() + 250]
-        if not TEST_NEAR.search(window):
+    for s in sents:
+        m = SIGNIF.search(s)
+        if m and not TEST_NEAR.search(s):
             issues += 1
-            print(f"  ! '{m.group(0)}' without a nearby test result: ...{text[max(0, m.start() - 50): m.end() + 30].strip()}...")
+            print(f"  ! '{m.group(0)}' without a test result in the same sentence: {s[:100]}")
             break
 
     ph = PLACEHOLDER.findall(text)
@@ -115,7 +116,7 @@ def main() -> int:
         print(f"Placeholders left: {len(ph)} -> {', '.join(ph[:5])}")
 
     print("\nResult:", "OK" if issues == 0 else f"{issues} issue group(s) to look at")
-    return 0
+    return 1 if (args.strict and issues) else 0
 
 
 if __name__ == "__main__":

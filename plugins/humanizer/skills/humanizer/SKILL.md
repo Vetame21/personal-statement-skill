@@ -95,3 +95,5 @@ The rewrite passes when:
 - [references/detector-reports.md](references/detector-reports.md): how detectors decide (perplexity, burstiness, classifiers, bypasser detection), why scores are unreliable, sentence triage
 - [references/shared/authorship-evidence.md](references/shared/authorship-evidence.md): keeping a writing trail and responding to a false AI flag
 - `scripts/humanize_check.py`: red-flag scan (English + Indonesian), rhythm statistics, placeholders, `--per-sentence` view, before/after comparison
+
+> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.

@@ -1,6 +1,6 @@
 {
   "name": "harvard-cv",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Create, upgrade, or tailor a CV/resume in the Harvard style (one page, reverse chronological, Education → Experience → Leadership & Activities → Skills & Interests, action-verb bullets with results). Use when the user asks to make, fix, review, upgrade, or tailor a CV or resume, mentions \"Harvard CV\", \"Harvard resume\", \"Harvard format\", or needs a CV to go with a university, scholarship, internship, or job application.",
   "author": {
     "name": "Vetame21",

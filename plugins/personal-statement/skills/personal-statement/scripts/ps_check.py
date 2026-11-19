@@ -59,6 +59,7 @@ def main() -> int:
     ap.add_argument("file", help="text/markdown file, or - for stdin")
     ap.add_argument("--limit-words", type=int)
     ap.add_argument("--limit-chars", type=int)
+    ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
 
     text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8").read()
@@ -117,7 +118,7 @@ def main() -> int:
         problems += 1
 
     print("\nResult:", "OK" if problems == 0 else f"{problems} issue group(s) to look at")
-    return 0
+    return 1 if (args.strict and problems) else 0
 
 
 if __name__ == "__main__":

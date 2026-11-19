@@ -85,3 +85,5 @@ Show, in this order: the debate summary (short), a change table (what changed, w
 - [references/debate-panel.md](references/debate-panel.md): the two panel debates
 - [references/shared/](references/shared/): integrity, anti-AI tone, verification, evidence standards, debate rules, AI detection, authorship evidence (shared by all skills)
 - `scripts/ps_check.py`: word/character counts, rhythm, em dashes, red flags, placeholders
+
+> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.

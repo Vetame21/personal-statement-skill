@@ -20,7 +20,7 @@ Rules change every admissions cycle. Treat everything below as a starting point 
 
 ## United States (undergraduate)
 
-- **Common App** personal essay: up to 650 words, chosen from a set of prompts. Many colleges add supplemental essays with their own limits.
+- **Common App** personal essay: up to 650 words, chosen from a set of prompts (confirm each year at commonapp.org). Many colleges add supplemental essays with their own limits.
 - Personal voice and story are expected; reflection matters more than listing achievements.
 - "Why us" supplements need very specific details about that college.
 
@@ -51,3 +51,10 @@ Rules change every admissions cycle. Treat everything below as a starting point 
 1. Ask the user for the official prompt and limits.
 2. Search the university's admissions page.
 3. Default to: clear structure, 500-650 words, specific reasons for the program, modest but confident tone.
+
+## Sources (checked November 2026)
+
+- [UCAS personal statement guidance (PDF)](https://ucas.com/media/150031/download)
+- [Study Mind: UCAS personal statement changes for 2026](https://studymind.co.uk/ucas-guide/ucas-personal-statement-changes/)
+- [CityU: Interview arrangements](https://www.cityu.edu.hk/admo/interview-arrangements-local-non-jupas-year-1-applicants)
+- [Personal statement guide for Hong Kong applications (third party)](https://dse-knowledge-hub.pages.dev/en/admission/personal-statement-guide/)

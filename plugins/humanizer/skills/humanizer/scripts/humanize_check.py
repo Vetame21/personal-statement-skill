@@ -38,7 +38,7 @@ EN_NOTJUST = r"\bnot (?:just|only|merely)\b[^.;!?]{1,80}?\bbut\b"
 EN_OPENERS = ["furthermore", "moreover", "additionally", "in addition", "however", "therefore", "overall"]
 EN_MORAL = r"(?:this|it|that) (?:taught|showed|reminded) me (?:that|the importance|how)"
 
-ID_WORDS = ["signifikan", "krusial", "esensial", "fundamental", "komprehensif", "holistik", "sinergi", "transformatif"]
+ID_WORDS = ["krusial", "esensial", "fundamental", "komprehensif", "holistik", "sinergi", "transformatif"]
 ID_PHRASES = [
     r"di era (?:digital|globalisasi|modern|teknologi)",
     r"seiring (?:dengan )?(?:perkembangan|berkembangnya) (?:zaman|teknologi)",
@@ -57,6 +57,13 @@ ID_MORAL = r"(?:hal ini|pengalaman ini) (?:mengajarkan|menunjukkan|mengingatkan)
 TRIPLET = re.compile(r"\b\w+(?:\s\w+)?,\s\w+(?:\s\w+)?,?\s(?:and|or|dan|atau|serta)\s\w+")
 PLACEHOLDER = re.compile(r"\[(?:ADD DETAIL|DATA NEEDED|VERIFY|TODO)[^\]]*\]|\bTODO\b|\bXXX+\b|<[^<>\n]{2,60}>", re.I)
 WORD = re.compile(r"\b[\w'’-]+\b")
+SIGNIF = re.compile(r"\bsignifikan\w*|\bsignificant(?:ly)?\b", re.I)
+TEST_IN_SENTENCE = re.compile(r"p\s*[<=>≤]\s*0?[.,]\d|\bt\s*\(\d|\bF\s*\(\d|χ2|chi-?square|α\s*=|\bsig\.|\bp-value|\buji\s+(?:t|f|chi|anova|mann|wilcoxon|regresi)", re.I)
+
+
+def unsupported_significance(sents):
+    """Sentences using 'signifikan'/'significant' with no test result in the same sentence."""
+    return [s for s in sents if SIGNIF.search(s) and not TEST_IN_SENTENCE.search(s)]
 
 
 def detect_lang(text: str) -> str:
@@ -109,6 +116,7 @@ def scan(text: str, lang: str) -> dict:
         "morals": len(re.findall(moral, low)),
         "em_dash_per150": text.count("—") / max(len(words), 1) * 150,
         "placeholders": PLACEHOLDER.findall(text),
+        "unsupported_significance": unsupported_significance(sents),
     }
 
 
@@ -137,6 +145,8 @@ def per_sentence(text: str, lang: str) -> None:
         notes += [f'phrase:"{m.group(0)}"' for p in phrases for m in re.finditer(p, low)]
         if GENERIC_OPENERS.match(s.strip()):
             notes.append("generic transition opener")
+        if SIGNIF.search(s) and not TEST_IN_SENTENCE.search(s):
+            notes.append("'significant' without a test result")
         if VAGUE.search(s) and not re.search(r"\d", s):
             notes.append("vague claim (no number/source)")
         tokens = WORD.findall(s)
@@ -156,7 +166,7 @@ def per_sentence(text: str, lang: str) -> None:
 def total_flags(r: dict) -> int:
     return (sum(r["word_hits"].values()) + len(r["phrase_hits"]) + len(r["not_just"])
             + max(0, r["triplets"] - 1) + sum(r["repeated_openers"].values()) + max(0, r["morals"] - 1)
-            + (1 if r["em_dash_per150"] > 1 else 0) + (1 if r["sentences"] > 5 and r["sd_len"] < 4 else 0))
+            + len(r["unsupported_significance"]) + (1 if r["em_dash_per150"] > 1 else 0) + (1 if r["sentences"] > 5 and r["sd_len"] < 4 else 0))
 
 
 def report(r: dict) -> None:
@@ -176,6 +186,8 @@ def report(r: dict) -> None:
         print(f"Paragraphs opening with the same connector: {r['repeated_openers']}")
     if r["morals"] > 1:
         print(f"'This taught me...' endings: {r['morals']}  (keep one at most)")
+    if r["unsupported_significance"]:
+        print(f"'Significant/signifikan' without a test result in the sentence: {len(r['unsupported_significance'])}")
     if r["placeholders"]:
         print(f"Placeholders left: {', '.join(r['placeholders'][:6])}")
     n = total_flags(r)
@@ -189,6 +201,7 @@ def main() -> int:
     ap.add_argument("--compare", nargs=2, metavar=("BEFORE", "AFTER"))
     ap.add_argument("--lang", choices=["en", "id", "auto"], default="auto")
     ap.add_argument("--per-sentence", action="store_true", help="list each sentence with its flags")
+    ap.add_argument("--strict", action="store_true", help="exit with code 1 if flags are found (single-file scan)")
     args = ap.parse_args()
 
     def load(path):
@@ -224,8 +237,9 @@ def main() -> int:
     if args.per_sentence:
         per_sentence(text, lang)
         return 0
-    report(scan(text, lang))
-    return 0
+    result = scan(text, lang)
+    report(result)
+    return 1 if (args.strict and total_flags(result)) else 0
 
 
 if __name__ == "__main__":

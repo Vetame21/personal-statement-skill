@@ -2,7 +2,7 @@
 """Lint a Harvard-style CV written as plain text or Markdown.
 
 Usage:
-    python cv_check.py cv.md
+    python cv_check.py cv.md [--strict]
     cat cv.txt | python cv_check.py -
 
 Checks bullets for weak openers, personal pronouns, buzzwords, length and
@@ -10,6 +10,7 @@ results; checks date-format consistency and rough one-page length.
 Standard library only. It is a helper, not a judge: read the CV too.
 """
 
+import argparse
 import re
 import sys
 
@@ -30,14 +31,31 @@ DATE_STYLES = {
 }
 
 
+# Sections whose bullets are facts or lists, not achievement bullets
+NON_ACHIEVEMENT_SECTION = re.compile(r"skills|interests|languages?|coursework|certifications?|bahasa|keahlian", re.I)
+NON_ACHIEVEMENT_BULLET = re.compile(r"^(?:relevant\s+)?coursework\b|^(?:cumulative\s+)?gpa\b|^honou?rs\b|^ipk\b|^grades?\b", re.I)
+HEADING = re.compile(r"^\s*(?:#+\s*(.+?)\s*$|([A-Z][A-Z &/]{2,})\s*$)")
+
+
 def main() -> int:
-    if len(sys.argv) != 2:
-        print(__doc__)
-        return 2
-    path = sys.argv[1]
-    text = sys.stdin.read() if path == "-" else open(path, encoding="utf-8").read()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("file", help="text/markdown file, or - for stdin")
+    ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
+    args = ap.parse_args()
+    text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8").read()
     lines = text.splitlines()
-    bullets = [(i + 1, m.group(1).strip()) for i, l in enumerate(lines) if (m := BULLET.match(l))]
+    bullets = []
+    section = ""
+    for i, line in enumerate(lines):
+        h = HEADING.match(line)
+        if h:
+            section = h.group(1) or h.group(2)
+            continue
+        m = BULLET.match(line)
+        if m:
+            body = m.group(1).strip()
+            counts = not (NON_ACHIEVEMENT_SECTION.search(section) or NON_ACHIEVEMENT_BULLET.search(body))
+            bullets.append((i + 1, body, counts))
 
     issues = 0
     print(f"Lines: {len(lines)}  Words: {len(text.split())}  Bullets: {len(bullets)}")
@@ -47,7 +65,8 @@ def main() -> int:
 
     with_numbers = 0
     first_verbs = {}
-    for ln, b in bullets:
+    achievement = [b for b in bullets if b[2]]
+    for ln, b, counts in bullets:
         low = b.lower()
         notes = []
         if low.startswith(WEAK_OPENERS):
@@ -60,17 +79,18 @@ def main() -> int:
         words = len(b.split())
         if words > 32:
             notes.append(f"long ({words} words)")
-        if NUMBER.search(b):
+        if counts and NUMBER.search(b):
             with_numbers += 1
-        first = re.sub(r"[^a-z]", "", low.split()[0]) if low.split() else ""
-        first_verbs[first] = first_verbs.get(first, 0) + 1
+        if counts:
+            first = re.sub(r"[^a-z]", "", low.split()[0]) if low.split() else ""
+            first_verbs[first] = first_verbs.get(first, 0) + 1
         if notes:
             issues += 1
             print(f"  line {ln}: {', '.join(notes)} -> {b[:70]}")
 
-    if bullets:
-        share = with_numbers / len(bullets)
-        print(f"Bullets with a number/scale: {with_numbers}/{len(bullets)} ({share:.0%})")
+    if achievement:
+        share = with_numbers / len(achievement)
+        print(f"Achievement bullets with a number/scale: {with_numbers}/{len(achievement)} ({share:.0%})")
         if share < 0.5:
             print("  ! Fewer than half the bullets show a number, scale or outcome.")
             issues += 1
@@ -92,7 +112,7 @@ def main() -> int:
         issues += 1
 
     print("\nResult:", "OK" if issues == 0 else f"{issues} item(s) to look at")
-    return 0
+    return 1 if (args.strict and issues) else 0
 
 
 if __name__ == "__main__":

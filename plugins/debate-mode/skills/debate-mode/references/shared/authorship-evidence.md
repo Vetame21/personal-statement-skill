@@ -32,3 +32,11 @@ Some institutions now use process tools such as **Turnitin Clarity** (2025), whe
 - `humanize_check.py --per-sentence` shows which flagged sentences have real style problems and which are plain facts the detector misread. That helps you explain the report.
 - Improving a genuinely human text for clarity is fine; keep the old version too, so the history stays complete.
 - Do not run your own text through outside "humanizer" or paraphrasing tools to lower the score: that can trigger bypasser detection and makes the case harder to defend.
+
+## Sources (checked November 2026)
+
+- [GradPilot: Falsely accused of AI cheating, what to do](https://gradpilot.com/news/falsely-accused-ai-cheating-what-to-do)
+- [GPTZero: Falsely accused of AI cheating](https://gptzero.me/news/falsely-accused-of-ai-cheating/)
+- [Turnitin Clarity](https://www.turnitin.ca/blog/turnitin-clarity-bringing-transparency-to-the-student-writing-process)
+
+These are practical guides and anecdotes, not legal advice; follow your institution's appeal procedure.

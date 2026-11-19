@@ -88,8 +88,7 @@ Run Debate 2 from [references/debate-panel.md](references/debate-panel.md): the 
 
 Examiners now see a lot of machine-written text. Write plainly and specifically.
 
-- **Indonesian red flags:** "Di era digital yang semakin berkembang", "seiring dengan perkembangan zaman", "tidak dapat dipungkiri", "memainkan peran penting/krusial", "secara signifikan" (without a statistical test), "lebih lanjut" and "selain itu" opening every paragraph, "hal ini menunjukkan bahwa" repeated, sentences that only restate the previous one.
-- **English red flags:** delve, pivotal, crucial, landscape, leverage, "plays a vital role", "in today's rapidly evolving world", "not only... but also" in every paragraph, triplets everywhere, em-dash habit.
+- **Red flags (English and Indonesian):** see [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md). The ones examiners notice most: padded openers ("Di era digital yang semakin berkembang"), "signifikan" without a test, the same connector opening every paragraph, sentences that only restate the previous one.
 - **Do:** concrete subjects and verbs, one idea per sentence, numbers with units, define terms once, "signifikan" only with a test result, past tense for what was done, present tense for what the results show.
 - `scripts/text_check.py` flags both lists, counts words, and finds very long sentences and leftover placeholders.
 
@@ -110,3 +109,5 @@ Examiners now see a lot of machine-written text. Write plainly and specifically.
 - [references/shared/](references/shared/): integrity (incl. Indonesia's 2024 GenAI guidance), anti-AI tone (English and Indonesian), verification, debate rules, AI detection, authorship evidence
 - `scripts/cite_check.py`: in-text citations vs reference list (APA author-year and IEEE numeric)
 - `scripts/text_check.py`: word count, long sentences, placeholders, Indonesian and English red-flag phrases
+
+> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.
