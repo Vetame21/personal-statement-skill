@@ -515,6 +515,23 @@ class Bundle(unittest.TestCase):
                         self.assertTrue((out / name).exists(), f.name + " -> " + name)
             self.assertTrue((Path(d) / "vetame-writing.zip").exists())
 
+    def test_lite_bundle_has_ten_files_and_three_guides(self):
+        import importlib.util
+        import re
+        spec = importlib.util.spec_from_file_location("make_bundle", ROOT / "scripts" / "make_bundle.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as d:
+            out = mod.make(Path(d), lite=True)
+            names = sorted(f.name for f in out.iterdir())
+            self.assertEqual(set(names), mod.LITE_FILES)
+            head = (out / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("name: vetame-writing-lite", head)
+            desc = re.search(r"^description: (.*)$", head, re.M).group(1)
+            self.assertLessEqual(len(desc.encode("utf-8")), 500)
+            self.assertNotIn("report-guide.md", head)
+            self.assertIn("contains three", head)
+
 
 class Installer(unittest.TestCase):
     def _run(self, home, *args):

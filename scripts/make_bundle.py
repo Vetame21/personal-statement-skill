@@ -2,7 +2,8 @@
 """Make one combined skill, "vetame-writing", for chat apps that take a single skill per upload
 (the Gemini app, claude.ai). All files sit flat in one folder, because uploads may drop subfolders.
 
-    python3 scripts/make_bundle.py              # writes dist/vetame-writing/ and dist/vetame-writing.zip
+    python3 scripts/make_bundle.py   # writes dist/vetame-writing/ (all six skills) and dist/vetame-writing-lite/
+                                     # (three skills, 10 files, for apps that reject the full one), plus ZIPs
 
 The folder holds SKILL.md (a router that picks the right guide), one guide per skill (ps-guide.md, ...)
 and every reference file with a prefix (ps-regional.md, shared-integrity.md, ...). Standard library only.
@@ -27,17 +28,9 @@ DESCRIPTION = ("Application and academic writing coach - personal statements and
 
 ROUTER = """# Vetame21 Writing Skills (combined)
 
-This one skill contains six. **First pick the guide that matches the task, read that file in full, and follow it.** Read the reference files a guide points to when the guide says so.
+This one skill contains {count}. **First pick the guide that matches the task, read that file in full, and follow it.** Read the reference files a guide points to when the guide says so.
 
-| The user wants... | Read first |
-|---|---|
-| A personal statement, statement of purpose, motivation letter, scholarship essay, short application answer, or interview prep from one | `ps-guide.md` |
-| A CV or resume made, upgraded or tailored (Harvard style) | `cv-guide.md` |
-| Text to sound natural or human, "kayak AI", "terlalu kaku", or an AI-detector report explained | `humanizer-guide.md` |
-| A lab report, laporan praktikum, programming lab, makalah, KP / magang or progress report | `report-guide.md` |
-| A skripsi, tugas akhir, undergraduate thesis, proposal, chapter (Bab I-V), or sidang prep | `thesis-guide.md` |
-| A debate, push-back or fact-check ("debat pakai fakta", "jangan iya-iya aja", "prove it") | `debate-guide.md` |
-
+{table}
 If a task spans two (for example a statement, then humanize it), finish the first guide's workflow, then apply the second.
 
 ## Rules that always apply
@@ -50,10 +43,41 @@ If a task spans two (for example a statement, then humanize it), finish the firs
 
 The guides were written as separate skills, so they mention paths such as `references/regional.md` or `references/shared/integrity.md`. In this bundle every file sits in one folder with a prefix: the guide's own references are `<prefix>-<name>.md` (ps-, cv-, humanizer-, report-, thesis-, debate-) and the shared ones are `shared-<name>.md`. The links have already been rewritten; if you meet an old path, use this rule.
 
-## Checker scripts
+{lite_note}## Checker scripts
 
 The guides mention scripts such as `python scripts/ps_check.py`. Chat apps usually cannot run them, and this bundle does not include them. When a guide says to run one, do the same checks by reading instead (word count against the limit, placeholders like `[VERIFY]` or `[add ...]` left in, repeated sentence openers, padding phrases, citations that are missing from the reference list), and tell the user the script was not run. For the scripts, use the full repository: https://github.com/Vetame21/personal-statement-skill
 """
+
+
+ROWS = {
+    "ps": "A personal statement, statement of purpose, motivation letter, scholarship essay, short application "
+          "answer, or interview prep from one",
+    "cv": "A CV or resume made, upgraded or tailored (Harvard style)",
+    "humanizer": "Text to sound natural or human, \"kayak AI\", \"terlalu kaku\", or an AI-detector report explained",
+    "report": "A lab report, laporan praktikum, programming lab, makalah, KP / magang or progress report",
+    "thesis": "A skripsi, tugas akhir, undergraduate thesis, proposal, chapter (Bab I-V), or sidang prep",
+    "debate": "A debate, push-back or fact-check (\"debat pakai fakta\", \"jangan iya-iya aja\", \"prove it\")",
+}
+# Lite: three skills and at most 10 files, for apps that reject large skills ("Sorry, we can't save your skill")
+LITE_NAME = NAME + "-lite"
+LITE_SKILLS = ["ps", "humanizer", "cv"]
+LITE_FILES = {"SKILL.md", "ps-guide.md", "humanizer-guide.md", "cv-guide.md", "shared-integrity.md",
+              "shared-anti-ai-tone.md", "ps-what-readers-want.md", "humanizer-patterns.md", "cv-harvard-format.md",
+              "cv-action-verbs.md"}
+LITE_DESCRIPTION = ("Writing coach for personal statements, scholarship essays and Harvard-style CVs, and for making "
+                    "text sound natural and like its author (humanizer). Keeps the author's voice and never invents "
+                    "facts. Use for a personal statement, motivation letter, CV or resume, humanize, sounds like AI, "
+                    "kayak AI, or terlalu kaku.")
+WORDS = {3: "three", 6: "six"}
+
+
+def router(prefixes, lite: bool) -> str:
+    table = "| The user wants... | Read first |\n|---|---|\n" + "".join(
+        "| " + ROWS[p] + " | `" + p + "-guide.md` |\n" for p in prefixes)
+    note = ("## This is the lite bundle\n\nIt holds only the files listed in this folder. When a guide mentions a "
+            "file that is not here, skip it and carry on with the guide's main steps. For report, thesis and debate "
+            "guides, use the full bundle or the repository.\n\n") if lite else ""
+    return ROUTER.format(table=table, count=WORDS.get(len(prefixes), str(len(prefixes))), lite_note=note)
 
 
 def save(path: Path, text: str) -> None:
@@ -85,32 +109,41 @@ def rewrite(text: str, prefix: str, own) -> str:
     return text
 
 
-def make(out_root: Path) -> Path:
-    out = out_root / NAME
+def make(out_root: Path, lite: bool = False) -> Path:
+    name = LITE_NAME if lite else NAME
+    prefixes = LITE_SKILLS if lite else list(PREFIX.values())
+    out = out_root / name
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    fm = "---\nname: " + NAME + "\ndescription: " + DESCRIPTION + "\n---\n\n"
-    save(out / "SKILL.md", fm + ROUTER)
+    fm = "---\nname: " + name + "\ndescription: " + (LITE_DESCRIPTION if lite else DESCRIPTION) + "\n---\n\n"
+    save(out / "SKILL.md", fm + router(prefixes, lite))
     for ref in sorted((ROOT / "shared" / "references").glob("*.md")):
         save(out / ("shared-" + ref.name), rewrite(ref.read_text(encoding="utf-8"), "shared", SHARED))
     for skill, prefix in PREFIX.items():
+        if prefix not in prefixes:
+            continue
         src = ROOT / "skills" / skill
         own = sorted(p.stem for p in (src / "references").glob("*.md"))
         guide = rewrite(body((src / "SKILL.md").read_text(encoding="utf-8")), prefix, own)
         save(out / (prefix + "-guide.md"), guide)
         for ref in sorted((src / "references").glob("*.md")):
             save(out / (prefix + "-" + ref.name), rewrite(ref.read_text(encoding="utf-8"), prefix, own))
-    with zipfile.ZipFile(out_root / (NAME + ".zip"), "w", zipfile.ZIP_DEFLATED) as z:
+    if lite:
+        for f in out.iterdir():
+            if f.name not in LITE_FILES:
+                f.unlink()
+    with zipfile.ZipFile(out_root / (name + ".zip"), "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(out.iterdir()):
-            z.write(f, NAME + "/" + f.name)
+            z.write(f, name + "/" + f.name)
     return out
 
 
 def main() -> int:
-    out = make(ROOT / "dist")
-    files = sorted(p.name for p in out.iterdir())
-    print("Wrote " + str(out) + " (" + str(len(files)) + " files) and " + str(out.parent / (NAME + ".zip")))
+    for lite in (False, True):
+        out = make(ROOT / "dist", lite)
+        files = sorted(p.name for p in out.iterdir())
+        print("Wrote " + str(out) + " (" + str(len(files)) + " files) and " + str(out) + ".zip")
     print("Upload the folder (not the zip) in the Gemini app: Settings > Skills > Upload skill > folder.")
     return 0
 

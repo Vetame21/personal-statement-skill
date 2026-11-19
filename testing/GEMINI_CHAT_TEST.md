@@ -32,6 +32,8 @@ All samples are fictional, so don't use your own statement or CV for this test.
 3. Click **Continue**. The name and description are filled in from `SKILL.md`.
 4. If the folder upload fails, choose **files** instead, select `SKILL.md`, and add the other `.md` files in the next step.
 
+**If Gemini says "Sorry, we can't save your skill":** use the web app at gemini.google.com on a computer (Google says skills created by hand don't save in the mobile app) and sign out of any school or work Google account in the same browser. Then upload the **`vetame-writing-lite`** folder instead: three skills (personal statement, humanizer, CV) in 10 files. If that also fails, upload only its `SKILL.md`. Then add the other files one by one, and note which file is refused; that tells the author what to fix.
+
 **If you don't have Skills:** skip this step. In step 3, attach `SKILL.md`, `ps-guide.md`, `humanizer-guide.md`, `cv-guide.md`, `shared-integrity.md` and `shared-anti-ai-tone.md` to the chat together with the samples.
 
 ## 3. Run the test

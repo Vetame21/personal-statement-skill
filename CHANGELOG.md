@@ -4,6 +4,7 @@
 
 - `scripts/make_bundle.py` builds **vetame-writing**: all six skills as one flat skill for chat apps that allow one skill per upload (the Gemini app takes a folder, not a ZIP). A router `SKILL.md` picks the right guide; reference links are rewritten to the flat names, and a test checks that every link resolves.
 - `testing/GEMINI_CHAT_TEST.md` now uses the bundle and explains the folder upload.
+- `vetame-writing-lite`: three skills (personal statement, humanizer, CV) in 10 files, for when the Gemini app refuses the full bundle ("Sorry, we can't save your skill"); the guide has steps to find the cause.
 
 ## 2.1.4 - 2026-11-19
 
