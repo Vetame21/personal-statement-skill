@@ -23,9 +23,13 @@ Standard library only; unusual formats may still need a manual check.
 """
 
 import argparse
+import os
 import re
 import sys
 import unicodedata
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from writing_rules import read_input  # noqa: E402
 
 REF_HEADINGS = re.compile(
     r"^\s*(?:#+\s*)?(references|bibliography|daftar\s+pustaka|referensi|参考文献)\s*:?\s*$",
@@ -69,32 +73,57 @@ def first_author(author_part: str) -> str:
     return norm(" ".join(words))
 
 
+REF_YEAR = re.compile(r"\((" + YEAR + r")(?:,[^)]*)?\)|(?<=[\s.])(" + YEAR + r")\.(?=\s|$)")
+
+
 def ref_entries(refs: str):
-    entries = set()
+    """Return a list of (aliases, year). Handles (2020), (2021, March 5) and the Indonesian 'Nama, A. 2020.' style.
+    'World Health Organization [WHO]. (2020)' gets both the full name and 'who' as aliases."""
+    entries = []
     for line in refs.splitlines():
         line = re.sub(r"^\s*(?:[-*]|\d+[.)])\s+", "", line).strip()
-        m = re.search(r"\((" + YEAR + r")\)", line)
+        m = REF_YEAR.search(line)
         if not line or not m:
             continue
+        year = m.group(1) or m.group(2)
         author_part = line[: m.start()]
-        # person: "Lee, J., & Park, S." -> before first comma; corporate: "World Health Organization."
+        aliases = set()
+        abbr = re.search(r"\[([A-Z][A-Za-z0-9&.\- ]{1,15})\]", author_part)
+        if abbr:
+            aliases.add(norm(abbr.group(1)))
+            author_part = author_part[: abbr.start()]
         first = author_part.split(",")[0] if "," in author_part else author_part
-        entries.add((norm(first), m.group(1)))
+        aliases.add(norm(first))
+        entries.append((frozenset(a for a in aliases if a), year))
     return entries
+
+
+def known_names(entries):
+    return {a for aliases, _ in entries for a in aliases}
 
 
 PAREN = re.compile(r"\(([^()]*?(?:" + YEAR + r")[^()]*?)\)")
 IN_PAREN = re.compile(r"([^;]*?),?\s+(" + YEAR + r")(?:,\s*(?:p|pp|hlm|hal)\.?\s*[\d\-–]+)?\s*$")
-NARRATIVE = re.compile(r"((?:[\w'’\-.&]+\s+){0,6}?[\w'’\-.]+)\s+\((" + YEAR + r")\)")
+NARRATIVE = re.compile(r"((?:[\w'’\-.&,]+\s+){0,6}?[\w'’\-.]+)\s+\((" + YEAR + r")\)")
 
 
 def best_key(candidate: str, year: str, known: set) -> str:
     """Find the first author in the words before '(year)' of a narrative citation."""
-    cand = re.sub(r"\b(?:et\s+al\.?|dkk\.?)\s*$", "", candidate.strip(), flags=re.I).strip()
-    # drop the last co-author: "Kurniawan dan Sari" -> "Kurniawan"
-    cand = re.sub(r"\s+(?:&|and|dan)\s+(?:\S+\s+)?\S+$", "", cand).strip(" ,")
+    cand = re.sub(r"['’]s$", "", candidate.strip())
+    cand = re.sub(r"\b(?:et\s+al\.?|dkk\.?)\s*$", "", cand, flags=re.I).strip()
+    # drop the last co-author: "Kurniawan dan Sari" -> "Kurniawan"; "Santoso, Lee, and Park" -> "Santoso, Lee"
+    cand = re.sub(r",?\s+(?:&|and|dan)\s+(?:\S+\s+)?\S+$", "", cand).strip(" ,")
+    names = known_names(known)
+    if "," in cand:
+        # "However, Santoso, Lee" -> try each comma segment from the left, keep the first known name
+        segments = [seg.strip() for seg in cand.split(",") if seg.strip()]
+        for seg in segments:
+            seg_words = seg.split()
+            for i in range(len(seg_words)):
+                if norm(" ".join(seg_words[i:])) in names:
+                    return norm(" ".join(seg_words[i:]))
+        cand = segments[-1] if segments else cand
     words = cand.split()
-    names = {a for a, _ in known}
     for i in range(len(words)):
         key = norm(" ".join(words[i:]))
         if key in names:
@@ -111,7 +140,8 @@ def best_key(candidate: str, year: str, known: set) -> str:
 
 
 def apa(body: str, refs: str) -> int:
-    listed = ref_entries(refs)
+    entries = ref_entries(refs)
+    listed = {(a, y) for aliases, y in entries for a in aliases}
     cited = set()
     paren_spans = []
     for m in PAREN.finditer(body):
@@ -121,20 +151,21 @@ def apa(body: str, refs: str) -> int:
             if pm and not re.search(r"[A-Za-z]", pm.group(1)):
                 continue  # just "(2019)" after a narrative citation
             if pm and re.search(r"[A-Za-z]", pm.group(1)):
-                key = first_author(pm.group(1))
+                key = first_author(re.sub(r"['’]s\b", "", pm.group(1)))
                 if (key, pm.group(2)) not in listed:
-                    key = best_key(pm.group(1), pm.group(2), listed) or key
+                    key = best_key(pm.group(1), pm.group(2), entries) or key
                 cited.add((key, pm.group(2)))
     for m in NARRATIVE.finditer(body):
         if any(s < m.start() and m.end() <= e for s, e in paren_spans):
             continue  # inside a larger parenthesis, already handled
-        key = best_key(m.group(1), m.group(2), listed)
+        key = best_key(m.group(1), m.group(2), entries)
         if key and key[:1].isalpha():
             cited.add((key, m.group(2)))
 
-    print(f"Style: APA / author-year. Cited works: {len(cited)}  Reference entries: {len(listed)}")
+    print(f"Style: APA / author-year. Cited works: {len(cited)}  Reference entries: {len(entries)}")
     missing = sorted(cited - listed)
-    unused = sorted(listed - cited)
+    unused = sorted((sorted(aliases, key=len)[-1], y) for aliases, y in entries
+                    if not any((a, y) in cited for a in aliases))
     for a, y in missing:
         print(f"  ! Cited but not in references: {a.title()} ({y})")
     for a, y in unused:
@@ -143,34 +174,43 @@ def apa(body: str, refs: str) -> int:
 
 
 # ---------- IEEE ----------
-RANGE = re.compile(r"(?<![\w\])])\[(\d+)\]\s*[-–]\s*\[(\d+)\]")
-BRACKET = re.compile(r"(?<![\w\])])\[(\d+(?:\s*[-–,]\s*\d+)*)\]")
+# Not preceded by an ASCII letter/digit/_ or ']' (so arr[7] is code, but 张三[1] is a citation)
+RANGE = re.compile(r"(?<![A-Za-z0-9_\]])\[(\d+)\]\s*[-–]\s*\[(\d+)\]")
+BRACKET = re.compile(r"(?<![A-Za-z0-9_\]])\[(\d+(?:\s*[-–,]\s*\d+)*)\]")
+MAX_REF = 999      # numbers above this are not reference numbers (years, intervals)
+MAX_RANGE = 200    # longer "ranges" are not citation ranges
 REF_IEEE = re.compile(r"^\s*\[(\d+)\]", re.M)
 
 
 def expand(group: str):
+    """Numbers in a bracket group, or [] if it looks like an interval or year span, not a citation."""
     nums = []
     for part in re.split(r"\s*,\s*", group):
         if re.search(r"[-–]", part):
             a, b = [int(x) for x in re.split(r"\s*[-–]\s*", part)]
+            if b < a or b - a > MAX_RANGE:
+                return []
             nums.extend(range(a, b + 1))
         elif part.strip():
             nums.append(int(part))
+    if any(n == 0 or n > MAX_REF for n in nums):
+        return []
     return nums
 
 
 def ieee(body: str, refs: str) -> int:
-    order = []
+    order, seen = [], set()
 
     def add(nums):
         for n in nums:
-            if n not in order:
+            if n not in seen:
+                seen.add(n)
                 order.append(n)
 
     spans = []
     for m in RANGE.finditer(body):
         spans.append(m.span())
-    events = [(m.start(), list(range(int(m.group(1)), int(m.group(2)) + 1))) for m in RANGE.finditer(body)]
+    events = [(m.start(), expand(f"{m.group(1)}-{m.group(2)}")) for m in RANGE.finditer(body)]
     for m in BRACKET.finditer(body):
         if any(s <= m.start() < e for s, e in spans):
             continue
@@ -204,8 +244,12 @@ def main() -> int:
     ap.add_argument("--style", choices=["apa", "ieee", "auto"], default="auto")
     ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
-    text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8").read()
+    text = read_input(args.file)
+    has_heading = bool(REF_HEADINGS.search(text))
     body, refs = split_body_refs(strip_code(text))
+    if has_heading and not refs.strip():
+        print("! The reference list heading is there, but the list under it is empty.")
+        return 1 if args.strict else 0
     if not refs:
         print("! No reference list heading found (References / Daftar Pustaka / Bibliography / Referensi / 参考文献).")
         return 1 if args.strict else 0

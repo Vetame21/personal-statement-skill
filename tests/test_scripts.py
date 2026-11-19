@@ -162,6 +162,74 @@ class Strict(unittest.TestCase):
         run("shared/scripts/text_check.py", "Di era digital, tidak dapat dipungkiri, teknologi memainkan peran penting.", "--lang", "id", "--strict", code=1)
 
 
+class ReviewTwoRegressions(unittest.TestCase):
+    """Cases found by the second independent review (v2.0.2)."""
+
+    def test_first_person_counts_as_voice(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "We tested the new design on the team for a week. My mother taught me to cook before school.",
+                  "--per-sentence")
+        self.assertIn("Sentences with flags: 0/2", out)
+
+    def test_technical_terms_are_not_heavy(self):
+        out = run("skills/humanizer/scripts/humanize_check.py",
+                  "We used robust standard errors and a wiring harness. CPU utilization dropped from 80% to 45%. "
+                  "The robust navigation stack ran in landscape mode during the landscape survey.")
+        self.assertIn("light touch", out)
+
+    def test_repo_markers_are_placeholders_but_math_is_not(self):
+        out = run("skills/personal-statement/scripts/ps_check.py", "I built it [ADD DETAIL: which?] and [DATA NEEDED: accuracy].")
+        self.assertIn("[ADD DETAIL: which?]", out)
+        self.assertIn("[DATA NEEDED: accuracy]", out)
+        out = run("skills/personal-statement/scripts/ps_check.py", "x < 3 and y > 9, see <https://example.com> and <div>.")
+        self.assertIn("Result: OK", out)
+        out = run("skills/personal-statement/scripts/ps_check.py", "My example: <write_your_example_here>.")
+        self.assertIn("<write_your_example_here>", out)
+
+    def test_cite_more_apa_forms(self):
+        text = ("As Santoso, Lee, and Park (2021) and Santoso's (2023) work shows (WHO, 2020), see Lee (2021) and Smith (2020).\n\n"
+                "# References\n\nSantoso, B., Lee, J., & Park, S. (2021). P.\nSantoso, B. (2023). Q.\n"
+                "World Health Organization [WHO]. (2020). R.\nLee, J. (2021, March 5). Blog post.\nSmith, J. 2020. Judul Buku. Penerbit.\n")
+        self.assertIn("Result: OK", run("shared/scripts/cite_check.py", text))
+
+    def test_cite_gbt_intervals_and_years(self):
+        text = ("张三[1]指出，李四[2]-[3]。数组 arr[7] 和区间 [0, 255]、[2010-2020]。\n\n参考文献\n"
+                "[1] 张三. 标题[J]. 2020.\n[2] 李四. 标题[M]. 2019.\n[3] 王五. 标题[D]. 2021.\n")
+        self.assertIn("Result: OK", run("shared/scripts/cite_check.py", text))
+
+    def test_cite_huge_range_is_fast(self):
+        import time
+        start = time.time()
+        run("shared/scripts/cite_check.py", "See [1] and [1-300000].\n\n## References\n[1] a\n")
+        self.assertLess(time.time() - start, 5)
+
+    def test_cite_empty_list_and_utf16(self):
+        out = run("shared/scripts/cite_check.py", "Text [1].\n\n## References\n")
+        self.assertIn("list under it is empty", out)
+        with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-16") as f:
+            f.write("See [1].\n\n## References\n[1] a\n")
+        out = subprocess.run([sys.executable, str(ROOT / "shared/scripts/cite_check.py"), f.name],
+                             capture_output=True, text=True, check=True).stdout
+        self.assertIn("Result: OK", out)
+
+    def test_strict_in_per_sentence_and_compare(self):
+        run("skills/humanizer/scripts/humanize_check.py", "Next, she explains the science behind carbon in detail.",
+            "--per-sentence", "--strict", code=1)
+        with tempfile.TemporaryDirectory() as d:
+            a, b = Path(d, "a.txt"), Path(d, "b.txt")
+            a.write_text("This journey was a testament to my passion.", encoding="utf-8")
+            b.write_text("It was a testament to my delving.", encoding="utf-8")
+            out = subprocess.run([sys.executable, str(ROOT / "skills/humanizer/scripts/humanize_check.py"),
+                                  "--compare", str(a), str(b), "--strict"], capture_output=True, text=True)
+            self.assertEqual(out.returncode, 1, out.stdout)
+
+    def test_empty_input_warns(self):
+        for script in ("skills/personal-statement/scripts/ps_check.py", "skills/humanizer/scripts/humanize_check.py",
+                       "shared/scripts/text_check.py", "skills/harvard-cv/scripts/cv_check.py"):
+            out = run(script, "   \n")
+            self.assertIn("Empty input", out, script)
+
+
 class Build(unittest.TestCase):
     def test_marketplace_name_is_fixed(self):
         import importlib.util

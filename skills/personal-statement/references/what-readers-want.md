@@ -51,7 +51,7 @@ Hiring readers skim for match: the role's top requirements, each answered with o
 
 ## Sources (checked November 2026)
 
-NACAC's full tables are behind a member login; the figures above come from these summaries.
+NACAC publishes a public summary at [Factors in College Admission](https://www.nacacnet.org/factors-in-college-admission/); the detailed tables are for members, so the figures above come from these summaries.
 
 - [GradPilot: Do college essays matter? NACAC data](https://gradpilot.com/news/do-college-essays-matter-nacac-data)
 - [Virginia Tech: College Essay Presentation 2025 (NACAC 2023 figures)](https://caregiving.vt.edu/content/dam/caregiving_vt_edu/College-Essay-Presentation-2025.pdf)

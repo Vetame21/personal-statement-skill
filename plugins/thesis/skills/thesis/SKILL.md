@@ -110,4 +110,4 @@ Examiners now see a lot of machine-written text. Write plainly and specifically.
 - `scripts/cite_check.py`: in-text citations vs reference list (APA author-year and IEEE numeric)
 - `scripts/text_check.py`: word count, long sentences, placeholders, Indonesian and English red-flag phrases
 
-> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/thesis/scripts/...` for a personal install. Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.

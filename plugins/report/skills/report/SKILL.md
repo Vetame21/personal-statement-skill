@@ -73,4 +73,4 @@ Plain, specific, objective ([references/shared/anti-ai-tone.md](references/share
 - [references/shared/](references/shared/): integrity, anti-AI tone, verification, debate rules, AI detection, authorship evidence
 - `scripts/cite_check.py`, `scripts/text_check.py`: citation and language checkers (shared with `thesis`)
 
-> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/report/scripts/...` for a personal install. Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.

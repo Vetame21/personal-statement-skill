@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.2 - 2026-11-19
+
+Fixes from a second independent review.
+
+- Python 3.9-3.11: `cv_check.py` used a backslash inside an f-string (3.12+ only); fixed. CI now tests 3.9, 3.11, 3.12 and 3.13.
+- New `shared/scripts/writing_rules.py`, copied next to every checker: one source for placeholders, the significance rule, AI-typical word lists, technical-term allowlist, first-person detection and file reading (UTF-8, BOM, UTF-16).
+- humanize_check / ps_check: whole-word matching; words split into "strong" and "possible (check context)", with possible words counted only beyond two; technical phrases (robust standard errors, CPU utilization, wiring harness, landscape mode...) no longer flagged; "We..." / "My..." / "Saya..." count as the writer's voice.
+- Placeholders: `[ADD DETAIL]`, `[DATA NEEDED]`, `[VERIFY]` etc. detected everywhere; `x < 3`, `<div>` and `<https://...>` no longer reported.
+- cite_check: Chinese GB/T 7714 (张三[1]); intervals and years in brackets ([0, 255], [2010-2020]) ignored; huge ranges no longer hang; narrative "Santoso, Lee, and Park (2021)"; possessives; abbreviations such as WHO via "[WHO]" in the reference entry; dated references "(2021, March 5)"; Indonesian "Nama, A. 2020." style; empty reference list reported clearly.
+- `--strict` now also works with `--per-sentence` and `--compare`; every checker warns on empty input.
+- humanizer: assessed-work gate (asks whether it is the user's own draft and what the rules allow before polishing a thesis chapter, graded report or application essay); Turnitin bypasser wording corrected (English-only, not every language covered).
+- debate-mode: the "no instant agreement" rule and the verdict format no longer contradict each other.
+- SKILL.md notes explain how to run scripts from the skill folder; NACAC public summary linked; second source for the OpenAI classifier withdrawal.
+- Tests: 30 (was 21).
+
 ## 2.0.1 - 2026-11-19
 
 Fixes from an independent fresh-eyes review.

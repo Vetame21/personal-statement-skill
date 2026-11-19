@@ -11,8 +11,12 @@ Standard library only. It is a helper, not a judge: read the CV too.
 """
 
 import argparse
+import os
 import re
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from writing_rules import PLACEHOLDER, is_empty, read_input  # noqa: E402
 
 BULLET = re.compile(r"^\s*(?:[-*•]|\d+[.)])\s+(.*)$")
 WEAK_OPENERS = ("responsible", "helped", "assisted in", "worked on", "participated",
@@ -42,7 +46,10 @@ def main() -> int:
     ap.add_argument("file", help="text/markdown file, or - for stdin")
     ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
-    text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8").read()
+    text = read_input(args.file)
+    if is_empty(text):
+        print("! Empty input: nothing to check.")
+        return 1 if args.strict else 0
     lines = text.splitlines()
     bullets = []
     section = ""
@@ -107,8 +114,9 @@ def main() -> int:
     if re.search(r"references available", text, re.I):
         print("  ! Remove 'References available upon request'.")
         issues += 1
-    if re.search(r"\[VERIFY", text):
-        print(f"  ! Unresolved [VERIFY] markers: {len(re.findall(r'\[VERIFY', text))}")
+    markers = PLACEHOLDER.findall(text)
+    if markers:
+        print(f"  ! Unresolved markers or placeholders: {len(markers)} -> {', '.join(markers[:5])}")
         issues += 1
 
     print("\nResult:", "OK" if issues == 0 else f"{issues} item(s) to look at")

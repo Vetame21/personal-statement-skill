@@ -11,18 +11,14 @@ em-dash density, leftover placeholders, and AI-sounding phrases
 """
 
 import argparse
+import os
 import re
 import statistics
 import sys
 
-RED_FLAG_WORDS = [
-    "delve", "tapestry", "testament", "pivotal", "crucial", "paramount",
-    "embark", "realm", "landscape", "foster", "cultivate", "nurture",
-    "leverage", "harness", "utilize", "navigate", "unwavering", "steadfast",
-    "relentless", "ignite", "seamless", "robust", "cutting-edge", "beacon",
-    "cornerstone", "linchpin", "poised", "multifaceted", "intricate",
-    "nuanced", "profound", "underscore", "resonate", "journey", "passion",
-]
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from writing_rules import PLACEHOLDER, is_empty, read_input, word_hits, word_severity  # noqa: E402
+
 RED_FLAG_PHRASES = [
     r"not (?:just|only|merely) [^.;]{1,60}?(?:,|;|—|-)?\s*but",
     r"it'?s not about [^.;]{1,60}?[;,—-]\s*it'?s about",
@@ -39,7 +35,6 @@ RED_FLAG_PHRASES = [
     r"i (?:really|truly|do) hope (?:you|i) (?:will |can )?(?:accept|get accepted)",
     r"\bi promise\b",
 ]
-PLACEHOLDER = re.compile(r"<[^>]{2,60}>|\[(?:VERIFY|MS\d|TODO|XX)[^\]]*\]|\bTBD\b|\bXXX+\b", re.I)
 
 
 WORD = re.compile(r"\b[\w'’-]+\b")
@@ -49,7 +44,7 @@ def count_words(text: str) -> int:
     return len(WORD.findall(text))
 
 
-def sentences(text: str) -> list[str]:
+def sentences(text: str) -> list:
     parts = re.split(r"(?<=[.!?])\s+", text.strip())
     return [p for p in parts if re.search(r"[A-Za-z]", p)]
 
@@ -62,7 +57,10 @@ def main() -> int:
     ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
 
-    text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8").read()
+    text = read_input(args.file)
+    if is_empty(text):
+        print("! Empty input: nothing to check.")
+        return 1 if args.strict else 0
     words = WORD.findall(text)
     paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip()]
     sents = sentences(text)
@@ -97,17 +95,18 @@ def main() -> int:
 
     low = text.lower()
     hits = []
-    for w in RED_FLAG_WORDS:
-        n = len(re.findall(rf"\b{re.escape(w)}\w*", low))
-        if n:
-            hits.append(f"{w} x{n}")
+    strong, context = word_hits(text, "en")
+    hits += [f"{w} x{n}" for w, n in strong.items()]
+    hits += [f"{w} x{n} (possible, check context)" for w, n in context.items()]
+    phrase_count = 0
     for ph in RED_FLAG_PHRASES:
         for m in re.finditer(ph, low):
             hits.append(f'"{m.group(0)[:60]}"')
+            phrase_count += 1
     print(f"AI-tone red flags: {len(hits)}")
     for h in hits:
         print(f"  - {h}")
-    if len(hits) >= 3:
+    if word_severity(strong, context) + phrase_count >= 3:
         problems += 1
 
     ph = PLACEHOLDER.findall(text)

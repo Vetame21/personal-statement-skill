@@ -90,4 +90,4 @@ Say the mode in one line and begin.
 - [ ] Every `[VERIFY]` resolved or listed
 - [ ] Matches the personal statement's facts
 
-> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/harvard-cv/scripts/...` for a personal install. Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.

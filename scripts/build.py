@@ -31,8 +31,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SHARED_REFS = ROOT / "shared" / "references"
 SHARED_SCRIPTS_DIR = ROOT / "shared" / "scripts"
 SHARED_SCRIPTS = {
-    "thesis": ["cite_check.py", "text_check.py"],
-    "report": ["cite_check.py", "text_check.py"],
+    "thesis": ["cite_check.py", "text_check.py", "writing_rules.py"],
+    "report": ["cite_check.py", "text_check.py", "writing_rules.py"],
+    "personal-statement": ["writing_rules.py"],
+    "humanizer": ["writing_rules.py"],
+    "harvard-cv": ["writing_rules.py"],
 }
 CATEGORY = "productivity"
 IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store")

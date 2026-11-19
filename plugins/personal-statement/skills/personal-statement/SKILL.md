@@ -86,4 +86,4 @@ Show, in this order: the debate summary (short), a change table (what changed, w
 - [references/shared/](references/shared/): integrity, anti-AI tone, verification, evidence standards, debate rules, AI detection, authorship evidence (shared by all skills)
 - `scripts/ps_check.py`: word/character counts, rhythm, em dashes, red flags, placeholders
 
-> Script paths in this file are relative to this skill's folder. Add `--strict` to make a checker exit with code 1 when it finds issues.
+> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python <this skill's folder>/scripts/x.py <file>`, for example `python ~/.claude/skills/personal-statement/scripts/...` for a personal install. Requires Python 3.9+. Add `--strict` to exit with code 1 when issues are found.

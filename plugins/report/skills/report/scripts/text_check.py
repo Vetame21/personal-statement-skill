@@ -12,8 +12,12 @@ chi-square, "uji t") appears in the same sentence. --strict exits 1 on issues. S
 """
 
 import argparse
+import os
 import re
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from writing_rules import PLACEHOLDER, SIGNIF, TEST_RESULT, is_empty, read_input  # noqa: E402
 
 ID_FLAGS = [
     r"di era (?:digital|globalisasi|modern|teknologi)",
@@ -45,9 +49,6 @@ EN_FLAGS = [
 ]
 EN_OPENERS = ["furthermore", "moreover", "additionally", "in addition", "however", "therefore"]
 
-PLACEHOLDER = re.compile(r"\[(?:DATA NEEDED|VERIFY|TODO|CITATION NEEDED|REF)[^\]]*\]|\bTODO\b|\bXXX+\b|<[^<>\n]{2,60}>", re.I)
-TEST_NEAR = re.compile(r"p\s*[<=>≤]\s*0?[.,]\d|\bt\s*\(\d|\bF\s*\(\d|χ2|chi-?square|α\s*=|\bsig\.|\bp-value|\buji\s+(?:t|f|chi|anova|mann|wilcoxon|regresi)", re.I)
-SIGNIF = re.compile(r"\bsignifikan\w*|\bsignificant(?:ly)?\b", re.I)
 WORD = re.compile(r"\b[\w'’-]+\b")
 
 
@@ -66,7 +67,10 @@ def main() -> int:
     ap.add_argument("--long", type=int, default=40, help="flag sentences longer than this many words")
     ap.add_argument("--strict", action="store_true", help="exit with code 1 if issues are found")
     args = ap.parse_args()
-    text = sys.stdin.read() if args.file == "-" else open(args.file, encoding="utf-8").read()
+    text = read_input(args.file)
+    if is_empty(text):
+        print("! Empty input: nothing to check.")
+        return 1 if args.strict else 0
     lang = detect_lang(text) if args.lang == "auto" else args.lang
     low = text.lower()
 
@@ -105,7 +109,7 @@ def main() -> int:
 
     for s in sents:
         m = SIGNIF.search(s)
-        if m and not TEST_NEAR.search(s):
+        if m and not TEST_RESULT.search(s):
             issues += 1
             print(f"  ! '{m.group(0)}' without a test result in the same sentence: {s[:100]}")
             break

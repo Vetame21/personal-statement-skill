@@ -16,16 +16,15 @@ phrases a careful editor would change. Standard library only.
 """
 
 import argparse
+import os
 import re
 import statistics
 import sys
 
-EN_WORDS = ["delve", "tapestry", "testament", "pivotal", "crucial", "paramount", "vital", "embark",
-            "realm", "landscape", "sphere", "foster", "cultivate", "nurture", "leverag", "harness",
-            "utiliz", "utilis", "navigat", "seamless", "robust", "cutting-edge", "unwavering",
-            "relentless", "steadfast", "underscor", "resonat", "multifaceted", "intricate",
-            "nuanced", "profound", "beacon", "cornerstone", "journey", "passion", "furthermore",
-            "moreover", "additionally"]
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from writing_rules import (FIRST_PERSON, PLACEHOLDER, SIGNIF, TEST_RESULT, is_empty, read_input,  # noqa: E402
+                           unsupported_significance, word_hits, word_severity)
+
 EN_PHRASES = [
     r"in today'?s (?:rapidly |fast-paced |ever-)?(?:evolving|changing|digital|modern)",
     r"plays? an? (?:vital|crucial|key|pivotal|important|significant) role",
@@ -38,7 +37,6 @@ EN_NOTJUST = r"\bnot (?:just|only|merely)\b[^.;!?]{1,80}?\bbut\b"
 EN_OPENERS = ["furthermore", "moreover", "additionally", "in addition", "however", "therefore", "overall"]
 EN_MORAL = r"(?:this|it|that) (?:taught|showed|reminded) me (?:that|the importance|how)"
 
-ID_WORDS = ["krusial", "esensial", "fundamental", "komprehensif", "holistik", "sinergi", "transformatif"]
 ID_PHRASES = [
     r"di era (?:digital|globalisasi|modern|teknologi)",
     r"seiring (?:dengan )?(?:perkembangan|berkembangnya) (?:zaman|teknologi)",
@@ -55,15 +53,7 @@ ID_OPENERS = ["selain itu", "lebih lanjut", "oleh karena itu", "dengan demikian"
 ID_MORAL = r"(?:hal ini|pengalaman ini) (?:mengajarkan|menunjukkan|mengingatkan) (?:saya|kita)"
 
 TRIPLET = re.compile(r"\b\w+(?:\s\w+)?,\s\w+(?:\s\w+)?,?\s(?:and|or|dan|atau|serta)\s\w+")
-PLACEHOLDER = re.compile(r"\[(?:ADD DETAIL|DATA NEEDED|VERIFY|TODO)[^\]]*\]|\bTODO\b|\bXXX+\b|<[^<>\n]{2,60}>", re.I)
 WORD = re.compile(r"\b[\w'’-]+\b")
-SIGNIF = re.compile(r"\bsignifikan\w*|\bsignificant(?:ly)?\b", re.I)
-TEST_IN_SENTENCE = re.compile(r"p\s*[<=>≤]\s*0?[.,]\d|\bt\s*\(\d|\bF\s*\(\d|χ2|chi-?square|α\s*=|\bsig\.|\bp-value|\buji\s+(?:t|f|chi|anova|mann|wilcoxon|regresi)", re.I)
-
-
-def unsupported_significance(sents):
-    """Sentences using 'signifikan'/'significant' with no test result in the same sentence."""
-    return [s for s in sents if SIGNIF.search(s) and not TEST_IN_SENTENCE.search(s)]
 
 
 def detect_lang(text: str) -> str:
@@ -81,15 +71,11 @@ def scan(text: str, lang: str) -> dict:
     lens = [len(WORD.findall(s)) for s in sents]
 
     if lang == "id":
-        word_list, phrases, notjust, openers, moral = ID_WORDS, ID_PHRASES, ID_NOTJUST, ID_OPENERS, ID_MORAL
+        phrases, notjust, openers, moral = ID_PHRASES, ID_NOTJUST, ID_OPENERS, ID_MORAL
     else:
-        word_list, phrases, notjust, openers, moral = EN_WORDS, EN_PHRASES, EN_NOTJUST, EN_OPENERS, EN_MORAL
+        phrases, notjust, openers, moral = EN_PHRASES, EN_NOTJUST, EN_OPENERS, EN_MORAL
 
-    word_hits = {}
-    for w in word_list:
-        n = len(re.findall(rf"\b{re.escape(w)}\w*", low))
-        if n:
-            word_hits[w] = n
+    strong, context = word_hits(text, lang)
     phrase_hits = []
     for p in phrases:
         for m in re.finditer(p, low):
@@ -108,7 +94,8 @@ def scan(text: str, lang: str) -> dict:
         "sentences": len(lens),
         "avg_len": statistics.mean(lens) if lens else 0,
         "sd_len": statistics.pstdev(lens) if len(lens) > 1 else 0,
-        "word_hits": word_hits,
+        "strong_words": strong,
+        "context_words": context,
         "phrase_hits": phrase_hits,
         "not_just": [m.group(0) for m in re.finditer(notjust, low)],
         "triplets": len(TRIPLET.findall(text)),
@@ -128,12 +115,12 @@ STARTERS = {"the", "a", "an", "it", "its", "she", "he", "they", "this", "that", 
             "ini", "itu", "dia", "mereka", "kami", "saya", "kita", "pada", "dalam", "setelah", "sebelum",
             "namun", "tetapi", "dan", "jadi", "karena", "selain", "kemudian", "selanjutnya", "hal"}
 ATTRIBUTION = re.compile(r"\b(?:the|this|her|his|their) (?:film|book|article|study|report|paper|video|talk|author|speaker|documentary|survey)\b|\b(?:film|buku|artikel|penelitian|laporan|video|penulis) ini\b|\baccording to\b|\bmenurut\b", re.I)
-CONCRETE = re.compile(r"\d|[A-Z][a-z]+\s[A-Z][a-z]+|\b(?:I|my|we|saya|kami|aku)\b")
+CONCRETE = re.compile(r"\d|[A-Z][a-z]+\s[A-Z][a-z]+")
 
 
-def per_sentence(text: str, lang: str) -> None:
-    words = EN_WORDS if lang == "en" else ID_WORDS
+def per_sentence(text: str, lang: str) -> int:
     phrases = EN_PHRASES if lang == "en" else ID_PHRASES
+    flagged = 0
     sents = [s for s in re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text.strip())) if WORD.search(s)]
     # words written with a capital in mid-sentence somewhere = names/proper nouns
     names = {t for s in sents for t in WORD.findall(s)[1:] if t[:1].isupper()}
@@ -141,11 +128,12 @@ def per_sentence(text: str, lang: str) -> None:
     for i, s in enumerate(sents, 1):
         low = s.lower()
         notes = []
-        notes += [f"word:{w}" for w in words if re.search(rf"\b{re.escape(w)}\w*", low)]
+        strong, context = word_hits(s, lang)
+        notes += [f"word:{w}" for w in strong] + [f"possible word (check context):{w}" for w in context]
         notes += [f'phrase:"{m.group(0)}"' for p in phrases for m in re.finditer(p, low)]
         if GENERIC_OPENERS.match(s.strip()):
             notes.append("generic transition opener")
-        if SIGNIF.search(s) and not TEST_IN_SENTENCE.search(s):
+        if SIGNIF.search(s) and not TEST_RESULT.search(s):
             notes.append("'significant' without a test result")
         if VAGUE.search(s) and not re.search(r"\d", s):
             notes.append("vague claim (no number/source)")
@@ -155,16 +143,19 @@ def per_sentence(text: str, lang: str) -> None:
                          and not first.lower().endswith("s") and first.lower() not in low_words)
         has_name = first_is_name or any(t in names for t in tokens[1:])
         has_attribution = bool(ATTRIBUTION.search(low))
-        if not (CONCRETE.search(s) or has_name or has_attribution) and len(tokens) > 6:
+        if not (CONCRETE.search(s) or FIRST_PERSON.search(s) or has_name or has_attribution) and len(tokens) > 6:
             notes.append("no concrete anchor (number, name, or writer's voice)")
+        flagged += bool(notes)
         tag = "  " if not notes else "! "
         print(f"{tag}{i:>2}. {s[:110]}{'...' if len(s) > 110 else ''}")
         for n in notes:
             print(f"       - {n}")
+    print(f"\nSentences with flags: {flagged}/{len(sents)}")
+    return flagged
 
 
 def total_flags(r: dict) -> int:
-    return (sum(r["word_hits"].values()) + len(r["phrase_hits"]) + len(r["not_just"])
+    return (word_severity(r["strong_words"], r["context_words"]) + len(r["phrase_hits"]) + len(r["not_just"])
             + max(0, r["triplets"] - 1) + sum(r["repeated_openers"].values()) + max(0, r["morals"] - 1)
             + len(r["unsupported_significance"]) + (1 if r["em_dash_per150"] > 1 else 0) + (1 if r["sentences"] > 5 and r["sd_len"] < 4 else 0))
 
@@ -174,8 +165,11 @@ def report(r: dict) -> None:
     print(f"Sentence length: avg {r['avg_len']:.1f}, spread (sd) {r['sd_len']:.1f}"
           + ("  ! very uniform, mix short and long" if r["sentences"] > 5 and r["sd_len"] < 4 else ""))
     print(f"Em dashes per 150 words: {r['em_dash_per150']:.1f}" + ("  ! high" if r["em_dash_per150"] > 1 else ""))
-    if r["word_hits"]:
-        print("AI-typical words: " + ", ".join(f"{w} x{n}" for w, n in r["word_hits"].items()))
+    if r["strong_words"]:
+        print("AI-typical words: " + ", ".join(f"{w} x{n}" for w, n in r["strong_words"].items()))
+    if r["context_words"]:
+        print("Possible (check context; counted only beyond two): "
+              + ", ".join(f"{w} x{n}" for w, n in r["context_words"].items()))
     if r["phrase_hits"]:
         print("Padding / cliché phrases: " + "; ".join(f'"{p}"' for p in r["phrase_hits"]))
     if r["not_just"]:
@@ -201,11 +195,11 @@ def main() -> int:
     ap.add_argument("--compare", nargs=2, metavar=("BEFORE", "AFTER"))
     ap.add_argument("--lang", choices=["en", "id", "auto"], default="auto")
     ap.add_argument("--per-sentence", action="store_true", help="list each sentence with its flags")
-    ap.add_argument("--strict", action="store_true", help="exit with code 1 if flags are found (single-file scan)")
+    ap.add_argument("--strict", action="store_true",
+                    help="exit with code 1 if flags are found (with --compare: if the AFTER text still has flags)")
     args = ap.parse_args()
 
-    def load(path):
-        return sys.stdin.read() if path == "-" else open(path, encoding="utf-8").read()
+    load = read_input
 
     if args.compare:
         a, b = (load(p) for p in args.compare)
@@ -214,7 +208,8 @@ def main() -> int:
         rows = [
             ("Words", ra["words"], rb["words"]),
             ("Sentence-length spread (sd)", f"{ra['sd_len']:.1f}", f"{rb['sd_len']:.1f}"),
-            ("AI-typical words", sum(ra["word_hits"].values()), sum(rb["word_hits"].values())),
+            ("AI-typical words", sum(ra["strong_words"].values()), sum(rb["strong_words"].values())),
+            ("Possible (context) words", sum(ra["context_words"].values()), sum(rb["context_words"].values())),
             ("Padding phrases", len(ra["phrase_hits"]), len(rb["phrase_hits"])),
             ("'Not just X but Y'", len(ra["not_just"]), len(rb["not_just"])),
             ("Lists of three", ra["triplets"], rb["triplets"]),
@@ -228,15 +223,18 @@ def main() -> int:
         if ra["words"]:
             change = (rb["words"] - ra["words"]) / ra["words"] * 100
             print(f"\nLength change: {change:+.0f}%" + ("  ! more than ±10%" if abs(change) > 10 else ""))
-        return 0
+        return 1 if (args.strict and total_flags(rb)) else 0
 
     if not args.file:
         ap.error("give a file, '-' for stdin, or --compare BEFORE AFTER")
     text = load(args.file)
+    if is_empty(text):
+        print("! Empty input: nothing to check.")
+        return 1 if args.strict else 0
     lang = detect_lang(text) if args.lang == "auto" else args.lang
     if args.per_sentence:
-        per_sentence(text, lang)
-        return 0
+        flagged = per_sentence(text, lang)
+        return 1 if (args.strict and flagged) else 0
     result = scan(text, lang)
     report(result)
     return 1 if (args.strict and total_flags(result)) else 0

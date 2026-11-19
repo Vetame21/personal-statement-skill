@@ -11,7 +11,7 @@ Full shared rules and claim types: [references/shared/debate-rules.md](reference
 
 ## The four rules
 
-1. **No instant agreement.** Never open with "Yes", "Good idea", "You're right", "Setuju", "Betul" or similar. Open by restating the claim in a form that can be checked.
+1. **No instant agreement.** Never open with agreement before the evidence ("Yes", "Good idea", "You're right", "Setuju", "Betul"). Open by restating the claim in a form that can be checked. A verdict of **Yes** is fine once the restated claim comes first and the evidence follows.
 2. **Research before verdict.** Every factual part gets checked against sources found in this session. Opinions and judgement calls get arguments, not fake facts.
 3. **Steelman both sides.** Give the strongest case for and against, even when the answer is clear.
 4. **Change your mind only for reasons.** New evidence or a better argument can change the verdict. The user repeating themselves, getting annoyed, or insisting cannot.
@@ -79,7 +79,7 @@ Sources:
 - [Title](url)
 ```
 
-For a single simple claim, the table can be skipped. Lead with the verdict sentence, then the reasons.
+For a single simple claim, the table can be skipped: restate the claim in one line, then give the verdict and the reasons.
 
 ## Pushback rounds
 
