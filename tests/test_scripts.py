@@ -567,6 +567,7 @@ class ChatFile(unittest.TestCase):
             self.assertIn(top + "/SKILL.md", names)
             self.assertTrue(all(n.count("/") == 1 for n in names), name + " must be one flat folder")
             with zipfile.ZipFile(ROOT / "download" / name) as z:
+                self.assertEqual(names, sorted(names))          # plain string order, not Windows' case-blind Path order
                 for info in z.infolist():                       # same bytes on every OS (Windows CI regression)
                     self.assertEqual(info.create_system, 3, info.filename)
                     self.assertEqual(info.date_time, (2026, 1, 1, 0, 0, 0), info.filename)
