@@ -22,9 +22,6 @@ Say the mode in one line and begin.
 
 ## Non-negotiable rules
 
-Before drafting new text, ask once whether the application or employer has an AI-use policy for CVs, and follow it.
-
-
 Shared rules: [references/shared/integrity.md](references/shared/integrity.md) and [references/shared/anti-ai-tone.md](references/shared/anti-ai-tone.md).
 
 1. **No invented facts.** Never add employers, titles, dates, grades, awards, numbers or skills the user did not give, and never widen what a task covered (a stronger verb is fine; extra equipment, systems or duties are not). If a bullet would be stronger with a number, ask for it or mark `[VERIFY: e.g. how many members?]`. List every marker after the CV under **"Check before sending"**.
@@ -44,7 +41,8 @@ Shared rules: [references/shared/integrity.md](references/shared/integrity.md) a
    - **University student / recent graduate**
    - **Experienced** (2+ years of work: Experience before Education)
 4. Write bullets with the formula: **Action verb + what you did + how/with what + result (number, scale or outcome)**.
-5. Show the CV, then "Check before sending", then the one-page check.
+5. **New details**: check every bullet against what the user told you (same fact trace as Upgrade mode).
+6. Show the CV, then "New details", then "Check before sending", then the one-page check.
 
 ## Upgrade mode
 
@@ -61,7 +59,7 @@ Shared rules: [references/shared/integrity.md](references/shared/integrity.md) a
 
 2. **Rewrite** in Harvard style. Keep every fact; improve how it is said. Move items to the right sections. Cut what doesn't serve the target (tell the user what you cut and why).
 3. **Before/after** for the 3-5 most improved bullets so the user learns the pattern.
-4. **Fact trace**: quote every task, tool, scope or outcome a bullet now claims that the original did not ("fixed printer problems" must not become "resolved printer and workstation issues"). Remove each one or turn it into a `[VERIFY]` question.
+4. **New details** (fact trace, rule 9 in [references/shared/integrity.md](references/shared/integrity.md)): quote every task, tool, scope or outcome a bullet now claims that the original did not ("fixed printer problems" must not become "resolved printer and workstation issues"). Remove each one or mark it `[VERIFY]`. Write "New details: none" if there are none.
 5. "Check before sending" list.
 
 ## Tailor mode
@@ -70,7 +68,8 @@ Shared rules: [references/shared/integrity.md](references/shared/integrity.md) a
 2. Pull out 4-6 things it asks for.
 3. Map each to evidence in the CV. Missing evidence is a gap: tell the user; do not invent it.
 4. Reorder bullets so the most relevant come first; adjust wording to the target's vocabulary where it is still true.
-5. Keep a "master CV" untouched; produce the tailored copy separately.
+5. **New details**: the target's vocabulary must not add tasks, tools or results the user did not do (same fact trace as Upgrade mode).
+6. Keep a "master CV" untouched; produce the tailored copy separately.
 
 ## Output
 

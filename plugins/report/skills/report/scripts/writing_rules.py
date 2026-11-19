@@ -174,6 +174,17 @@ _SENTENCE_STARTERS = (r"The|A|An|This|That|These|Those|It|We|I|In|On|At|For|Afte
 _INITIAL = re.compile(r"(?<![\w°])(?<!\d )\b([A-Z])\.(?=\s(?!(?:" + _SENTENCE_STARTERS + r")\b)[A-Z])")
 
 
+def paragraphs(text: str):
+    """Blank-line blocks with heading lines removed, so "## Hasil\nSelain itu, ..." counts as a paragraph
+    starting with "Selain itu" (a heading followed directly by text is common Markdown)."""
+    out = []
+    for block in re.split(r"\n\s*\n", text.strip()):
+        lines = [ln for ln in block.split("\n") if ln.strip() and not ln.lstrip().startswith("#")]
+        if lines:
+            out.append("\n".join(lines))
+    return out
+
+
 def split_sentences(text: str):
     """Split prose into sentences: headings and blank-line blocks stay separate, and common
     abbreviations (U.S., Dr., e.g., et al., dkk.) and initials do not end a sentence."""

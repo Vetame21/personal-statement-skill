@@ -9,17 +9,11 @@ This is a shorter version of [TESTER_BRIEF.md](TESTER_BRIEF.md) for chat apps th
 
 ## 1. Get the files
 
-You don't need git.
+You don't need git or Python. Download these from the repository (open each link, then click the download button):
 
-1. Open https://github.com/Vetame21/personal-statement-skill.
-2. Click **Code → Download ZIP**, then unzip it.
-
-You need these files:
-
-- the folder `vetame-writing`: all six skills combined into one, because Gemini takes one skill per upload. Get it from the person who asked you to test, or build it with `python3 scripts/make_bundle.py`, which writes `dist/vetame-writing/`.
-- `testing/samples/personal_statement.txt`
-- `testing/samples/ai_paragraph.txt`
-- `testing/samples/cv.md`
+- [`download/vetame-writing-lite.zip`](../download/vetame-writing-lite.zip): the personal statement, humanizer and CV skills as **one** skill (Gemini allows one skill per upload). Unzip it to get the folder `vetame-writing-lite`.
+- [`download/vetame-writing-chat.md`](../download/vetame-writing-chat.md): the same three skills in one file, in case Skills doesn't work for you.
+- The samples: [`personal_statement.txt`](samples/personal_statement.txt), [`ai_paragraph.txt`](samples/ai_paragraph.txt), [`cv.md`](samples/cv.md).
 
 All samples are fictional, so don't use your own statement or CV for this test.
 
@@ -27,21 +21,20 @@ All samples are fictional, so don't use your own statement or CV for this test.
 
 **If your Gemini has Skills** (Settings → Skills; it is still rolling out, so you may not have it yet):
 
-1. Click **Upload skill → folder**.
-2. Choose the `vetame-writing` folder itself, the one that directly contains `SKILL.md`. Gemini does not accept ZIP files, so unzip first if you got a ZIP.
-3. Click **Continue**. The name and description are filled in from `SKILL.md`.
-4. If the folder upload fails, choose **files** instead, select `SKILL.md`, and add the other `.md` files in the next step.
+1. Use gemini.google.com on a computer. Google says skills created by hand don't save in the mobile app.
+2. Click **Upload skill → folder**, choose the unzipped `vetame-writing-lite` folder (the one that directly contains `SKILL.md`; Gemini does not accept ZIP files) and click **Continue**. The name and description are filled in from `SKILL.md`.
+3. If it says **"Sorry, we can't save your skill"**: sign out of any school or work Google account in the same browser and try again. If it still fails, upload only `SKILL.md` and add the other files one by one, and note which file is refused; that tells the author what to fix.
 
-**If Gemini says "Sorry, we can't save your skill":** use the web app at gemini.google.com on a computer (Google says skills created by hand don't save in the mobile app) and sign out of any school or work Google account in the same browser. Then upload the **`vetame-writing-lite`** folder instead: three skills (personal statement, humanizer, CV) in 10 files. If that also fails, upload only its `SKILL.md`. Then add the other files one by one, and note which file is refused; that tells the author what to fix.
+The full six-skill bundle (`download/vetame-writing.zip`, 34 files) failed to save in the Gemini app in our test; the lite one worked.
 
-**If you don't have Skills:** skip this step. In step 3, attach `SKILL.md`, `ps-guide.md`, `humanizer-guide.md`, `cv-guide.md`, `shared-integrity.md` and `shared-anti-ai-tone.md` to the chat together with the samples.
+**If you don't have Skills:** skip this step and attach `vetame-writing-chat.md` to the chat in step 3 instead.
 
 ## 3. Run the test
 
-Start a new chat. Attach the three sample files, plus the files listed above if you skipped step 2. Then paste:
+Start a new chat. Attach the three sample files, plus `vetame-writing-chat.md` if you skipped step 2. Then paste:
 
 ```
-You are testing three writing skills for their author: personal-statement, humanizer and harvard-cv. Use the vetame-writing skill (installed, or the attached files): for each task read the matching guide it points to and follow it. Use only the attached fictional samples. Do not stop to ask me questions until step 4.
+You are testing three writing skills for their author: personal-statement, humanizer and harvard-cv. Use the vetame-writing-lite skill (installed, or the attached vetame-writing-chat.md): for each task read the matching guide it points to and follow it. Use only the attached fictional samples. Do not stop to ask me questions until step 4.
 
 Assumed answers when a skill would ask something:
 - Statement: CityU BSc Data Science, undergraduate with scholarship, 500 words, no AI rule beyond "the essay must be your own", Upgrade mode, keep the voice.

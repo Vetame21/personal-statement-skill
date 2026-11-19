@@ -157,8 +157,9 @@ def update_readme(root: Path, info: dict) -> None:
     write(readme, new)
 
 
-def build_chat(root: Path) -> None:
-    """chat/vetame-writing-chat.md (.txt): one file people download from GitHub for any chat AI, free or paid."""
+def build_downloads(root: Path) -> None:
+    """download/: files people use without Python or git. vetame-writing-chat.md (.txt) for any chat AI,
+    vetame-writing.zip (all six skills, claude.ai) and vetame-writing-lite.zip (Gemini app: unzip, upload the folder)."""
     import importlib.util
     spec = importlib.util.spec_from_file_location("make_bundle", root / "scripts" / "make_bundle.py")
     mod = importlib.util.module_from_spec(spec)
@@ -167,9 +168,13 @@ def build_chat(root: Path) -> None:
     mod.SHARED = sorted(p.stem for p in (root / "shared" / "references").glob("*.md"))
     with tempfile.TemporaryDirectory() as tmp:
         chat = mod.make_chat(Path(tmp))
-        (root / "chat").mkdir(exist_ok=True)
-        for src in (chat, chat.with_suffix(".txt")):
-            shutil.copyfile(src, root / "chat" / src.name)
+        mod.make(Path(tmp), lite=True)
+        dest = root / "download"
+        if dest.exists():
+            shutil.rmtree(dest)
+        dest.mkdir()
+        for name in (chat.name, chat.with_suffix(".txt").name, mod.NAME + ".zip", mod.LITE_NAME + ".zip"):
+            shutil.copyfile(Path(tmp) / name, dest / name)
 
 
 def build(root: Path) -> list:
@@ -179,13 +184,13 @@ def build(root: Path) -> list:
     errors = validate(root)
     build_plugins(root, info, version)
     update_readme(root, info)
-    build_chat(root)
+    build_downloads(root)
     return errors
 
 
 def same_tree(a: Path, b: Path) -> list:
     diffs = []
-    for rel in ["skills", "plugins", ".claude-plugin", "README.md", "chat"]:
+    for rel in ["skills", "plugins", ".claude-plugin", "README.md", "download"]:
         pa, pb = a / rel, b / rel
         if pa.is_file() or pb.is_file():
             if not (pa.exists() and pb.exists() and filecmp.cmp(pa, pb, shallow=False)):

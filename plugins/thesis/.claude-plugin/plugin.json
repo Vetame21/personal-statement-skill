@@ -1,6 +1,6 @@
 {
   "name": "thesis",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Coach an undergraduate thesis (skripsi, tugas akhir, bachelor's thesis) - topic, proposal, chapters (Bab I-V or IMRaD), literature review, methodology, results, citations, AI-use rules and defense (sidang) prep. Use when the user mentions skripsi, tugas akhir (TA), thesis, proposal penelitian, sidang, bab 1-5, latar belakang, rumusan masalah, tinjauan pustaka, metodologi, or wants a chapter reviewed.",
   "author": {
     "name": "Vetame21",

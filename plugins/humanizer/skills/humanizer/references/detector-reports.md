@@ -25,7 +25,7 @@ For every sentence the report marks as AI-like, decide which case it is:
 | **Missing voice** | Summary sentences that never show the writer's view (common in reviews, reflections, personal statements) | Where the genre allows, add the writer's angle in their own words, or ask the user for it |
 
 Rules:
-- Facts, numbers, names, quotes and citations stay correct. If you add a number, it must come from the user's source or a search you ran (cite it).
+- Facts, numbers, names, quotes and citations stay correct. In Humanize only mode, add no new numbers or facts. In Humanize + upgrade mode, a new number must come from the user's source or a search you ran (cite it), and it goes in the "New details" list.
 - Do not add mistakes, odd synonyms, random typos, or filler to "confuse" a detector. It hurts the writing and is a known evasion trick.
 - Do not promise a lower score. Promise clearer writing.
 - If the text is for assessment and the user used AI to draft it, remind them once that disclosure rules still apply.
@@ -36,3 +36,8 @@ Rules:
 2. A table: flagged sentence → case → suggested rewrite (or "keep").
 3. If the user wants, the whole passage rewritten under the normal humanize rules.
 4. `scripts/humanize_check.py --per-sentence` output for the passage, so the user can see which sentences have real red flags.
+
+## Sources (checked November 2026)
+
+- [OpenAI: New AI classifier for indicating AI-written text](https://openai.com/blog/new-ai-classifier-for-indicating-ai-written-text/) (26% / 9%; note added 20 July 2023 on its withdrawal) · [Decrypt: OpenAI shuts its AI text classifier](https://decrypt.co/149826/openai-quietly-shutters-its-ai-text-classifier-due-to-low-accuracy)
+- [Liang et al. (2023), GPT detectors are biased against non-native English writers, *Patterns*](https://arxiv.org/abs/2304.02819)

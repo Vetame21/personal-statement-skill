@@ -1,0 +1,15 @@
+name: Idea
+description: Suggest a feature, a new skill, or a university/scholarship to cover
+title: "Idea: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: What would it help you do?

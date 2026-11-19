@@ -24,7 +24,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from writing_rules import (FIRST_PERSON, MORAL, NOT_JUST, NUMBER_WORDS, PASSIVE, PLACEHOLDER,  # noqa: E402
                            SIGNIF, TEST_RESULT, TRIPLET, detect_lang, is_empty, phrase_hits, read_input,
-                           repeated_openers, split_sentences, unsupported_significance, word_hits, word_severity)
+                           paragraphs, repeated_openers, split_sentences, unsupported_significance, word_hits,
+                           word_severity)
 
 WORD = re.compile(r"\b[\w'’-]+\b")
 
@@ -32,7 +33,7 @@ WORD = re.compile(r"\b[\w'’-]+\b")
 def scan(text: str, lang: str, register: str = "general") -> dict:
     low = text.lower()
     words = WORD.findall(text)
-    paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip()]
+    paras = paragraphs(text)
     sents = split_sentences(text)
     lens = [len(WORD.findall(s)) for s in sents]
     strong, context = word_hits(text, lang)

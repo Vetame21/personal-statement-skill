@@ -101,6 +101,8 @@ def rewrite(text: str, prefix: str, own) -> str:
     """Point paths and bare file names at the flat, prefixed names. `own` = this skill's reference names."""
     text = re.sub(r"(?:\.\./)?references/shared/([\w.-]+?)\.md", r"shared-\1.md", text)
     text = re.sub(r"(?:\.\./)?references/([\w.-]+?)\.md", prefix + r"-\1.md", text)
+    text = re.sub(r"(?<![\w/-])shared/([\w-]+)\.md", r"shared-\1.md", text)       # "shared/debate-rules.md"
+    text = re.sub(r"\[references/shared/\]\(references/shared/\)", "the `shared-*.md` files", text)
     text = re.sub(r"\]\(references/shared/\)", "](shared-integrity.md)", text)
     text = text.replace("references/shared/", "the shared-*.md files ")
     names = {n: prefix + "-" + n for n in own}
@@ -108,6 +110,40 @@ def rewrite(text: str, prefix: str, own) -> str:
     for n, flat in names.items():                       # bare "debate-panel.md" -> "ps-debate-panel.md"
         text = re.sub(r"(?<![\w/-])" + re.escape(n) + r"\.md", flat + ".md", text)
     return text
+
+
+MISSING = " (not included in this version)"
+FLAT_NAME = r"(?:ps|cv|humanizer|report|thesis|debate|shared)-[\w-]+\.md"
+
+
+def annotate_missing(text: str, present) -> str:
+    """Mark references to files that this bundle or chat file does not contain, so the model skips them
+    instead of guessing their content."""
+    def link(m):
+        return m.group(0) if m.group(2) in present else m.group(1) + MISSING
+    text = re.sub(r"\[([^\]]+)\]\((" + FLAT_NAME + r")(?:#[^)]*)?\)", link, text)
+
+    def tick(m):
+        return m.group(0) if m.group(1) in present else m.group(0) + MISSING
+    text = re.sub(r"`(" + FLAT_NAME + r")`(?!" + re.escape(MISSING) + ")", tick, text)
+
+    def bare(m):
+        return m.group(0) if m.group(0) in present else m.group(0) + MISSING
+    return re.sub(r"(?<![\w`(\[-])" + FLAT_NAME + r"(?![\w`)\]]|" + re.escape(MISSING) + ")", bare, text)
+
+
+def mark_missing(folder: Path, present) -> None:
+    for f in folder.iterdir():
+        save(f, annotate_missing(f.read_text(encoding="utf-8"), present))
+
+
+def write_zip(folder: Path, dest: Path) -> None:
+    """Uncompressed, fixed timestamps: the same bytes on every OS and Python, so build.py --check can compare."""
+    with zipfile.ZipFile(dest, "w", zipfile.ZIP_STORED) as z:
+        for f in sorted(folder.iterdir()):
+            info = zipfile.ZipInfo(folder.name + "/" + f.name, date_time=(2026, 1, 1, 0, 0, 0))
+            info.external_attr = 0o644 << 16
+            z.writestr(info, f.read_bytes())
 
 
 def make(out_root: Path, lite: bool = False) -> Path:
@@ -134,19 +170,22 @@ def make(out_root: Path, lite: bool = False) -> Path:
         for f in out.iterdir():
             if f.name not in LITE_FILES:
                 f.unlink()
-    with zipfile.ZipFile(out_root / (name + ".zip"), "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(out.iterdir()):
-            z.write(f, name + "/" + f.name)
+    if lite:
+        mark_missing(out, set(LITE_FILES))
+    write_zip(out, out_root / (name + ".zip"))
     return out
 
 
-CHAT_ORDER = ["SKILL.md", "shared-integrity.md", "shared-anti-ai-tone.md", "ps-guide.md", "ps-what-readers-want.md",
-              "humanizer-guide.md", "humanizer-patterns.md", "cv-guide.md", "cv-harvard-format.md", "cv-action-verbs.md"]
+CHAT_ORDER = ["SKILL.md", "shared-integrity.md", "shared-anti-ai-tone.md",
+              "ps-guide.md", "ps-debate-panel.md", "ps-what-readers-want.md", "ps-formats.md",
+              "humanizer-guide.md", "humanizer-patterns.md",
+              "cv-guide.md", "cv-harvard-format.md", "cv-action-verbs.md", "cv-bullet-upgrades.md"]
 
 CHAT_HEADER = """# Vetame21 Writing Skills: chat version
 
-**For the person using this:** attach this file at the start of a new chat, or paste all of it. It works in ChatGPT, Claude,
-Gemini, DeepSeek, Kimi, Grok, Qwen and other chat AIs, on free or paid plans. Then say what you need, for example
+**For the person using this:** attach this file at the start of a new chat, or paste all of it. It is written to work in
+ChatGPT, Claude, Gemini, DeepSeek, Kimi, Grok, Qwen and other chat AIs, free or paid (tested in the Gemini app, November
+2026; tell us how it goes elsewhere). Then say what you need, for example
 "Upgrade my personal statement for [program], keep my voice: [paste]", "Humanize this: [paste]" or
 "Make my CV Harvard style for [job]: [paste]".
 
@@ -155,20 +194,27 @@ with a line `<<< FILE: name >>>`. When a part says "read `x.md`", go to the part
 `SKILL.md`, the first part. If the user has not said what they need yet, ask in one short message: statement, CV, or
 humanize, plus the target and the text. Never invent facts. Run the fact trace (rule 9 in `shared-integrity.md`)
 after every rewrite. The guides mention Python scripts; you cannot run them here, so do those checks by reading and say so.
+This chat version has three skills: personal statement, humanizer and Harvard CV. Ignore instructions about saving files,
+`.gitignore`, installing, or the report, thesis and debate-mode skills; they are not available here. If the user asks for
+"humanize + upgrade" on a report or thesis, humanize only and say that the report and thesis guides are in the full
+repository. A file marked "(not included in this version)" is not in this document: skip it and carry on.
 
 """
 
 
 def make_chat(out_root: Path) -> Path:
-    """One file with the lite bundle, for any chat app: attach once (ChatGPT Free allows 3 uploads a day) or paste."""
-    lite = make(out_root, lite=True)
+    """One file for any chat app: attach once (ChatGPT Free allows 3 uploads a day) or paste."""
+    full = make(out_root, lite=False)
     parts = [CHAT_HEADER]
     for name in CHAT_ORDER:
-        text = (lite / name).read_text(encoding="utf-8")
         if name == "SKILL.md":
-            text = body(text).replace("in this folder", "in this document")
+            text = router(LITE_SKILLS, lite=False).replace(
+                "In this bundle every file sits in one folder with a prefix", "In this document every file is a part with a prefix")
+        else:
+            text = (full / name).read_text(encoding="utf-8")
+        text = re.sub(r"(?m)^> \*\*Running the scripts:\*\*.*\n?", "", text)      # tool-specific script paths
         parts.append("<<< FILE: " + name + " >>>\n\n" + text.strip() + "\n\n")
-    chat = "".join(parts)
+    chat = annotate_missing("".join(parts), set(CHAT_ORDER))
     dest = out_root / (NAME + "-chat.md")
     save(dest, chat)
     save(out_root / (NAME + "-chat.txt"), chat)

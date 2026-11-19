@@ -18,7 +18,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from writing_rules import (NOT_JUST, PLACEHOLDER, SIGNIF, TEST_RESULT, detect_lang, is_empty,  # noqa: E402
-                           phrase_hits, read_input, repeated_openers, split_sentences, word_hits, word_severity)
+                           paragraphs, phrase_hits, read_input, repeated_openers, split_sentences, word_hits,
+                           word_severity)
 
 
 
@@ -41,7 +42,7 @@ def main() -> int:
     low = text.lower()
 
     words = WORD.findall(text)
-    paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip() and not p.lstrip().startswith("#")]
+    paras = paragraphs(text)
     sents = split_sentences(text)
     issues = 0
 

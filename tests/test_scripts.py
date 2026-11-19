@@ -537,13 +537,35 @@ class ChatFile(unittest.TestCase):
     """chat/vetame-writing-chat.md: one file for any chat AI. It must hold every lite file and the fact-trace rule."""
 
     def test_chat_file_is_complete(self):
-        text = (ROOT / "chat" / "vetame-writing-chat.md").read_text(encoding="utf-8")
+        text = (ROOT / "download" / "vetame-writing-chat.md").read_text(encoding="utf-8")
         for name in ("SKILL.md", "shared-integrity.md", "ps-guide.md", "humanizer-guide.md", "cv-guide.md"):
             self.assertIn("<<< FILE: " + name + " >>>", text)
         self.assertIn("Fact trace after every rewrite", text)
         self.assertNotIn("name: vetame-writing", text)          # no YAML front matter inside a chat prompt
         self.assertLess(len(text), 80000)                        # keep it attachable and pasteable
-        self.assertEqual(text, (ROOT / "chat" / "vetame-writing-chat.txt").read_text(encoding="utf-8"))
+        self.assertEqual(text, (ROOT / "download" / "vetame-writing-chat.txt").read_text(encoding="utf-8"))
+
+    def test_chat_file_only_points_to_parts_it_contains(self):
+        import re
+        text = (ROOT / "download" / "vetame-writing-chat.md").read_text(encoding="utf-8")
+        parts = set(re.findall(r"<<< FILE: (\S+) >>>", text))
+        self.assertIn("ps-debate-panel.md", parts)              # the quick Check and scores need the panel
+        for m in re.finditer(r"(?:ps|cv|humanizer|report|thesis|debate|shared)-[\w-]+\.md", text):
+            if m.group(0) not in parts:
+                after = text[m.end():m.end() + 40]
+                self.assertTrue("(not included" in after, m.group(0) + " is referenced but missing: " + after)
+        self.assertNotIn("Running the scripts", text)
+        self.assertNotIn("~/.claude/skills", text)
+        self.assertNotRegex(text, r"(?<![\w/])shared/[\w-]+\.md")      # unrewritten "shared/debate-rules.md"
+
+    def test_downloads_exist_and_zips_are_flat_skills(self):
+        import zipfile
+        for name, top, count in (("vetame-writing.zip", "vetame-writing", 34), ("vetame-writing-lite.zip", "vetame-writing-lite", 10)):
+            with zipfile.ZipFile(ROOT / "download" / name) as z:
+                names = z.namelist()
+            self.assertEqual(len(names), count, name)
+            self.assertIn(top + "/SKILL.md", names)
+            self.assertTrue(all(n.count("/") == 1 for n in names), name + " must be one flat folder")
 
     def test_fact_trace_examples_from_the_gemini_test(self):
         # The Gemini test added "probability" to a statement and "workstation" to a CV bullet unnoticed
@@ -552,6 +574,51 @@ class ChatFile(unittest.TestCase):
         self.assertIn("workstation", integrity)
         for skill in ("personal-statement", "harvard-cv", "humanizer"):
             self.assertIn("act trace", (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8"), skill)
+
+
+class ReviewSevenRegressions(unittest.TestCase):
+    """Cases found by the seventh independent review (v2.3.0)."""
+
+    def test_paragraph_right_after_heading_counts(self):
+        text = "## A\nSelain itu, x.\n\n## B\nSelain itu, y.\n\n## C\nSelain itu, z.\n"
+        out = run("shared/scripts/text_check.py", text, "--lang", "id")
+        self.assertIn("Paragraphs: 3", out)
+        self.assertIn("selain itu", out)
+        out = run("skills/humanizer/scripts/humanize_check.py", text, "--lang", "id")
+        self.assertIn("selain itu", out)
+
+    def test_pandoc_heading_attributes(self):
+        for heading in ("# Daftar Pustaka {#daftar-pustaka .unnumbered}", "## References {-}"):
+            out = run("shared/scripts/cite_check.py", "As (Lee, 2020) said.\n\n" + heading + "\nLee, J. (2020). X.\n")
+            self.assertIn("Result: OK", out, heading)
+
+    def test_make_pdf_keeps_text_inside_the_page(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("make_pdf", ROOT / "testing" / "make_pdf.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        md = ("WWWWWWWWWWWW ALL CAPS TEXT THAT USED TO RUN OFF THE PAGE EDGE " * 3 + "\n\n"
+              "## **BOLD HEADING THAT IS QUITE LONG AND SHOULD WRAP BEFORE THE RIGHT EDGE OF THE PAGE**\n\n"
+              "2025. That year was a sentence.\n\n"
+              "| a | b | c | d | e | f |\n|---|---|---|---|---|---|\n| " + " | ".join(["long cell text " * 4] * 6) + " |\n")
+        limit = mod.PAGE_W - mod.MARGIN + 0.5
+        for page in mod.layout(md):
+            for font, size, x, y, text in page:
+                self.assertLessEqual(x + mod.text_width(text, font, size), limit, text)
+                self.assertFalse(text.startswith("2025. -"))
+        self.assertTrue(any(t.startswith("2025.") for p in mod.layout(md) for _, _, _, _, t in p))
+
+    def test_fact_trace_uses_one_marker(self):
+        for path in ("skills/humanizer/SKILL.md", "skills/harvard-cv/SKILL.md", "skills/personal-statement/SKILL.md"):
+            text = (ROOT / path).read_text(encoding="utf-8")
+            self.assertNotRegex(text, r"[Ff]act trace[^\n]*\[ADD DETAIL\]", path)
+        cv = (ROOT / "skills/harvard-cv/SKILL.md").read_text(encoding="utf-8")
+        self.assertEqual(cv.count("**New details**"), 3)          # Create, Upgrade and Tailor modes
+        self.assertEqual(cv.count("AI-use policy"), 1)            # the duplicate rule is gone
+
+    def test_bundle_link_text(self):
+        text = (ROOT / "download" / "vetame-writing-chat.md").read_text(encoding="utf-8")
+        self.assertNotIn("files ](", text)
 
 
 class Installer(unittest.TestCase):

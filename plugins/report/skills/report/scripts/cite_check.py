@@ -39,7 +39,7 @@ from writing_rules import read_input  # noqa: E402
 REF_HEADINGS = re.compile(
     r"^\s*(?:#+\s*)?(?:\*\*|__)?\s*(?:\d+[.)]?\s*)?(references?|reference\s+list|bibliography|works\s+cited|literature\s+cited|"
     r"sources|daftar\s+pustaka|pustaka\s+acuan|daftar\s+rujukan|daftar\s+referensi|referensi|rujukan|kepustakaan|参考文献)"
-    r"\s*:?\s*(?:\*\*|__)?\s*:?\s*$",
+    r"\s*:?\s*(?:\*\*|__)?\s*:?\s*(?:\{[^}\n]*\})?\s*$",                # pandoc attributes: {#refs .unnumbered} / {-}
     re.I | re.M,
 )
 # Where the reference list ends: the next Markdown heading, or an appendix heading

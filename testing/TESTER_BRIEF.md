@@ -76,6 +76,8 @@ python3 skills/report/scripts/text_check.py testing/samples/report.md --lang id
 python3 -m unittest discover -s tests
 ```
 
+Each sample starts with a "FICTIONAL SAMPLE" line (and the statement with a "Target" line). The checkers count those lines too, so expect one extra sentence and a few extra words. That is not a bug.
+
 For each checker, the expected behaviour is roughly:
 - **personal statement:** flags the placeholder, the pleading line and the cliché opener
 - **AI paragraph:** flags the "Furthermore/Moreover" openers and words such as "testament"

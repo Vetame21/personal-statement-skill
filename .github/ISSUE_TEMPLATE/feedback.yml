@@ -1,0 +1,47 @@
+name: Feedback
+description: Tell us how the skills worked for you
+title: "Feedback: "
+labels: [feedback]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks! Please don't paste your real statement, CV or personal details here; this page is public."
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill?
+      multiple: true
+      options: [personal-statement, harvard-cv, humanizer, report, thesis, debate-mode, chat file (vetame-writing-chat.md)]
+    validations:
+      required: true
+  - type: input
+    id: tool
+    attributes:
+      label: Which AI or tool, and which plan?
+      placeholder: "e.g. Codex, Claude Code, ChatGPT Free, Gemini app, DeepSeek"
+    validations:
+      required: true
+  - type: dropdown
+    id: useful
+    attributes:
+      label: How useful was the result?
+      options: ["5 - would use it for a real application", "4", "3", "2", "1 - not useful"]
+    validations:
+      required: true
+  - type: textarea
+    id: good
+    attributes:
+      label: What worked well?
+  - type: textarea
+    id: bad
+    attributes:
+      label: What was wrong, confusing or AI-sounding? Did it add any detail you never gave it?
+  - type: dropdown
+    id: premium
+    attributes:
+      label: Would you pay for a premium pack (for example a Hong Kong universities playbook with prompts, word limits, interview formats and what each program looks for, updated every year)?
+      options: ["Yes", "Maybe", "No"]
+  - type: input
+    id: price
+    attributes:
+      label: If yes or maybe, roughly how much would feel fair?

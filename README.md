@@ -1,55 +1,63 @@
-# Vetame21 Writing Skills
+<p align="center">
+  <img src="docs/logo.svg" alt="Vetame21 Writing Skills logo" width="120">
+</p>
 
-**Application and academic writing skills for AI coding agents** (Claude Code, Codex, Gemini CLI, Qwen Code, Kimi Code, OpenCode and other Agent Skills tools), built from research on what admissions readers, examiners and markers actually look for, and on how AI-writing detectors such as Turnitin work.
+<h1 align="center">Vetame21 Writing Skills</h1>
 
-Six skills, one shared set of rules:
+<p align="center">
+  <b>Personal statements, CVs, reports and theses that sound like <i>you</i>, with nothing made up.</b><br>
+  <a href="https://github.com/Vetame21/personal-statement-skill/stargazers"><img src="https://img.shields.io/github/stars/Vetame21/personal-statement-skill?style=flat" alt="stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+  <a href="https://github.com/Vetame21/personal-statement-skill/releases"><img src="https://img.shields.io/github/v/release/Vetame21/personal-statement-skill" alt="release"></a>
+  <a href="https://github.com/Vetame21/personal-statement-skill/actions/workflows/ci.yml"><img src="https://github.com/Vetame21/personal-statement-skill/actions/workflows/ci.yml/badge.svg" alt="tests"></a>
+</p>
 
-| Skill | What it does |
-|---|---|
-| **personal-statement** | Write, upgrade and stress-test personal statements, statements of purpose, motivation letters, scholarship essays and short answers, keeping the applicant's own story and voice |
-| **harvard-cv** | Create, upgrade or tailor a one-page Harvard-style CV with action-verb, result-focused bullets |
-| **thesis** | Coach an undergraduate thesis (skripsi / tugas akhir / 毕业论文): topic, Bab I-V or IMRaD chapters, citations, examiner simulation, defense prep |
-| **report** | Lab, programming-lab, technical, makalah, internship (KP/magang) and progress reports |
-| **humanizer** | Make any text sound natural and like its author, explain AI-detector flags, and protect genuine authors |
-| **debate-mode** | Claude researches before agreeing and returns sourced verdicts (Yes / No / Partly / Not enough evidence) |
+<p align="center">
+  <img src="docs/demo.png" alt="Before and after: a personal statement loses its AI-sounding opener, its unchecked ranking claim becomes a VERIFY note, and AI-tone red flags go from 8 to 0" width="760">
+</p>
 
-## What makes these different
+You have a real story, but the draft sounds like everyone else's, or like a chatbot wrote it. These skills turn your own material into a statement, CV or report a reader trusts. They keep your voice, cut the AI-sounding filler, and **never invent facts**: anything unconfirmed becomes a `[VERIFY]` note instead of a made-up claim.
 
-- **Evidence over templates.** Each skill starts from the user's real material and marks anything unconfirmed `[VERIFY]` instead of inventing it.
-- **Research-backed guidance.** What readers weigh (e.g. NACAC 2023 admission factors, UCAS's 2026 three-question format), what examiners reward, and how detectors decide. Key facts link their sources with a check date; some figures come from secondary summaries and are labelled as such.
-- **Debate before and after writing.** Panels (Admissions Reader, Skeptic, Applicant Advocate, Tone Detector; Examiner, Supervisor, Methodologist) argue over choices and drafts, then a moderator decides.
-- **Honest about AI detection.** The shared `ai-detection.md` explains perplexity, burstiness, Turnitin's thresholds (300-word minimum, scores under 20% shown as `*`, about 4% sentence-level false positives by Turnitin's own figures), bypasser detection and Turnitin Clarity, with links. The skills use this to explain flags and protect genuine authors. **They do not use evasion tricks or optimise for detector scores.** For assessed work, they first check that the text is the user's own draft and what the rules allow, and they decline requests whose goal is to pass AI-written work off as human.
-- **Checker scripts** for five of the six skills (debate-mode has none), tested in CI. Python 3.9+; add `--strict` to make a script exit with code 1 when it finds issues.
+Made for school leavers, scholarship and university applicants, and students writing reports and theses, in English or Indonesian. Works in ChatGPT, Claude, Gemini, DeepSeek, Kimi, Grok and Qwen, free or paid, and in coding agents such as Claude Code and Codex.
 
-## Install
+## ✨ What it does
 
-### Any chat AI, free or paid: no install
+- 📝 **personal-statement**: write, upgrade and stress-test personal statements, statements of purpose, motivation letters, scholarship essays and short answers. Keeps your story and voice, and preps you for the interview.
+- 📄 **harvard-cv**: create, upgrade or tailor a one-page Harvard-style CV with action-verb, result-focused bullets.
+- 🗣️ **humanizer**: make any text sound natural and like its author, and explain what an AI-detector report actually means.
+- 🔬 **report**: lab, programming-lab, technical, makalah, internship (KP / magang) and progress reports.
+- 🎓 **thesis**: coach a skripsi, tugas akhir or undergraduate thesis, from topic and Bab I-V or IMRaD chapters to citations and sidang (defense) prep.
+- ⚖️ **debate-mode**: the AI researches before it agrees and gives a sourced verdict (Yes / No / Partly / Not enough evidence) instead of telling you what you want to hear.
 
-Download **[chat/vetame-writing-chat.md](chat/vetame-writing-chat.md)** (or the [.txt](chat/vetame-writing-chat.txt) if an app refuses `.md`). It is one file with the personal statement, humanizer and Harvard CV skills. Attach it at the start of a chat, or paste all of it, then say what you need:
+**Built in:**
+- 🔎 **Fact trace.** After every rewrite it lists any name, number, topic or scope word that wasn't in your text, then removes it or marks it `[VERIFY]`.
+- 🧑‍⚖️ **Debate panels.** An admissions reader, a skeptic, your advocate and a tone detector argue over your draft before a moderator decides (examiner and supervisor for theses).
+- 📚 **Research with sources.** What readers weigh (NACAC admission factors, UCAS's 2026 three-question format), what examiners reward, and how detectors work. Each fact has a link and a check date.
+- ✅ **Checker scripts** for word limits, AI-tone phrases, placeholders, citations versus the reference list, and CV bullets. They run in coding agents, and the tests run in CI on Windows, macOS and Linux.
 
-```
-Upgrade my personal statement for [program], keep my voice: [paste]
-```
+## 🛡️ What it won't do
+
+- **Invent experiences, numbers, rankings or sources.** Gaps become `[VERIFY]` or `[ADD DETAIL]` for you to fill.
+- **Help pass off AI writing as your own, or beat AI detectors.** No added typos, odd synonyms or "bypass" tricks. For graded work it checks what your course allows first, and coaches your own draft.
+- **Promise an admission or a detector score.** It makes the writing clearer and more specific; readers decide.
+
+## 📦 Install
+
+**Option A: any chat AI, no install (free or paid)**
+
+Download **[`download/vetame-writing-chat.md`](download/vetame-writing-chat.md)** (or the [`.txt`](download/vetame-writing-chat.txt) if an app refuses `.md`). It holds the personal statement, humanizer and Harvard CV skills in one file. Attach it at the start of a chat, or paste all of it, then say what you need.
 
 | App | Free plan | Paid plan |
 |---|---|---|
-| ChatGPT | attach the file (Free allows about 3 uploads a day) or paste it; a Project keeps it for every chat (Free projects hold 5 files) | put the file in a Project (Go/Plus: 25 files per project) |
-| Claude | upload [`vetame-writing.zip`](#build-the-bundles-yourself) (all six skills) under Settings → Capabilities → Skills; free accounts have had skills since February 2026 | same, or add the file to a Project |
-| Gemini | Settings → Skills → Upload skill → **folder**: `vetame-writing-lite` (the full 34-file bundle failed to save in our test); skills are still rolling out, so if you don't have them, attach the file | same |
-| DeepSeek, Kimi, Qwen | attach the file (or the `.txt`) at the start of each new chat, or paste it | same; these apps keep no skill or project for it, so attach it again in each new chat |
-| Grok | attach or paste | a Project with the file (reported for SuperGrok; free access to projects is unclear) |
+| ChatGPT | attach the file (Free allows 3 uploads a day) or paste it; a Project keeps it for every chat | put the file in a Project |
+| Claude | upload [`download/vetame-writing.zip`](download/vetame-writing.zip) (all six skills) as a skill in Settings; reported available on free accounts since February 2026 | same, or add the chat file to a Project |
+| Gemini | Settings → Skills → Upload skill → **folder**: unzip [`download/vetame-writing-lite.zip`](download/vetame-writing-lite.zip) and choose the folder (the full bundle failed to save in our test); no Skills yet? attach the chat file | same |
+| DeepSeek, Kimi, Qwen | attach the chat file at the start of each new chat, or paste it | same |
+| Grok | attach or paste | a Project with the file (reported for SuperGrok) |
 
-Chat apps can't run the checker scripts, so the AI does those checks by reading and says so. Plans change often: features checked November 2026 from the sources below; check the app's own pricing page.
-Sources: [OpenAI: custom GPTs](https://help.openai.com/en/articles/8555545-custom-gpts), [OpenAI: Projects](https://help.openai.com/en/articles/8555545-projects-in-chatgpt), [TechRadar: Claude free plan skills](https://techradar.com/ai-platforms-assistants/claude/claude-just-made-its-most-powerful-tools-free-from-file-creation-to-app-integration-all-without-ads), [Claude Help: skills](https://support.claude.com/en/articles/12512180-using-skills-on-claude-ai), [Gemini Apps Help: skills](https://support.google.com/gemini/answer/17094296?hl=en&co=GENIE.Platform%3DDesktop), [freeacademy: Grok Free vs SuperGrok](https://freeacademy.ai/blog/grok-free-vs-supergrok-2026), [macaron: Kimi vs DeepSeek vs Qwen](https://macaron.im/de/blog/kimi-vs-deepseek-vs-qwen).
+Chat apps can't run the checker scripts, so the AI does those checks by reading and says so. Tested in the Gemini app; the others are untested so far, so please [tell us](https://github.com/Vetame21/personal-statement-skill/issues/new?template=feedback.yml) how it goes. Plans change often (checked November 2026): [OpenAI: uploads](https://help.openai.com/articles/8555545), [ChatGPT Projects limits (third party)](https://elephas.app/resources/chatgpt-projects-limits-files-size-and-how-many-projects), [TechRadar: Claude free plan](https://techradar.com/ai-platforms-assistants/claude/claude-just-made-its-most-powerful-tools-free-from-file-creation-to-app-integration-all-without-ads), [Claude Help: skills](https://support.claude.com/en/articles/12512180-using-skills-on-claude-ai), [Gemini Apps Help: skills](https://support.google.com/gemini/answer/17094296?hl=en&co=GENIE.Platform%3DDesktop), [Grok Free vs SuperGrok (third party)](https://freeacademy.ai/blog/grok-free-vs-supergrok-2026), [Kimi vs DeepSeek (third party)](https://toolquestor.com/vs/kimi-vs-deepseek).
 
-#### Build the bundles yourself
-
-`python3 scripts/make_bundle.py` writes `dist/vetame-writing/` (all six skills as one flat skill, plus `.zip`), `dist/vetame-writing-lite/` (three skills in 10 files, plus `.zip`) and the chat file.
-
-
-### Any agent: Claude Code, Codex, Gemini CLI, Qwen Code, Kimi Code, OpenCode, DeepSeek-TUI, ...
-
-The skills use the open **Agent Skills** format (a folder with a `SKILL.md`), which many coding agents read. Clone the repo and run the installer (Python 3.9+, no extra packages, works on Windows, macOS and Linux):
+**Option B: coding agents (Claude Code, Codex, Gemini CLI, Qwen Code, Kimi Code, OpenCode, DeepSeek-TUI)**
 
 ```bash
 git clone https://github.com/Vetame21/personal-statement-skill
@@ -59,13 +67,16 @@ git clone https://github.com/Vetame21/personal-statement-skill
 python3 personal-statement-skill/scripts/install.py
 ```
 
-On Windows use `py` instead of `python3`:
+On Windows use `py` instead of `python3`. Python 3.9+, no extra packages. By default it installs all six skills for Claude Code (`~/.claude/skills`), the shared `~/.agents/skills` (Codex, Gemini CLI, Kimi Code, OpenCode, DeepSeek-TUI) and Qwen Code (`~/.qwen/skills`).
+- `--tools codex` installs for one tool only.
+- `--project .` installs into the current project instead.
+- `--link` keeps the skills in sync with `git pull`.
+- `--list` shows every folder; `--uninstall` removes them.
 
-```bash
-py personal-statement-skill\scripts\install.py
-```
+It never overwrites a same-named skill it didn't install. Restart your agent afterwards.
 
-By default it copies the skills to `~/.claude/skills` (Claude Code), `~/.agents/skills` (Codex CLI, Gemini CLI, Kimi Code CLI, OpenCode, DeepSeek-TUI) and `~/.qwen/skills` (Qwen Code). Pick tools with `--tools codex gemini qwen kimi opencode deepseek claude`, install into one project with `--project .`, keep them in sync with `git pull` using `--link`, see every folder with `--list`, and remove them with `--uninstall`. It never overwrites a same-named skill it did not install.
+<details>
+<summary>Where each tool reads skills from</summary>
 
 | Tool | Reads skills from (user level) |
 |---|---|
@@ -77,41 +88,10 @@ By default it copies the skills to `~/.claude/skills` (Claude Code), `~/.agents/
 | OpenCode | `~/.config/opencode/skills`, `~/.claude/skills` or `~/.agents/skills` |
 | DeepSeek, Qwen, Kimi and other **models** | Use them through one of the tools above; skills belong to the tool, not the model |
 
-Paths checked against each tool's documentation in November 2026; tools change, so `python scripts/install.py --list` shows what the installer uses. OpenCode reads both `~/.claude/skills` and `~/.agents/skills`; OpenCode users should install to only one (for example `--tools codex`).
+Paths checked against each tool's documentation in November 2026. OpenCode reads both `~/.claude/skills` and `~/.agents/skills`, so install to only one (for example `--tools codex`).
+</details>
 
-### Using the skills
-
-Restart your agent after installing. Then either describe the task ("polish my scholarship essay, keep my voice"); the agent picks the skill from its description; or call a skill by name:
-
-| Tool | Call a skill by name |
-|---|---|
-| Claude Code | `/humanizer`, `/personal-statement`, ... |
-| Codex CLI | `$humanizer`, `$personal-statement`, ... |
-| Qwen Code | `/humanizer` (the folder name becomes the command) |
-| Gemini CLI, Kimi Code, OpenCode | describe the task, or check the tool's skills list (for example `/skills`) |
-| Chat apps (ChatGPT, Claude, Gemini, DeepSeek, Kimi, Grok, Qwen) | see [Any chat AI, free or paid](#any-chat-ai-free-or-paid-no-install) |
-
-The checker scripts need Python 3.9+ (`python3`, or `py` on Windows). Skills that check current facts (debate-mode, news in a statement) need **web search turned on** in your agent; without it they label their verdicts "provisional".
-
-### Codex quick start
-
-```bash
-git clone https://github.com/Vetame21/personal-statement-skill
-```
-
-```bash
-python3 personal-statement-skill/scripts/install.py --tools codex
-```
-
-Restart Codex, then type for example `$personal-statement Upgrade this statement for ...` or just describe what you need. To update later:
-
-```bash
-cd personal-statement-skill && git pull && python3 scripts/install.py --tools codex
-```
-
-Re-installing replaces the installed copies, so keep your own edits in a fork rather than in the installed folders.
-
-### Claude Code plugin marketplace
+**Option C: Claude Code plugin marketplace**
 
 ```bash
 claude plugin marketplace add Vetame21/personal-statement-skill
@@ -132,64 +112,108 @@ Then install the skills you want:
 
 <!-- SKILLS_TABLE_END -->
 
-Or copy a folder from `skills/` into `~/.claude/skills/` (personal) or `.claude/skills/` (project).
+## 🔄 Stay up to date
 
-### Testing the skills for us
+- **Chat apps:** download the file or ZIP again from [`download/`](download/). It's rebuilt with every release.
+- **Installer:** pull the latest version, then install again. Your own edits in the installed copies are replaced, so keep them in a fork.
 
-Want to help? Follow [testing/TESTER_BRIEF.md](testing/TESTER_BRIEF.md). Your agent runs a 20-30 minute test on fictional samples and produces one PDF report (`testing/out/report.pdf`) to send back. Using the Gemini app or another chat app that can't run commands? Follow [testing/GEMINI_CHAT_TEST.md](testing/GEMINI_CHAT_TEST.md) instead.
+  ```bash
+  cd personal-statement-skill && git pull && python3 scripts/install.py
+  ```
 
-## Example prompts
+- **Claude Code plugins:**
+
+  ```bash
+  claude plugin marketplace update Vetame21-skills
+  ```
+
+  ```bash
+  claude plugin update personal-statement@Vetame21-skills
+  ```
+
+See what changed in [CHANGELOG.md](CHANGELOG.md).
+
+## 🚀 Usage
+
+Describe the task and the AI picks the skill, or call it by name:
+
+| You type | What you get |
+|---|---|
+| `/personal-statement Upgrade this for CityU Data Science, keep my voice: …` | A light rewrite, a change table, the fact trace and a "check before submitting" list |
+| `/personal-statement` + your notes, no draft | A new statement built from your material, debated before and after drafting |
+| `/humanizer [text]` | It asks "humanize only, or upgrade too?", then rewrites at the lightest touch |
+| `/harvard-cv Upgrade my CV for a data analyst internship: …` | An audit table, a one-page Harvard CV and before/after bullets |
+| `/report` or `/thesis` + your draft or brief | Structure, section-by-section coaching, and citation and language checks |
+| `/debate-mode Should I mention this news in my statement?` | A sourced verdict before any advice |
+
+In Codex use `$personal-statement` instead of `/personal-statement`. In chat apps, just describe what you need after attaching the file. Skills that check current facts (debate-mode, news in a statement) need web search turned on.
+
+## 👀 Example
 
 ```
-Upgrade this personal statement for CityU Data Science, undergraduate + scholarship. Keep it close to the original: [paste]
+You:    /personal-statement Upgrade this for CityU BSc Data Science, keep my voice
+        "In today's rapidly evolving digital landscape, data science plays a pivotal
+         role... CityU is ranked number 1 in Asia for data science..."
+
+Skill:  Mode: Upgrade. Keeping your shop story and voice.
+
+        In grade 10, I noticed my father writing each month's sales in a notebook
+        at his small phone accessories shop in Surabaya...
+        I also want to study in Hong Kong, a global financial hub. [VERIFY: replace
+        the ranking claim with one or two specific things about CityU's BSc Data
+        Science, checked on CityU's website]
+
+        New details: "with statistics and code" is a goal, not something you did:
+        confirm it's how you'd say it. No new names, numbers or achievements.
+        Check: AI-tone red flags 8 -> 0. Words 220 / 500.
 ```
 
-```
-/humanizer [paste text]   (Codex: $humanizer [paste text])  it asks: humanize only, or upgrade too?
-```
+See the full run, with the map, keep list, change table and checker output, in [`examples/personal-statement-upgrade.md`](examples/personal-statement-upgrade.md). The sample is fictional.
+
+## ❓ FAQ
+
+**Will it write my essay for me?** It drafts from *your* material when the application allows AI help, and coaches your own draft when it doesn't. It asks about the AI-use rules first. You still need to be able to explain every sentence in an interview.
+
+**Will it get my text past Turnitin or GPTZero?** No, and it won't try. Detectors make mistakes, especially on non-native English writers, and evasion tricks make writing worse. The humanizer explains what a detector flag means and makes your writing more specific. For background (Turnitin's 300-word minimum, scores under 20% shown as `*`, false-positive rates), see [`ai-detection.md`](shared/references/ai-detection.md).
+
+**Does it make things up?** It's built not to: unconfirmed facts become `[VERIFY]`, and the fact trace lists anything new after a rewrite. Models can still slip, so read the "New details" list and the "check before submitting" list.
+
+**Is my text sent anywhere?** The skills are plain instructions and local scripts, with no tracking. Your text goes only to the AI you choose to use, under that app's own privacy terms.
+
+**Is it free?** Yes, MIT licensed. Use it with any chat AI, including free plans.
+
+**English only?** English and Indonesian are fully supported (word lists, checkers, thesis Bab I-V). It talks to you in your language and writes in the language the application needs.
+
+## 💬 Feedback
+
+Your feedback decides what gets improved next.
+- [Feedback form](https://github.com/Vetame21/personal-statement-skill/issues/new?template=feedback.yml): how it worked, in which app, and what was off. Please don't paste your real statement there, since issues are public.
+- Found a bug? [Report it](https://github.com/Vetame21/personal-statement-skill/issues/new?template=bug_report.yml).
+- Have an idea, or a university or scholarship you want covered? [Suggest it](https://github.com/Vetame21/personal-statement-skill/issues/new?template=feature_request.yml).
+
+**Want to test it properly?** Follow [`testing/TESTER_BRIEF.md`](testing/TESTER_BRIEF.md) (coding agents: about 25 minutes, ends with a PDF report) or [`testing/GEMINI_CHAT_TEST.md`](testing/GEMINI_CHAT_TEST.md) (chat apps: about 15 minutes).
+
+## 🧩 Works great together
+
+Draft with **personal-statement**, polish the wording with **humanizer**, and use **debate-mode** before adding anything risky, such as news, rankings or a second program. Keep facts consistent across documents: **harvard-cv** checks that your CV and statement agree.
+
+## 🤝 Contributing
+
+Ideas, new regional guides and translations are welcome. Open an issue or a PR. Read [AGENTS.md](AGENTS.md) first; it applies to people and AI agents alike.
 
 ```
-Here is my GPTZero report, which sentences are actually weak? [paste]
+shared/references/   integrity, anti-AI tone (EN + ID), verify-and-cite, evidence standards,
+                     debate rules, AI detection, authorship evidence   <- edit here
+shared/scripts/      cite_check.py, text_check.py, writing_rules.py (shared rules)
+skills/<name>/       SKILL.md, references/, scripts/ (references/shared/ is generated)
+download/            chat file and skill ZIPs (generated)
+plugins/             Claude Code plugin packages (generated)
+scripts/             build.py, install.py, make_bundle.py
+testing/             tester briefs, fictional samples, make_pdf.py
+tests/               tests for every script, the build and the bundles
 ```
 
-```
-Debat pakai fakta: should I mention this news in my statement?
-```
-
-```
-Help me narrow my skripsi topic and plan Bab I.
-```
-
-```
-Upgrade my CV to Harvard style for an AI engineering internship: [paste]
-```
-
-## How the repo is organised
-
-```
-shared/
-  references/      integrity, anti-ai-tone (EN + ID), verify-and-cite, evidence-standards,
-                   debate-rules, ai-detection, authorship-evidence   <- edit here
-  scripts/         cite_check.py, text_check.py, writing_rules.py (shared rules for every checker)
-skills/<name>/
-  SKILL.md
-  references/      skill-specific guides
-  references/shared/   copies of shared/references (generated)
-  scripts/         checkers (shared ones copied in by the build)
-plugins/           generated plugin packages
-scripts/build.py   sync shared files, validate, generate plugins and this table
-tests/             tests for every checker script and the build
-testing/           tester brief, fictional samples, make_pdf.py (Markdown -> PDF, standard library)
-VERSION, CHANGELOG.md
-```
-
-Development:
-
-Requires Python 3.9+ (3.9 is end-of-life; it is still tested).
-
-```bash
-pip install pyyaml
-```
+After a change, run these in order (Python 3.9+, `pip install pyyaml` for the build):
 
 ```bash
 python scripts/build.py
@@ -199,7 +223,13 @@ python scripts/build.py
 python -m unittest discover -s tests -v
 ```
 
-CI runs the tests and `python scripts/build.py --check` on Python 3.9, 3.11, 3.12 and 3.13 for every push and pull request. Edit `shared/` and `skills/`; never edit `plugins/` or `skills/*/references/shared/` by hand (the build overwrites them).
+```bash
+python scripts/build.py --check
+```
+
+CI runs the tests and `build.py --check` on Python 3.9, 3.11, 3.12 and 3.13 (Linux) and 3.12 (Windows and macOS). For a release, bump `VERSION` and add a `CHANGELOG.md` entry.
+
+If this helped you, please ⭐ the repo so more students can find it.
 
 ## Credits
 
@@ -207,4 +237,4 @@ The idea of a structured, stage-based personal statement skill comes from [Diamo
 
 ## License
 
-MIT. See [LICENSE](LICENSE). Not affiliated with Harvard, Turnitin, UCAS, NACAC, or any university named in examples.
+[MIT](LICENSE). Not affiliated with Harvard, Turnitin, UCAS, NACAC, CityU or any other university, company or app named here.

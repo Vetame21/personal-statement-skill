@@ -18,6 +18,78 @@ STYLES = {  # kind: (font, size, line height, space before)
     "h1": ("F2", 16, 22, 10), "h2": ("F2", 13, 18, 10), "h3": ("F2", 11, 15, 6),
     "p": ("F1", BODY, 13, 4), "li": ("F1", BODY, 13, 1), "code": ("F3", MONO, 10.5, 0),
 }
+# Adobe Helvetica / Helvetica-Bold advance widths (1/1000 em) for ASCII 32-126; other characters use AVG_WIDTH.
+HELV = [278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556, 556, 556, 556,
+        556, 556, 556, 556, 278, 278, 584, 584, 584, 556, 1015, 667, 667, 722, 722, 667, 611, 778, 722, 278, 500, 667,
+        556, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 278, 278, 278, 469, 556, 333, 556,
+        556, 500, 556, 556, 278, 556, 556, 222, 222, 500, 222, 833, 556, 556, 556, 556, 333, 500, 278, 556, 500, 722,
+        500, 500, 500, 334, 260, 334, 584]
+HELV_BOLD = [278, 333, 474, 556, 556, 889, 722, 238, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556, 556, 556,
+             556, 556, 556, 556, 556, 333, 333, 584, 584, 584, 611, 975, 722, 722, 722, 722, 667, 611, 778, 722, 278,
+             556, 722, 611, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 333, 278, 333, 584,
+             556, 333, 556, 611, 556, 611, 556, 333, 611, 611, 278, 278, 556, 278, 889, 611, 611, 611, 611, 389, 556,
+             333, 611, 556, 778, 556, 556, 500, 389, 280, 389, 584]
+AVG_WIDTH = 667          # accented capitals are as wide as their base letters; err on the wide side
+LIST_MARK = r"^(\s*)([-*+]|\d{1,2}[.)])\s+"   # "2025. That year..." is a sentence, not item 2025
+
+
+def text_width(text: str, font: str, size: float) -> float:
+    if font == "F3":
+        return len(text) * 0.6 * size
+    table = HELV_BOLD if font == "F2" else HELV
+    return sum(table[ord(c) - 32] if 32 <= ord(c) < 127 else AVG_WIDTH for c in text) * size / 1000
+
+
+def wrap(text: str, font: str, size: float, max_w: float):
+    """Greedy word wrap by real glyph widths; words longer than a line are split."""
+    lines, cur = [], ""
+    for word in text.split():
+        while text_width(word, font, size) > max_w:              # split an over-long word (URLs, paths)
+            cut = len(word)
+            while cut > 1 and text_width(word[:cut], font, size) > max_w:
+                cut -= 1
+            if cur:
+                lines.append(cur)
+                cur = ""
+            lines.append(word[:cut])
+            word = word[cut:]
+        trial = (cur + " " + word) if cur else word
+        if text_width(trial, font, size) <= max_w:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = word
+    if cur or not lines:
+        lines.append(cur)
+    return lines
+
+
+def table_lines(rows, max_chars: int):
+    """Lay out a table in monospace: wrap each cell inside its column. Too many columns -> one line per cell."""
+    cols = max(len(r) for r in rows)
+    rows = [r + [""] * (cols - len(r)) for r in rows]
+    gap = 2
+    widths = [max(len(r[c]) for r in rows) for c in range(cols)]
+    avail = max_chars - gap * (cols - 1)
+    while sum(widths) > avail and max(widths) > 8:
+        widths[widths.index(max(widths))] -= 1
+    if sum(widths) > avail:                                      # cannot fit even at 8 chars a column
+        out = []
+        for n, r in enumerate(rows[1:], 1):
+            out.append("Row " + str(n) + ":")
+            out += ["  " + rows[0][c] + ": " + r[c] for c in range(cols)]
+        return out
+    out = []
+    for n, r in enumerate(rows):
+        cells = [textwrap.wrap(r[c], widths[c]) or [""] for c in range(cols)]
+        for i in range(max(len(x) for x in cells)):
+            out.append((" " * gap).join((cells[c][i] if i < len(cells[c]) else "").ljust(widths[c])
+                                        for c in range(cols)).rstrip())
+        if n == 0 and len(rows) > 1:
+            out.append((" " * gap).join("-" * w for w in widths))
+    return out
+
+
 REPLACE = {"→": "->", "←": "<-", "✓": "[ok]", "✗": "[x]", "✔": "[ok]", "✖": "[x]",
            "≥": ">=", "≤": "<=", " ": " ", "−": "-"}
 
@@ -58,24 +130,20 @@ def blocks(md: str):
                 if not re.match(r"^\s*\|[\s:|-]+\|\s*$", lines[i]):           # skip |---|---| rows
                     rows.append([plain(c.strip()) for c in lines[i].strip().strip("|").split("|")])
                 i += 1
-            cols = max(len(r) for r in rows)
-            widths = [max(len(r[c]) if c < len(r) else 0 for r in rows) for c in range(cols)]
-            for n, r in enumerate(rows):
-                yield "code", "  ".join((r[c] if c < len(r) else "").ljust(widths[c]) for c in range(cols)).rstrip()
-                if n == 0 and len(rows) > 1:
-                    yield "code", "  ".join("-" * w for w in widths)
+            for line in table_lines(rows, int((PAGE_W - 2 * MARGIN) / (MONO * 0.6))):
+                yield "code", line
             yield "gap", ""
             continue
         elif re.match(r"^#{1,6}\s", line):
             yield from flush()
             level = len(line) - len(line.lstrip("#"))
             yield "h" + str(min(level, 3)), plain(line.lstrip("#").strip())
-        elif re.match(r"^\s*([-*+]|\d+[.)])\s+", line):
+        elif re.match(LIST_MARK, line):
             yield from flush()
-            m = re.match(r"^(\s*)([-*+]|\d+[.)])\s+(.*)", line)
+            m = re.match(LIST_MARK + r"(.*)", line)
             indent, mark, text = len(m.group(1)) // 2, m.group(2), m.group(3)
             while i + 1 < len(lines) and lines[i + 1].startswith("  ") and lines[i + 1].strip() \
-                    and not re.match(r"^\s*([-*+]|\d+[.)])\s+", lines[i + 1]):
+                    and not re.match(LIST_MARK, lines[i + 1]):
                 i += 1
                 text += " " + lines[i].strip()
             bullet = "-" if mark in "-*+" else mark
@@ -86,11 +154,6 @@ def blocks(md: str):
             para.append(plain(line))
         i += 1
     yield from flush()
-
-
-def width_chars(size: float, mono: bool, indent: float = 0) -> int:
-    avg = 0.6 if mono else 0.53                     # Courier is exactly 0.6 em; Helvetica averages ~0.5
-    return max(20, int((PAGE_W - 2 * MARGIN - indent) / (size * avg)))
 
 
 def layout(md: str):
@@ -114,15 +177,16 @@ def layout(md: str):
         if kind == "li":
             indent, bullet, text = content
             x = MARGIN + 12 + indent * 14
-            wrapped = textwrap.wrap(text, width_chars(size, False, x - MARGIN + 14)) or [""]
-            put(font, size, lh, x, bullet + " " + wrapped[0])
+            wrapped = wrap(bullet + " " + text, font, size, PAGE_W - MARGIN - x - 10)
+            put(font, size, lh, x, wrapped[0])
             for rest in wrapped[1:]:
                 put(font, size, lh, x + 10, rest)
         elif kind == "code":
-            for part in textwrap.wrap(content, width_chars(size, True), drop_whitespace=False) or [""]:
+            per_line = int((PAGE_W - 2 * MARGIN) / (size * 0.6))
+            for part in [content[i:i + per_line] for i in range(0, len(content), per_line)] or [""]:
                 put(font, size, lh, MARGIN, part)
         else:
-            for part in textwrap.wrap(content, width_chars(size, False)) or [""]:
+            for part in wrap(content, font, size, PAGE_W - 2 * MARGIN):
                 put(font, size, lh, MARGIN, part)
     if page:
         pages.append(page)

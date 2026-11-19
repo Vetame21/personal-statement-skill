@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.3.0 - 2026-11-19
+
+New README, ready-to-download files, and fixes from a seventh independent review.
+
+- **README** rewritten: logo, badges, a demo image and a short example, both from a real run on the fictional sample ([examples/personal-statement-upgrade.md](examples/personal-statement-upgrade.md)), plus "What it won't do", install options A-C, stay up to date, usage, FAQ and feedback. Issue forms for feedback (including a premium-pack question), bugs and ideas.
+- **`download/`** (generated, checked by `build.py --check`): the chat file, `vetame-writing.zip` (all six skills, for claude.ai) and `vetame-writing-lite.zip` (for the Gemini app). The ZIPs are byte-identical on every OS. Before this, the README pointed people without Python to files that weren't in the repo. `chat/` moved to `download/`.
+- **Chat file:** now includes the debate panel (needed by the quick Check and the scores), formats and CV bullet upgrades. Every file it mentions but doesn't contain is marked "(not included in this version)", and a test checks this. Script-path and `.gitignore` instructions are stripped. The header says what to do with report, thesis and debate requests, and that it has only been tested in the Gemini app.
+- **Fact trace:** one marker (`[VERIFY]` for added details; `[ADD DETAIL]` only for gaps) and one heading ("New details") across personal-statement, harvard-cv (now in Create, Upgrade and Tailor modes) and humanizer. The humanizer's rule on adding numbers now applies only to Humanize + upgrade.
+- **Checkers:** a paragraph that starts right under a heading ("## Hasil" then "Selain itu, ...") is counted, and repeated connectors are caught. cite_check accepts pandoc headings with attributes (`# Daftar Pustaka {#refs .unnumbered}`).
+- **make_pdf.py:** wraps text using real Helvetica widths, so capitals and bold headings no longer run off the page. Table cells wrap inside their columns (very wide tables become one line per cell). "2025. That year…" is no longer read as a numbered list.
+- **Sources added** to detector-reports.md and formats.md. README links corrected. Duplicate AI-policy rule removed from harvard-cv. Bundle link text fixed. The tester brief explains that the sample banner lines are counted.
+- Tests: 83 (was 76).
+
 ## 2.2.0 - 2026-11-19
 
 **Works in any chat AI, free or paid.**

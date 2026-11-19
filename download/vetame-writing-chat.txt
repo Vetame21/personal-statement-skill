@@ -1,7 +1,8 @@
 # Vetame21 Writing Skills: chat version
 
-**For the person using this:** attach this file at the start of a new chat, or paste all of it. It works in ChatGPT, Claude,
-Gemini, DeepSeek, Kimi, Grok, Qwen and other chat AIs, on free or paid plans. Then say what you need, for example
+**For the person using this:** attach this file at the start of a new chat, or paste all of it. It is written to work in
+ChatGPT, Claude, Gemini, DeepSeek, Kimi, Grok, Qwen and other chat AIs, free or paid (tested in the Gemini app, November
+2026; tell us how it goes elsewhere). Then say what you need, for example
 "Upgrade my personal statement for [program], keep my voice: [paste]", "Humanize this: [paste]" or
 "Make my CV Harvard style for [job]: [paste]".
 
@@ -10,6 +11,10 @@ with a line `<<< FILE: name >>>`. When a part says "read `x.md`", go to the part
 `SKILL.md`, the first part. If the user has not said what they need yet, ask in one short message: statement, CV, or
 humanize, plus the target and the text. Never invent facts. Run the fact trace (rule 9 in `shared-integrity.md`)
 after every rewrite. The guides mention Python scripts; you cannot run them here, so do those checks by reading and say so.
+This chat version has three skills: personal statement, humanizer and Harvard CV. Ignore instructions about saving files,
+`.gitignore`, installing, or the report, thesis and debate-mode skills; they are not available here. If the user asks for
+"humanize + upgrade" on a report or thesis, humanize only and say that the report and thesis guides are in the full
+repository. A file marked "(not included in this version)" is not in this document: skip it and carry on.
 
 <<< FILE: SKILL.md >>>
 
@@ -33,11 +38,7 @@ If a task spans two (for example a statement, then humanize it), finish the firs
 
 ## File names in this bundle
 
-The guides were written as separate skills, so they mention paths such as `references/regional.md` or `references/shared/integrity.md`. In this bundle every file sits in one folder with a prefix: the guide's own references are `<prefix>-<name>.md` (ps-, cv-, humanizer-, report-, thesis-, debate-) and the shared ones are `shared-<name>.md`. The links have already been rewritten; if you meet an old path, use this rule.
-
-## This is the lite bundle
-
-It holds only the files listed in this document. When a guide mentions a file that is not here, skip it and carry on with the guide's main steps. For report, thesis and debate guides, use the full bundle or the repository.
+The guides were written as separate skills, so they mention paths such as `references/regional.md` or `references/shared/integrity.md`. In this document every file is a part with a prefix: the guide's own references are `<prefix>-<name>.md` (ps-, cv-, humanizer-, report-, thesis-, debate-) and the shared ones are `shared-<name>.md`. The links have already been rewritten; if you meet an old path, use this rule.
 
 ## Checker scripts
 
@@ -52,15 +53,15 @@ Shared by every skill in this collection. They protect the person the writing is
 ## The rules
 
 1. **Real content only.** Never invent experiences, results, data, grades, awards, quotes, interviews, employers, dates or numbers. When a gap must be filled to show a structure, mark it `[VERIFY: what to check]` (for personal details) or `[DATA NEEDED: what]` (for results), and list every marker after the text under **"Check before submitting"**.
-2. **Real sources only.** Every citation or fact must come from the user or from a search run in this session, with title and link. AI tools invent plausible references; check every one. See `shared-verify-and-cite.md`.
+2. **Real sources only.** Every citation or fact must come from the user or from a search run in this session, with title and link. AI tools invent plausible references; check every one. See `shared-verify-and-cite.md` (not included in this version).
 3. **Coach, don't ghostwrite assessed work.** For theses and graded reports, default to outlines, questions, feedback and line edits on the user's own draft. Draft passages only where the rules allow it, mark them as AI-assisted, and expect the user to rewrite them in their own words. Applications and CVs may be drafted with the user, from the user's real material.
 4. **Follow the rules of the place it is going.** Ask about (or check) the course, university, scholarship or employer rules on AI use and disclosure. Campus rules override every template in these skills.
 5. **Disclose when required.** Better wording does not change who wrote something. Remind the user once when disclosure is likely required and they have not mentioned it. A short disclosure template:
    > I used [tool] for [purpose]. I reviewed and edited all output and take responsibility for the content.
-6. **No detector evasion.** Do not add deliberate errors, odd synonyms or filler to move an AI score, and do not promise lower scores. See `shared-ai-detection.md`.
+6. **No detector evasion.** Do not add deliberate errors, odd synonyms or filler to move an AI score, and do not promise lower scores. See `shared-ai-detection.md` (not included in this version).
 7. **Similarity is fixed at the source.** For plagiarism checkers (Turnitin similarity), fix high matches by quoting and citing or by genuinely rewriting in the user's own words with a citation, never by "spinning" text. Limits are set per institution (examples: 25% for skripsi at one Universitas Airlangga faculty from 2025/26; 20% at UGM's Faculty of Cultural Sciences, with the supervisor deciding).
 8. **Every claim must survive a conversation.** If the user could not explain a sentence for a minute in an interview or defense, cut it or flag it.
-9. **Fact trace after every rewrite.** Small additions slip in even when big ones are caught: a topic ("practised probability" when the source only says "math club"), a tool, or a wider scope ("printer problems" becoming "printer and workstation issues", "helped with lab computers" becoming "troubleshot software and hardware"). After rewriting, compare the new text with the source and list, under **"New details"**, every name, number, topic, tool, place, role or scope word that is not in the source. Remove each one or mark it `[VERIFY]`. If there are none, write "New details: none". Quote the phrases; a bare "nothing invented" does not count as a check.
+9. **Fact trace after every rewrite.** Small additions slip in even when big ones are caught: a topic ("practised probability" when the source only says "math club"), a tool, or a wider scope ("printer problems" becoming "printer and workstation issues", "helped with lab computers" becoming "troubleshot software and hardware"). After rewriting, compare the new text with the source and list, under **"New details"**, every name, number, topic, tool, place, role or scope word that is not in the source. Remove each one or mark it `[VERIFY: confirm ...]`. If there are none, write "New details: none". (`[VERIFY]` is for a detail that was added and must be confirmed; `[ADD DETAIL]` / `[DATA NEEDED]` are for a gap the user should fill. Do not mix them up.) Quote the phrases; a bare "nothing invented" does not count as a check.
 
 ## Indonesia: Ministry guidance on generative AI (2024)
 
@@ -214,7 +215,7 @@ Follow [shared-integrity.md](shared-integrity.md) in full. In short: real conten
 
 - **The applicant's story leads.** Inspiring people can appear; the applicant's own actions carry the statement.
 - **Declare, don't plead.** No "I really hope you accept me". Scholarship need is stated once, plainly, then tied to a plan.
-- **Do not agree to please.** Proposed additions (news, framing, name-dropping) are debated before they go in ([shared-debate-rules.md](shared-debate-rules.md)).
+- **Do not agree to please.** Proposed additions (news, framing, name-dropping) are debated before they go in (shared-debate-rules.md (not included in this version)).
 - **Debate in proportion.** A light polish ("rapikan", "fix the grammar", "keep my voice") gets one quick **Check** after the rewrite: a short list of what the Skeptic and Tone Detector would flag, with no approval stop. The full panel debates ([ps-debate-panel.md](ps-debate-panel.md)) run in Build mode, when new content or facts are added, or when the user asks to debate or stress-test. The user can always say "skip debate" or "full debate".
 
 ## Modes
@@ -225,7 +226,7 @@ Follow [shared-integrity.md](shared-integrity.md) in full. In short: real conten
 | **Build** | No draft, or the user wants a fresh one from their material | The full workflow below |
 | **Review** | Feedback only | Stress-test (Debate 2) reported as a review |
 | **Split / tailor** | Several programs, schools or prompts | One core story, tailored "why this program" and "plan" sections |
-| **Interview prep** | Interview or recorded video expected | Story bank from the statement ([ps-interview-prep.md](ps-interview-prep.md)) |
+| **Interview prep** | Interview or recorded video expected | Story bank from the statement (ps-interview-prep.md (not included in this version)) |
 
 State the mode in one line and start. Write the statement in the application's language; talk to the user in theirs.
 
@@ -248,7 +249,7 @@ Offer to save the context to a file such as `personal-statement-context.md` in t
 ### 2. Angle
 
 1. Choose **one core thread** (e.g. "curiosity about how data catches fraud") and 2-4 pieces of evidence that support it.
-2. Check what this reader values: [ps-what-readers-want.md](ps-what-readers-want.md), the field guide [ps-fields.md](ps-fields.md), the system rules [ps-regional.md](ps-regional.md), and for school leavers and scholarships [ps-undergraduate-scholarship.md](ps-undergraduate-scholarship.md).
+2. Check what this reader values: [ps-what-readers-want.md](ps-what-readers-want.md), the field guide ps-fields.md (not included in this version), the system rules ps-regional.md (not included in this version), and for school leavers and scholarships ps-undergraduate-scholarship.md (not included in this version).
 3. Pick the format from [ps-formats.md](ps-formats.md).
 4. **Debate 1 (before writing)**: the open choices become motions (main story, opening, what to add or cut, tone, how to treat a second program, scholarship paragraph) and go through the panel in [ps-debate-panel.md](ps-debate-panel.md). Show the verdicts and a locked outline; write after the user agrees.
 
@@ -256,9 +257,9 @@ Offer to save the context to a file such as `personal-statement-context.md` in t
 
 - Specific beats general: a monitor next to the desk, not "technology".
 - Growth: first contact → own initiative → what it led to.
-- Why this program and place: one or two concrete, verified reasons (course content, city, industry). Current facts only from a search in this session, with sources (see [shared-verify-and-cite.md](shared-verify-and-cite.md)).
+- Why this program and place: one or two concrete, verified reasons (course content, city, industry). Current facts only from a search in this session, with sources (see shared-verify-and-cite.md (not included in this version)).
 - Plans in steps that fit the level (school leaver: foundations → projects/internships → direction; graduate: coursework and lab → research → career).
-- Openings and closings: [ps-openings-and-closings.md](ps-openings-and-closings.md).
+- Openings and closings: ps-openings-and-closings.md (not included in this version).
 - Tone: [shared-anti-ai-tone.md](shared-anti-ai-tone.md).
 
 ### 4. Stress-test
@@ -284,16 +285,131 @@ Show, in this order: the debate summary (short), a change table (what changed, w
 
 - [ps-what-readers-want.md](ps-what-readers-want.md): what admissions and scholarship readers weigh, with sources
 - [ps-formats.md](ps-formats.md): structures and limits by application type
-- [ps-fields.md](ps-fields.md): what to show in each field (incl. Data Science, FinTech)
-- [ps-openings-and-closings.md](ps-openings-and-closings.md): ways to open and close, with examples
-- [ps-undergraduate-scholarship.md](ps-undergraduate-scholarship.md): school leavers, scholarships, two programs in one statement
-- [ps-regional.md](ps-regional.md): Hong Kong, UK (UCAS), US, Europe, Asia
-- [ps-interview-prep.md](ps-interview-prep.md): live interviews and recorded-video story banks
+- ps-fields.md (not included in this version): what to show in each field (incl. Data Science, FinTech)
+- ps-openings-and-closings.md (not included in this version): ways to open and close, with examples
+- ps-undergraduate-scholarship.md (not included in this version): school leavers, scholarships, two programs in one statement
+- ps-regional.md (not included in this version): Hong Kong, UK (UCAS), US, Europe, Asia
+- ps-interview-prep.md (not included in this version): live interviews and recorded-video story banks
 - [ps-debate-panel.md](ps-debate-panel.md): the two panel debates
-- [the shared-*.md files ](shared-integrity.md): integrity, anti-AI tone, verification, evidence standards, debate rules, AI detection, authorship evidence (shared by all skills)
+- the `shared-*.md` files: integrity, anti-AI tone, verification, evidence standards, debate rules, AI detection, authorship evidence (shared by all skills)
 - `scripts/ps_check.py`: word/character counts, rhythm, em dashes, red flags, placeholders
 
-> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python3 <this skill's folder>/scripts/x.py <file>` (`py` on Windows), for example `python ~/.claude/skills/personal-statement/scripts/...` (Claude Code) or `python ~/.agents/skills/personal-statement/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. If `python3` is missing, try `python` or `py`. Add `--strict` to exit with code 1 when issues are found.
+<<< FILE: ps-debate-panel.md >>>
+
+# Debate Panel
+
+Two debates are available: one **before writing** (decide what the statement should say) and one **after the draft** (attack the draft before a real reader does). They run in Build mode, when new content or facts are added, or on request. A light polish gets the **quick Check** instead (end of this file).
+
+The rules in `shared-debate-rules.md` (not included in this version) apply to every panelist: no instant agreement, research before any factual verdict, steelman the other side, and change position only for evidence or a better argument.
+
+---
+
+## The panel
+
+| Panelist | Reads as | Pushes for | Typical attack |
+|---|---|---|---|
+| **Admissions Reader** | A tired committee member with 2 minutes and 300 other files | Clarity, fit with the program, a reason to remember this applicant | "I can't tell why *this* program by paragraph 3." |
+| **Skeptic** (fact-checker) | An interviewer who will ask about every claim | Truth, verifiable facts, sources, interview safety | "Did she actually build this? Where does the HK$8 billion come from?" |
+| **Applicant Advocate** | The applicant's friend who knows their voice | Keeping the original story, voice and details | "That rewrite sounds like a consultant, not a 17-year-old." |
+| **Tone Detector** | Someone who has read too many AI-written essays | Human rhythm, plain words | "Three triplets and a 'not just X but Y' in one paragraph." |
+| **Moderator** (you) | Neutral | A decision | Writes the verdicts and the final call |
+
+For scholarship statements, the Admissions Reader also reads as a **Scholarship Panelist** ("will this money produce a good outcome?"). For job applications, use a **Hiring Manager** instead.
+
+---
+
+## How to run the panelists
+
+- **Independent first, then clash.** Write each panelist's position *before* reading the others, so they do not just agree with whoever spoke first. Then each panelist answers one other panelist's strongest point (agree or rebut, with a reason).
+- **Subagents.** When the environment can run subagents and the user has asked for a panel debate or a "deep" debate, run each panelist as its own subagent in parallel (give each the draft, the context, its role row above, and these rules), then moderate their outputs. Otherwise, play the roles yourself in sequence, keeping each one's view separate.
+- **Research.** Any factual point in dispute (a statistic, a program detail, a word limit, how a program describes itself) gets searched before a verdict. No search tool → mark that verdict *provisional*.
+- **Rounds.** *Quick* (default): one round of positions + one clash. *Deep* (on request, or for high-stakes applications): two clash rounds.
+- **Length.** Panelists speak in bullets, not essays. The whole debate should fit on one screen in quick mode.
+
+---
+
+## Debate 1: before writing
+
+Run at the end of step 2 (Angle) in Build mode, and before the rewrite in Upgrade mode.
+
+**1. Pick the motions.** Turn the open decisions into 2-5 short motions, for example:
+
+- "The opening should be the cousin-and-monitor scene."
+- "Include the 2026 AI-fraud fact about Hong Kong."
+- "Mention the second-choice program (CFFT) in one sentence only."
+- "Write in a casual register with contractions."
+- "Add a scholarship paragraph."
+
+Always include at least one motion about **the main story** and one about **anything the user wants added**.
+
+**2. Debate each motion.** Each panelist: For / Against / Conditional, with one reason. Skeptic adds evidence or a `[VERIFY]` flag.
+
+**3. Moderator verdicts.**
+
+| # | Motion | Verdict | Why (strongest reason) | Condition |
+|---|---|---|---|---|
+| 1 | ... | Adopt / Reject / Adopt with change / User's call | ... | ... |
+
+"User's call" is for preferences (tone, which story feels like them) once the facts are clear.
+
+**4. Lock the plan.** The outline is updated to match the verdicts and shown to the user. Writing starts only after the user accepts it or says "go".
+
+---
+
+## Debate 2: after the draft
+
+Run in step 4 (Stress-test) in Build mode, and after the rewrite in Upgrade mode. Run `scripts/ps_check.py` first and give the results to the Tone Detector.
+
+**1. Attacks.** Each panelist names its **top 3 problems**, each with a short quote from the draft and a proposed fix.
+
+**2. Clash.** Each panelist answers the strongest point of one other panelist. Typical clashes:
+- Advocate vs Admissions Reader: voice vs clarity.
+- Skeptic vs Advocate: a vivid detail that cannot be verified.
+- Tone Detector vs Admissions Reader: a punchy line that sounds generated.
+
+**3. Moderator verdicts.**
+
+| # | Issue (quote) | Raised by | Verdict | Fix |
+|---|---|---|---|---|
+| 1 | "..." | Skeptic | Fix now / Keep / User's call | ... |
+
+**4. Apply.** Apply "Fix now" items at the lightest touch (respect Upgrade mode). List "User's call" items as questions. Show the revised statement, then the **"Check before submitting"** list.
+
+**5. Final score** (one line each, 1-5): Clarity · Fit · Truth/verifiability · Voice · Human tone. Anything below 4 gets one sentence on why and what would raise it.
+
+---
+
+## Output format (quick mode)
+
+```
+### Debate 1: before writing
+| # | Motion | Verdict | Why | Condition |
+...
+Locked plan: <3-6 bullet outline>
+
+### Debate 2: after the draft
+Attacks
+- Admissions Reader: 1) "..." → fix  2) ...  3) ...
+- Skeptic: ...
+- Applicant Advocate: ...
+- Tone Detector: (ps_check: N red flags, N words) ...
+Clash
+- Advocate → Reader: ...
+- Skeptic → Advocate: ...
+Verdicts
+| # | Issue | Raised by | Verdict | Fix |
+Score: Clarity 4 · Fit 5 · Truth 3 (two [VERIFY] left) · Voice 5 · Human tone 4
+```
+
+Use the user's language for the debate, and the application's language for quotes and fixes.
+
+## Quick Check (light polish)
+
+After a light rewrite, give one short list instead of the panel: up to 5 bullets of what the Skeptic (facts, `[VERIFY]` items, claims that need a source) and the Tone Detector (`ps_check.py` flags, register) would raise, each with its fix. No approval stop, no scores.
+
+## Skipping
+
+The user can say "skip debate", "no debate", or "quick only". Respect it. Note once that the post-draft check was skipped, and still run `ps_check.py` and the `[VERIFY]` sweep, because those protect the applicant.
 
 <<< FILE: ps-what-readers-want.md >>>
 
@@ -360,6 +476,70 @@ Primary: NACAC's [Factors in the Admission Decision](https://www.nacacnet.org/fa
 - [The Profs: The new UCAS personal statement questions for 2026](https://www.theprofs.co.uk/student-resources/university-applications/how-to-answer-the-new-ucas-personal-statement-questions-for-2026-entry/)
 - [CityU: Interview arrangements (example of selective video interviews)](https://www.cityu.edu.hk/admo/interview-arrangements-local-non-jupas-year-1-applicants)
 
+<<< FILE: ps-formats.md >>>
+
+# Formats by Application Type
+
+Limits change every cycle: always confirm on the official portal. Word counts below are typical, not rules.
+
+| Type | Typical length | Shape |
+|---|---|---|
+| School leaver, single essay (HK, Asia, many scholarships) | 400-650 words | Moment → growth → turning point → why this program and place → plan → close |
+| US Common App personal essay | up to 650 words | A story or theme about the applicant; reflection matters more than a list of achievements |
+| US "Why us" supplement | 100-300 words | Three or four details that only fit this college, each tied to the applicant |
+| UK UCAS (from 2026) | 4,000 characters over three questions | Q1 subject motivation; Q2 academic preparation; Q3 preparation outside education; no repetition across answers |
+| Graduate statement of purpose | 500-1,000 words | Research or professional interest → preparation (one or two projects in depth) → fit with named faculty, labs or courses → plan |
+| PhD research statement | 1,000-2,000 words | Question → background → what you have done → proposed direction → fit → feasibility |
+| Scholarship essay | 300-800 words | Merit with evidence → goal → how the money enables it → contribution |
+| European motivation letter | 1 page | Formal letter: who you are → why this program → why you fit → goals → polite close |
+| Short-answer prompts | 50-300 words each | Answer the exact question in the first sentence → one specific example → what it shows → link to the program |
+| Job cover letter | 250-400 words | Role and hook → two matched achievements → why this company → next step |
+
+## The short-answer pattern
+
+For any prompt such as "Describe a challenge you overcame" or "Why this scholarship?":
+
+1. **Answer** the question directly in the first sentence.
+2. **Example**: one concrete situation (what, when, your role).
+3. **Action and result**: what you did, what changed (numbers if real).
+4. **Meaning**: what it shows about you, in one sentence.
+5. **Link** to the program or role.
+
+Spend most of the words on 2 and 3.
+
+## One statement, several programs
+
+- Keep the core story (about 70%) the same.
+- Rewrite the "why this program" and "plan" parts for each target.
+- When one statement must cover two programs (first and second choice), find what they share and give the second choice its own sentence of real reasons (see `ps-undergraduate-scholarship.md` (not included in this version)).
+- When the application allows separate statements, write one per program and make each focus on its own field.
+
+## Formal letter skeleton
+
+```
+[Your name, address, email, phone]
+[Date]
+Admissions Committee, [Program], [University]
+
+Dear Members of the Admissions Committee,
+
+[Paragraph 1: who you are, what you apply for, the one-line reason]
+[Paragraph 2: preparation: studies, projects, results]
+[Paragraph 3: why this program: specific courses, faculty, structure]
+[Paragraph 4: goals and what you will contribute]
+
+Thank you for considering my application. I would welcome the opportunity to discuss it further.
+
+Yours sincerely,
+[Name]
+```
+
+## Sources (checked November 2026)
+
+- [UCAS: Reform of the personal statement](https://www.ucas.com/reform) (three questions, 4,000 characters, from 2026 entry applications)
+- [Common App: 2026-2027 essay prompts](https://www.commonapp.org/blog/announcing-2026-2027-common-app-essay-prompts) (prompts unchanged; the 650-word maximum is reported by [Cognito](https://cognito.org/blog/common-app-prompts-2026-27))
+- Other lengths in the table are typical ranges, not rules: always use the limit the application states.
+
 <<< FILE: humanizer-guide.md >>>
 
 # Humanizer
@@ -381,7 +561,7 @@ From the text and the request, note in one line: text type (personal statement, 
 
 ### 1b. If the user pastes an AI-detector report
 
-GPTZero, Turnitin, ZeroGPT and similar reports ("most AI sentences", a percentage) are **hints, not the target**. Detectors are unreliable, especially for non-native English writers, and often flag plain factual sentences. Follow [humanizer-detector-reports.md](humanizer-detector-reports.md): note the reliability problem once, triage each flagged sentence (template phrasing / vague claim / plain fact / missing voice), and fix only real writing problems. Never add errors or filler to move a score, and never promise a lower score. If the user says they wrote the text themselves and fear a false accusation, also share the steps in [shared-authorship-evidence.md](shared-authorship-evidence.md). If the user asks to make AI-written text pass a detector ("Turnitin killer", "bypass"), decline that goal briefly, explain that Turnitin has detected humanizer-altered English text since August 2025 (its AI detector does not cover every language, for example Indonesian, so the honest reason is integrity, not risk), and offer coaching or an honest disclosure instead.
+GPTZero, Turnitin, ZeroGPT and similar reports ("most AI sentences", a percentage) are **hints, not the target**. Detectors are unreliable, especially for non-native English writers, and often flag plain factual sentences. Follow humanizer-detector-reports.md (not included in this version): note the reliability problem once, triage each flagged sentence (template phrasing / vague claim / plain fact / missing voice), and fix only real writing problems. Never add errors or filler to move a score, and never promise a lower score. If the user says they wrote the text themselves and fear a false accusation, also share the steps in shared-authorship-evidence.md (not included in this version). If the user asks to make AI-written text pass a detector ("Turnitin killer", "bypass"), decline that goal briefly, explain that Turnitin has detected humanizer-altered English text since August 2025 (its AI detector does not cover every language, for example Indonesian, so the honest reason is integrity, not risk), and offer coaching or an honest disclosure instead.
 
 ### 2. Diagnose
 
@@ -438,7 +618,7 @@ Repeat until no sentence has a `!` flag (plain facts and advisory-only sentences
 1. The rewritten text.
 2. **What changed**: 3-8 bullet before → after examples of the most important changes.
 3. **Check, before vs after**: run the script with `--compare old.txt new.txt` and report the red-flag counts and sentence-length spread.
-4. **Fact trace**: any name, number, topic, example or claim in the new text that is not in the original, quoted, then removed or marked `[ADD DETAIL]`. Write "New details: none" if there are none.
+4. **New details** (fact trace, rule 9 in [shared-integrity.md](shared-integrity.md)): quote any name, number, topic, tool, example or scope word in the new text that is not in the original, then remove it or mark it `[VERIFY]`. Write "New details: none" if there are none.
 5. Any `[ADD DETAIL]` flags, and the disclosure reminder if relevant.
 
 ## Quality bar
@@ -452,13 +632,11 @@ The rewrite passes when:
 
 ## References
 
-- [shared-ai-detection.md](shared-ai-detection.md): how detectors work, Turnitin's thresholds, bypasser detection, Clarity
+- shared-ai-detection.md (not included in this version): how detectors work, Turnitin's thresholds, bypasser detection, Clarity
 - [humanizer-patterns.md](humanizer-patterns.md): English and Indonesian red-flag words, structural patterns, register by text type, and before/after examples
-- [humanizer-detector-reports.md](humanizer-detector-reports.md): how detectors decide (perplexity, burstiness, classifiers, bypasser detection), why scores are unreliable, sentence triage
-- [shared-authorship-evidence.md](shared-authorship-evidence.md): keeping a writing trail and responding to a false AI flag
+- humanizer-detector-reports.md (not included in this version): how detectors decide (perplexity, burstiness, classifiers, bypasser detection), why scores are unreliable, sentence triage
+- shared-authorship-evidence.md (not included in this version): keeping a writing trail and responding to a false AI flag
 - `scripts/humanize_check.py`: red-flag scan (English + Indonesian), rhythm statistics, placeholders, `--per-sentence` view, before/after comparison
-
-> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python3 <this skill's folder>/scripts/x.py <file>` (`py` on Windows), for example `python ~/.claude/skills/humanizer/scripts/...` (Claude Code) or `python ~/.agents/skills/humanizer/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. If `python3` is missing, try `python` or `py`. Add `--strict` to exit with code 1 when issues are found.
 
 <<< FILE: humanizer-patterns.md >>>
 
@@ -583,9 +761,6 @@ Say the mode in one line and begin.
 
 ## Non-negotiable rules
 
-Before drafting new text, ask once whether the application or employer has an AI-use policy for CVs, and follow it.
-
-
 Shared rules: [shared-integrity.md](shared-integrity.md) and [shared-anti-ai-tone.md](shared-anti-ai-tone.md).
 
 1. **No invented facts.** Never add employers, titles, dates, grades, awards, numbers or skills the user did not give, and never widen what a task covered (a stronger verb is fine; extra equipment, systems or duties are not). If a bullet would be stronger with a number, ask for it or mark `[VERIFY: e.g. how many members?]`. List every marker after the CV under **"Check before sending"**.
@@ -605,7 +780,8 @@ Shared rules: [shared-integrity.md](shared-integrity.md) and [shared-anti-ai-ton
    - **University student / recent graduate**
    - **Experienced** (2+ years of work: Experience before Education)
 4. Write bullets with the formula: **Action verb + what you did + how/with what + result (number, scale or outcome)**.
-5. Show the CV, then "Check before sending", then the one-page check.
+5. **New details**: check every bullet against what the user told you (same fact trace as Upgrade mode).
+6. Show the CV, then "New details", then "Check before sending", then the one-page check.
 
 ## Upgrade mode
 
@@ -622,7 +798,7 @@ Shared rules: [shared-integrity.md](shared-integrity.md) and [shared-anti-ai-ton
 
 2. **Rewrite** in Harvard style. Keep every fact; improve how it is said. Move items to the right sections. Cut what doesn't serve the target (tell the user what you cut and why).
 3. **Before/after** for the 3-5 most improved bullets so the user learns the pattern.
-4. **Fact trace**: quote every task, tool, scope or outcome a bullet now claims that the original did not ("fixed printer problems" must not become "resolved printer and workstation issues"). Remove each one or turn it into a `[VERIFY]` question.
+4. **New details** (fact trace, rule 9 in [shared-integrity.md](shared-integrity.md)): quote every task, tool, scope or outcome a bullet now claims that the original did not ("fixed printer problems" must not become "resolved printer and workstation issues"). Remove each one or mark it `[VERIFY]`. Write "New details: none" if there are none.
 5. "Check before sending" list.
 
 ## Tailor mode
@@ -631,7 +807,8 @@ Shared rules: [shared-integrity.md](shared-integrity.md) and [shared-anti-ai-ton
 2. Pull out 4-6 things it asks for.
 3. Map each to evidence in the CV. Missing evidence is a gap: tell the user; do not invent it.
 4. Reorder bullets so the most relevant come first; adjust wording to the target's vocabulary where it is still true.
-5. Keep a "master CV" untouched; produce the tailored copy separately.
+5. **New details**: the target's vocabulary must not add tasks, tools or results the user did not do (same fact trace as Upgrade mode).
+6. Keep a "master CV" untouched; produce the tailored copy separately.
 
 ## Output
 
@@ -656,8 +833,6 @@ Shared rules: [shared-integrity.md](shared-integrity.md) and [shared-anti-ai-ton
 - [ ] No photo or personal data unless the target requires it
 - [ ] Every `[VERIFY]` resolved or listed
 - [ ] Matches the personal statement's facts
-
-> **Running the scripts:** paths like `scripts/x.py` are relative to this skill's folder (the folder that contains this SKILL.md), not the user's project. Run them as `python3 <this skill's folder>/scripts/x.py <file>` (`py` on Windows), for example `python ~/.claude/skills/harvard-cv/scripts/...` (Claude Code) or `python ~/.agents/skills/harvard-cv/scripts/...` (Codex, Gemini CLI, Kimi Code, OpenCode). Requires Python 3.9+. If `python3` is missing, try `python` or `py`. Add `--strict` to exit with code 1 when issues are found.
 
 <<< FILE: cv-harvard-format.md >>>
 
@@ -823,4 +998,30 @@ Start every bullet with one of these (or another precise verb). Use each verb at
 | Was involved in | (say the role) |
 | Spearheaded, Leveraged, Synergised, Orchestrated | Led, Used, Combined, Organised |
 | Utilised | Used |
+
+<<< FILE: cv-bullet-upgrades.md >>>
+
+# Bullet Upgrades: Before and After
+
+Formula: **Action verb + what + how/with what + result (number, scale, outcome)**.
+
+If the user does not know the number, ask. If there is no number, use scale (who, how many, how often) or an outcome (what changed). Mark anything unconfirmed with `[VERIFY]`.
+
+| Before | After | What changed |
+|---|---|---|
+| Responsible for social media of the club | Ran the club's Instagram, posting 3 times a week and growing followers from 200 to 650 in one semester [VERIFY: numbers] | Verb, frequency, result |
+| Helped organise school event | Coordinated logistics for a 300-guest school fair, managing 12 volunteers and a HK$5,000 budget [VERIFY] | Real role, scale |
+| Made a website for a class project | Designed and published a 4-page hobby website in HTML/CSS for a junior high computer class | Specific, scoped, honest |
+| Learned Python by myself | Completed an online Python course and built a calculator and a 20-question quiz game used by classmates for revision | Proof instead of a claim |
+| Member of debate team | Competed in 6 inter-school debate tournaments, reaching the semi-finals at the city championship (2025) | Results |
+| Tutor | Tutored 4 junior students in mathematics weekly; all 4 improved their term grades | Scale and outcome |
+| Worked at family shop | Handled cash and QR payments and tracked weekly stock for a family grocery shop during school holidays | Concrete tasks; links to finance/data interests |
+| Data analysis using Excel | Analysed 2 years of the shop's sales in Excel to find the 10 slowest-moving products, which the owner then reduced in the next order | Context and impact |
+
+## Anti-AI checks for bullets
+
+- No "dynamic", "passionate", "results-driven", "detail-oriented", "team player" (show these instead).
+- No "successfully" (if it's on the CV, it worked).
+- Not every bullet needs a percentage. Too many neat numbers looks invented.
+- Vary verbs and bullet lengths.
 

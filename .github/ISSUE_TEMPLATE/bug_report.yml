@@ -1,0 +1,23 @@
+name: Bug report
+description: A script fails, a skill doesn't load, or an instruction is wrong
+title: "Bug: "
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include the exact command and the full error. Remove personal details first.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+  - type: input
+    id: env
+    attributes:
+      label: Tool, OS and Python version
+      placeholder: "e.g. Codex 0.x on Windows 11, Python 3.12"
+    validations:
+      required: true

@@ -53,3 +53,9 @@ Thank you for considering my application. I would welcome the opportunity to dis
 Yours sincerely,
 [Name]
 ```
+
+## Sources (checked November 2026)
+
+- [UCAS: Reform of the personal statement](https://www.ucas.com/reform) (three questions, 4,000 characters, from 2026 entry applications)
+- [Common App: 2026-2027 essay prompts](https://www.commonapp.org/blog/announcing-2026-2027-common-app-essay-prompts) (prompts unchanged; the 650-word maximum is reported by [Cognito](https://cognito.org/blog/common-app-prompts-2026-27))
+- Other lengths in the table are typical ranges, not rules: always use the limit the application states.

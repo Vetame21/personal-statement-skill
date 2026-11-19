@@ -9,7 +9,7 @@ Six Agent Skills (folders with a `SKILL.md`) for application and academic writin
 ## Layout and rules
 
 - Edit **sources** only: `shared/references/*.md`, `shared/scripts/*.py`, `skills/<name>/SKILL.md`, `skills/<name>/references/*.md` (not `references/shared/`), `skills/<name>/scripts/*.py` (except copied shared scripts), `scripts/`, `tests/`, `testing/` (tester brief, samples, `make_pdf.py`), `README.md` outside the generated table.
-- **Generated, never edit by hand:** `plugins/`, `.claude-plugin/marketplace.json`, `skills/*/references/shared/`, the shared scripts copied into `skills/*/scripts/` (`writing_rules.py`, `cite_check.py`, `text_check.py`), the skills table in `README.md`, and `chat/` (built from the lite bundle by `scripts/make_bundle.py`).
+- **Generated, never edit by hand:** `plugins/`, `.claude-plugin/marketplace.json`, `skills/*/references/shared/`, the shared scripts copied into `skills/*/scripts/` (`writing_rules.py`, `cite_check.py`, `text_check.py`), the skills table in `README.md`, and `download/` (chat file and skill ZIPs, built by `scripts/make_bundle.py`).
 - After any change run, in this order:
 
 ```bash

@@ -18,7 +18,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from writing_rules import (NOT_JUST, PLACEHOLDER, detect_lang, is_empty, phrase_hits, read_input,  # noqa: E402
-                           split_sentences, word_hits, word_severity)
+                           paragraphs, split_sentences, word_hits, word_severity)
 
 # Statement-specific phrases on top of the shared lists in writing_rules.py
 PS_PHRASES = {
@@ -59,7 +59,7 @@ def main() -> int:
         return 1 if args.strict else 0
     # Count like Word and application portals: whitespace-separated tokens ("U.S.", "3.85" and URLs are one word)
     words = [tok for tok in text.split() if re.search(r"\w", tok)]
-    paras = [p for p in re.split(r"\n\s*\n", text.strip()) if p.strip()]
+    paras = paragraphs(text)
     sents = split_sentences(text)
     lang = detect_lang(text) if args.lang == "auto" else args.lang
     lens = [count_words(s) for s in sents]
