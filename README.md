@@ -139,7 +139,7 @@ Describe the task and the AI picks the skill, or call it by name:
 
 | You type | What you get |
 |---|---|
-| `/personal-statement Upgrade this for CityU Data Science, keep my voice: …` | A light rewrite, a change table, the fact trace and a "check before submitting" list |
+| `/personal-statement Upgrade this for a Data Science program, keep my voice: …` | A light rewrite, a change table, the fact trace and a "check before submitting" list |
 | `/personal-statement` + your notes, no draft | A new statement built from your material, debated before and after drafting |
 | `/humanizer [text]` | It asks "humanize only, or upgrade too?", then rewrites at the lightest touch |
 | `/harvard-cv Upgrade my CV for a data analyst internship: …` | An audit table, a one-page Harvard CV and before/after bullets |
@@ -151,24 +151,24 @@ In Codex use `$personal-statement` instead of `/personal-statement`. In chat app
 ## 👀 Example
 
 ```
-You:    /personal-statement Upgrade this for CityU BSc Data Science, keep my voice
+You:    /personal-statement Upgrade this for [University] BSc Data Science, keep my voice
         "In today's rapidly evolving digital landscape, data science plays a pivotal
-         role... CityU is ranked number 1 in Asia for data science..."
+         role... [University] is ranked number 1 in Asia for data science..."
 
 Skill:  Mode: Upgrade. Keeping your shop story and voice.
 
         In grade 10, I noticed my father writing each month's sales in a notebook
         at his small phone accessories shop in Surabaya...
         I also want to study in Hong Kong, a global financial hub. [VERIFY: replace
-        the ranking claim with one or two specific things about CityU's BSc Data
-        Science, checked on CityU's website]
+        the ranking claim with one or two specific things about the BSc Data
+        Science program, checked on the university's website]
 
         New details: "with statistics and code" is a goal, not something you did:
         confirm it's how you'd say it. No new names, numbers or achievements.
         Check: AI-tone red flags 8 -> 0. Words 220 / 500.
 ```
 
-See the full run, with the map, keep list, change table and checker output, in [`examples/personal-statement-upgrade.md`](examples/personal-statement-upgrade.md). The sample is fictional.
+See the full run, with the map, keep list, change table and checker output, in [`examples/personal-statement-upgrade.md`](examples/personal-statement-upgrade.md). The sample is fictional, and the university name is replaced with [University] here.
 
 ## ❓ FAQ
 
@@ -237,4 +237,4 @@ The idea of a structured, stage-based personal statement skill comes from [Diamo
 
 ## License
 
-[MIT](LICENSE). Not affiliated with Harvard, Turnitin, UCAS, NACAC, CityU or any other university, company or app named here.
+[MIT](LICENSE). Not affiliated with Harvard, Turnitin, UCAS, NACAC or any university, company or app named here.
