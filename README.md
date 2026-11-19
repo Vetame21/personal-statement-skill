@@ -90,7 +90,7 @@ VERSION, CHANGELOG.md
 
 Development:
 
-Requires Python 3.9+.
+Requires Python 3.9+ (3.9 is end-of-life; it is still tested).
 
 ```bash
 pip install pyyaml

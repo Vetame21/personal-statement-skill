@@ -4,7 +4,7 @@
 
 Fixes from a second independent review.
 
-- Python 3.9-3.11: `cv_check.py` used a backslash inside an f-string (3.12+ only); fixed. CI now tests 3.9, 3.11, 3.12 and 3.13.
+- Python 3.9-3.11: `cv_check.py` used a backslash inside an f-string (3.12+ only); fixed. CI now tests 3.9, 3.11, 3.12 and 3.13 (interpreters provided by uv, since current GitHub runners no longer ship 3.9).
 - New `shared/scripts/writing_rules.py`, copied next to every checker: one source for placeholders, the significance rule, AI-typical word lists, technical-term allowlist, first-person detection and file reading (UTF-8, BOM, UTF-16).
 - humanize_check / ps_check: whole-word matching; words split into "strong" and "possible (check context)", with possible words counted only beyond two; technical phrases (robust standard errors, CPU utilization, wiring harness, landscape mode...) no longer flagged; "We..." / "My..." / "Saya..." count as the writer's voice.
 - Placeholders: `[ADD DETAIL]`, `[DATA NEEDED]`, `[VERIFY]` etc. detected everywhere; `x < 3`, `<div>` and `<https://...>` no longer reported.
