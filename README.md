@@ -65,7 +65,7 @@ Restart your agent after installing. Then either describe the task ("polish my s
 | Codex CLI | `$humanizer`, `$personal-statement`, ... |
 | Qwen Code | `/humanizer` (the folder name becomes the command) |
 | Gemini CLI, Kimi Code, OpenCode | describe the task, or check the tool's skills list (for example `/skills`) |
-| Gemini app, claude.ai (chat) | add a skill in the app's Skills settings by uploading its `SKILL.md` (or a ZIP of the folder on claude.ai), or attach `SKILL.md` to the chat; the checker scripts don't run there |
+| Gemini app, claude.ai (chat) | run `python3 scripts/make_bundle.py` to get **one** combined skill, `dist/vetame-writing/`. Upload that folder in the app's Skills settings: Gemini takes the folder, claude.ai the ZIP. The checker scripts don't run there |
 
 The checker scripts need Python 3.9+ (`python3`, or `py` on Windows). Skills that check current facts (debate-mode, news in a statement) need **web search turned on** in your agent; without it they label their verdicts "provisional".
 

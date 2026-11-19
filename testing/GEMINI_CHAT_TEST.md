@@ -16,30 +16,30 @@ You don't need git.
 
 You need these files:
 
-- `skills/personal-statement/SKILL.md`
-- `skills/humanizer/SKILL.md`
-- `skills/harvard-cv/SKILL.md`
+- the folder `vetame-writing`: all six skills combined into one, because Gemini takes one skill per upload. Get it from the person who asked you to test, or build it with `python3 scripts/make_bundle.py`, which writes `dist/vetame-writing/`.
 - `testing/samples/personal_statement.txt`
 - `testing/samples/ai_paragraph.txt`
 - `testing/samples/cv.md`
 
 All samples are fictional, so don't use your own statement or CV for this test.
 
-## 2. Add the skills
+## 2. Add the skill
 
 **If your Gemini has Skills** (Settings → Skills; it is still rolling out, so you may not have it yet):
 
-1. Add each of the three skills. Upload the `SKILL.md` file, or create a skill and paste its contents.
-2. If it asks for a **name** and **description**, copy them from the top of the file. The `name:` line goes in Name, and the text after `description:` goes in Description.
+1. Click **Upload skill → folder**.
+2. Choose the `vetame-writing` folder itself, the one that directly contains `SKILL.md`. Gemini does not accept ZIP files, so unzip first if you got a ZIP.
+3. Click **Continue**. The name and description are filled in from `SKILL.md`.
+4. If the folder upload fails, choose **files** instead, select `SKILL.md`, and add the other `.md` files in the next step.
 
-**If you don't have Skills:** skip this step. In step 3, attach the three `SKILL.md` files to the chat together with the samples.
+**If you don't have Skills:** skip this step. In step 3, attach `SKILL.md`, `ps-guide.md`, `humanizer-guide.md`, `cv-guide.md`, `shared-integrity.md` and `shared-anti-ai-tone.md` to the chat together with the samples.
 
 ## 3. Run the test
 
-Start a new chat. Attach the three sample files, plus the three `SKILL.md` files if you skipped step 2. Then paste:
+Start a new chat. Attach the three sample files, plus the files listed above if you skipped step 2. Then paste:
 
 ```
-You are testing three writing skills for their author: personal-statement, humanizer and harvard-cv. Use the skill instructions (installed skills or the attached SKILL.md files). Use only the attached fictional samples. Do not stop to ask me questions until step 4.
+You are testing three writing skills for their author: personal-statement, humanizer and harvard-cv. Use the vetame-writing skill (installed, or the attached files): for each task read the matching guide it points to and follow it. Use only the attached fictional samples. Do not stop to ask me questions until step 4.
 
 Assumed answers when a skill would ask something:
 - Statement: CityU BSc Data Science, undergraduate with scholarship, 500 words, no AI rule beyond "the essay must be your own", Upgrade mode, keep the voice.

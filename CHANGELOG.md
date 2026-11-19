@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.5 - 2026-11-19
+
+- `scripts/make_bundle.py` builds **vetame-writing**: all six skills as one flat skill for chat apps that allow one skill per upload (the Gemini app takes a folder, not a ZIP). A router `SKILL.md` picks the right guide; reference links are rewritten to the flat names, and a test checks that every link resolves.
+- `testing/GEMINI_CHAT_TEST.md` now uses the bundle and explains the folder upload.
+
 ## 2.1.4 - 2026-11-19
 
 - Skill descriptions shortened to about 400 characters: Codex skips skills whose description is over 500, so five of the six were not loading there. The build now fails over 500 bytes, and a test checks it.

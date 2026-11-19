@@ -485,6 +485,37 @@ class TesterBrief(unittest.TestCase):
         self.assertIn(b"\\(parens\\)", data)    # parentheses escaped
 
 
+class Bundle(unittest.TestCase):
+    """scripts/make_bundle.py: one flat skill for chat apps that take a single skill per upload (Gemini app)."""
+
+    def test_bundle_is_one_flat_valid_skill_with_working_links(self):
+        import importlib.util
+        import re
+        spec = importlib.util.spec_from_file_location("make_bundle", ROOT / "scripts" / "make_bundle.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as d:
+            out = mod.make(Path(d))
+            files = list(out.iterdir())
+            self.assertTrue(all(f.is_file() for f in files), "bundle must be flat")
+            head = (out / "SKILL.md").read_text(encoding="utf-8").split("---")[1]
+            self.assertIn("name: vetame-writing", head)
+            desc = re.search(r"^description: (.*)$", head, re.M).group(1)
+            self.assertLessEqual(len(desc.encode("utf-8")), 500)
+            self.assertNotIn(": ", desc)
+            for skill in ("ps", "cv", "humanizer", "report", "thesis", "debate"):
+                self.assertTrue((out / (skill + "-guide.md")).exists(), skill)
+            for f in files:
+                if f.name == "SKILL.md":
+                    continue
+                text = f.read_text(encoding="utf-8")
+                self.assertNotIn("references/", text, f.name)
+                for name in re.findall(r"\]\(([^)#\s]+\.md)", text) + re.findall(r"`([\w-]+\.md)`", text):
+                    if not name.endswith("-context.md"):          # files the user creates
+                        self.assertTrue((out / name).exists(), f.name + " -> " + name)
+            self.assertTrue((Path(d) / "vetame-writing.zip").exists())
+
+
 class Installer(unittest.TestCase):
     def _run(self, home, *args):
         import os
