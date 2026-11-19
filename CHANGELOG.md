@@ -15,7 +15,7 @@
 - cv_check recognises bold headings (`**SKILLS & INTERESTS**`).
 - thesis: chapter and .docx guidance; no AI-rules question before purely mechanical checks.
 - Accuracy: CV margins consistent (at least 0.75 in); unverified rubric weights labelled as such; em-dash rule labelled a rule of thumb; authorship-evidence wording corrected; Indonesian phrase list extended.
-- Tests: 62 (was 42), including installer tests.
+- Tests: 55 (was 42), including installer tests. Windows CI also caught doubly converted line endings (CR CR LF), now normalised.
 
 ## 2.0.3 - 2026-11-19
 

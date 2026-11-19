@@ -32,13 +32,18 @@ def decode_bytes(raw: bytes) -> str:
         text = raw.decode("utf-8", errors="replace")
     if text.count("\ufffd") > max(3, len(text) // 200):
         print("! Warning: parts of this input could not be decoded; save it as UTF-8 and re-run.", file=sys.stderr)
-    return text.replace("\r\n", "\n").replace("\r", "\n")
+    return normalise_newlines(text)
+
+
+def normalise_newlines(text: str) -> str:
+    """CRLF, doubly converted CR CR LF and bare CR all become one LF."""
+    return re.sub(r"\r+\n?", "\n", text)
 
 def read_input(path: str) -> str:
     """Read a file, or '-' for stdin, through the same decoder (BOMs, UTF-16, CRLF)."""
     if path == "-":
         stream = getattr(sys.stdin, "buffer", None)
-        return decode_bytes(stream.read()) if stream else sys.stdin.read().replace("\r\n", "\n")
+        return decode_bytes(stream.read()) if stream else normalise_newlines(sys.stdin.read())
     with open(path, "rb") as f:
         return decode_bytes(f.read())
 

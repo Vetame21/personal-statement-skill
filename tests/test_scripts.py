@@ -10,7 +10,8 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def run(script: str, text: str, *args: str, code: int = 0) -> str:
-    with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as f:
+    # newline="" writes the text exactly as given (Windows would otherwise turn \n into \r\n)
+    with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8", newline="") as f:
         f.write(text)
         path = f.name
     out = subprocess.run([sys.executable, str(ROOT / script), path, *args], capture_output=True, text=True, encoding="utf-8")
@@ -267,6 +268,11 @@ class ReviewThreeRegressions(unittest.TestCase):
                   "Yesterday, I went and bought bread. The U.S. data from Dr. Lee, e.g. the 2020 survey, was clear.")
         self.assertNotIn("Lists of three", out)
         self.assertIn("Sentences: 2", out)
+
+    def test_double_converted_crlf(self):
+        sys.path.insert(0, str(ROOT / "shared" / "scripts"))
+        import writing_rules
+        self.assertEqual(writing_rules.normalise_newlines("a\r\r\nb\r\nc\rd\n"), "a\nb\nc\nd\n")
 
     def test_crlf_character_count(self):
         a = run("skills/personal-statement/scripts/ps_check.py", "One line.\nTwo line.\n")
